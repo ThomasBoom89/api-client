@@ -1,0 +1,8 @@
+.idea
+build/bin
+node_modules
+frontend/dist
+frontend/build
+frontend/.idea
+frontend/test-results
+.svelte-kit
