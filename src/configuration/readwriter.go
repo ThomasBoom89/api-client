@@ -10,8 +10,9 @@ const (
 	ConfigFileName = "config.toml"
 )
 
+// Configuration json annotation is mandatory to export fields in javascript
 type Configuration struct {
-	Theme string
+	Theme string `json:"theme"`
 }
 
 type ReadWriter struct {

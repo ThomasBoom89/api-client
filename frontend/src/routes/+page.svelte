@@ -1,5 +1,4 @@
-<script>
-
+<script lang="ts">
 </script>
 
 <svelte:head>
@@ -7,7 +6,7 @@
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<h1>Test</h1>
+<h1>Hallo</h1>
 <section>
 	<p>inside slot</p>
 </section>

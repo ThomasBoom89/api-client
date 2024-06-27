@@ -3,26 +3,38 @@
 	import { goto } from '$app/navigation';
 	import { LogDebug } from '$lib/wailsjs/runtime/runtime';
 	import { Test } from '$lib/wailsjs/go/main/App';
+	import { configuration } from '$lib/wailsjs/go/models.ts';
+	import { getContext } from 'svelte';
+	import type { ConfigurationStore } from './createConfigurationState.svelte.ts';
 
 	let theme: string = $state('');
 	const html = document.documentElement;
-	if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-		html.setAttribute('data-theme', 'dark');
-		theme = 'dark';
-	} else {
-		html.setAttribute('data-theme', 'light');
-		theme = 'light';
-	}
+	let configurationStore: ConfigurationStore = getContext('configurationStore');
+	$effect(() => {
+		let config: configuration.Configuration = configurationStore.getConfiguration();
+		if (config.theme === '') {
+			if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+				html.setAttribute('data-theme', 'dark');
+				theme = 'dark';
+			} else {
+				html.setAttribute('data-theme', 'light');
+				theme = 'light';
+			}
+			configurationStore.setProperty('theme', theme);
+		} else {
+			html.setAttribute('data-theme', config.theme);
+			theme = config.theme;
+		}
+	});
 
 	function navigate(page: string = ''): null {
 		console.warn(page);
 		if (page == undefined) {
 			return null;
 		}
-
 		goto(page, {});
-		return null;
 
+		return null;
 	}
 
 	function switchTheme(): void {
@@ -31,9 +43,11 @@
 		if (currentTheme == 'dark') {
 			html.setAttribute('data-theme', 'light');
 			theme = 'light';
+			configurationStore.setProperty('theme', theme);
 		} else {
 			html.setAttribute('data-theme', 'dark');
 			theme = 'dark';
+			configurationStore.setProperty('theme', theme);
 		}
 	}
 
