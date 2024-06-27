@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { LogDebug } from '$lib/wailsjs/runtime/runtime';
+	import { Test } from '$lib/wailsjs/go/main/App';
 
 	let theme: string = $state('');
 	const html = document.documentElement;
@@ -35,6 +36,10 @@
 			theme = 'dark';
 		}
 	}
+
+	function test(): void {
+		Test();
+	}
 </script>
 
 <header class="px-2 pb-2">
@@ -48,6 +53,9 @@
 			</li>
 		</ul>
 		<ul class="flex flex-row gap-2 items-center">
+			<li>
+				<button onclick="{test}">Test</button>
+			</li>
 			<li class="flex items-center">
 				<button onclick={switchTheme}>
 					{#if theme === "dark"}
