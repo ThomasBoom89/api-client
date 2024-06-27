@@ -5,6 +5,8 @@ go 1.21
 toolchain go1.22.3
 
 require (
+	github.com/adrg/xdg v0.4.0
+	github.com/pelletier/go-toml/v2 v2.2.2
 	github.com/rs/zerolog v1.33.0
 	github.com/wailsapp/wails/v2 v2.9.1
 )
