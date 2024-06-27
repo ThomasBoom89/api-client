@@ -1,0 +1,84 @@
+package configuration
+
+import (
+	"github.com/pelletier/go-toml/v2"
+	"os"
+	"path/filepath"
+)
+
+const (
+	ConfigFileName = "config.toml"
+)
+
+type Configuration struct {
+	Theme string
+}
+
+type ReadWriter struct {
+	userDir UserDir
+}
+
+func NewReadWriter(userDir UserDir) *ReadWriter {
+	return &ReadWriter{userDir}
+}
+
+func (R *ReadWriter) Read() (Configuration, error) {
+	configuration := Configuration{}
+	file, err := R.getFile()
+	if err != nil {
+		return configuration, err
+	}
+	defer file.Close()
+	fileInfo, err := file.Stat()
+	if err != nil {
+		return configuration, err
+	}
+	buffer := make([]byte, fileInfo.Size())
+	_, err = file.Read(buffer)
+	if err != nil {
+		return configuration, err
+	}
+
+	err = toml.Unmarshal(buffer, &configuration)
+	if err != nil {
+		return configuration, err
+	}
+
+	return configuration, nil
+}
+
+func (R *ReadWriter) Write(configuration Configuration) error {
+	file, err := R.getFile()
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	data, err := toml.Marshal(configuration)
+	if err != nil {
+		return err
+	}
+	err = file.Truncate(0)
+	if err != nil {
+		return err
+	}
+	_, err = file.Write(data)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (R *ReadWriter) getFile() (*os.File, error) {
+	path := R.userDir.GetPath() + ConfigFileName
+	err := os.MkdirAll(filepath.Dir(path), 0755)
+	if err != nil {
+		return nil, err
+	}
+	file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
+	if err != nil {
+		return nil, err
+	}
+
+	return file, nil
+}

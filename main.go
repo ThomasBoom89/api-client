@@ -1,6 +1,7 @@
 package main
 
 import (
+	"api-client/src/configuration"
 	"embed"
 	"github.com/rs/zerolog"
 	"github.com/wailsapp/wails/v2"
@@ -20,13 +21,15 @@ func main() {
 	}
 
 	app := NewApp()
+	xdgUserDir := configuration.NewXDG()
+	configurationReadWriter := configuration.NewReadWriter(xdgUserDir)
 
 	// Create application with options
 	err := wails.Run(&options.App{
 		Title:     "Api-Client",
 		Frameless: true,
-		Width:     1024,
-		Height:    768,
+		Width:     500,
+		Height:    500,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
@@ -35,6 +38,7 @@ func main() {
 		OnShutdown:       app.shutdown,
 		Bind: []interface{}{
 			app,
+			configurationReadWriter,
 		},
 	})
 
