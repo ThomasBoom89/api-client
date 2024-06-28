@@ -4,26 +4,21 @@
 	import { LogDebug } from '$lib/wailsjs/runtime/runtime';
 	import { Test } from '$lib/wailsjs/go/main/App';
 	import { configuration } from '$lib/wailsjs/go/models.ts';
-	import { getContext } from 'svelte';
-	import type { ConfigurationStore } from './createConfigurationState.svelte.ts';
+	import { configurationStore } from './createConfigurationState.svelte.ts';
 
-	let theme: string = $state('');
 	const html = document.documentElement;
-	let configurationStore: ConfigurationStore = getContext('configurationStore');
+	let config: configuration.Configuration = configurationStore.configuration;
 	$effect(() => {
-		let config: configuration.Configuration = configurationStore.getConfiguration();
 		if (config.theme === '') {
 			if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
 				html.setAttribute('data-theme', 'dark');
-				theme = 'dark';
+				configurationStore.setProperty('theme', 'dark');
 			} else {
 				html.setAttribute('data-theme', 'light');
-				theme = 'light';
+				configurationStore.setProperty('theme', 'light');
 			}
-			configurationStore.setProperty('theme', theme);
 		} else {
 			html.setAttribute('data-theme', config.theme);
-			theme = config.theme;
 		}
 	});
 
@@ -42,12 +37,10 @@
 		const currentTheme = html.getAttribute('data-theme');
 		if (currentTheme == 'dark') {
 			html.setAttribute('data-theme', 'light');
-			theme = 'light';
-			configurationStore.setProperty('theme', theme);
+			configurationStore.setProperty('theme', 'light');
 		} else {
 			html.setAttribute('data-theme', 'dark');
-			theme = 'dark';
-			configurationStore.setProperty('theme', theme);
+			configurationStore.setProperty('theme', 'dark');
 		}
 	}
 
@@ -72,7 +65,7 @@
 			</li>
 			<li class="flex items-center">
 				<button onclick={switchTheme}>
-					{#if theme === "dark"}
+					{#if config.theme === "dark"}
 						<svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
 								 width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
 							<path fill-rule="evenodd"
