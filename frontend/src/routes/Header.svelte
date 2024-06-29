@@ -4,9 +4,10 @@
 	import { LogDebug } from '$lib/wailsjs/runtime/runtime';
 	import { Test } from '$lib/wailsjs/go/main/App';
 	import { configuration } from '$lib/wailsjs/go/models.ts';
-	import { configurationStore } from './createConfigurationState.svelte.ts';
+	import { getConfigurationStore } from './createConfigurationState.svelte.ts';
 
 	const html = document.documentElement;
+	const configurationStore = getConfigurationStore();
 	let config: configuration.Configuration = configurationStore.configuration;
 	$effect(() => {
 		if (config.theme === '') {
@@ -85,7 +86,3 @@
 		</ul>
 	</nav>
 </header>
-<hr class="border-background-accent" />
-
-<style>
-</style>

@@ -1,16 +1,17 @@
 import { Write } from '$lib/wailsjs/go/configuration/ReadWriter';
 import { configuration } from '$lib/wailsjs/go/models.ts';
+import { getContext, setContext } from 'svelte';
 
 class ConfigurationStore {
-	set configuration(value: configuration.Configuration) {
-		this._configuration = value;
-	}
+	private readonly _configuration: configuration.Configuration = $state(new configuration.Configuration());
 
 	get configuration(): configuration.Configuration {
 		return this._configuration;
 	}
 
-	private _configuration: configuration.Configuration = $state(new configuration.Configuration());
+	constructor(configuration: configuration.Configuration) {
+		this._configuration = configuration;
+	}
 
 	setProperty(property: string, value: any): void {
 		// @ts-ignore
@@ -19,4 +20,12 @@ class ConfigurationStore {
 	}
 }
 
-export const configurationStore = new ConfigurationStore();
+const configurationStoreContextKey = 'configurationStore';
+
+export function initializeConfigurationStore(configuration: configuration.Configuration): void {
+	setContext<ConfigurationStore>(configurationStoreContextKey, new ConfigurationStore(configuration));
+}
+
+export function getConfigurationStore(): ConfigurationStore {
+	return getContext<ConfigurationStore>(configurationStoreContextKey);
+}
