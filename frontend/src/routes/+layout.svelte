@@ -4,8 +4,8 @@
 	import { initializeConfigurationStore } from './createConfigurationState.svelte.ts';
 
 	let { children, data } = $props();
-	document.getElementById('loader')?.remove();
 	initializeConfigurationStore(data.configuration);
+	document.getElementById('loader')?.remove();
 </script>
 <div class="w-[100vw] h-[100vh] bg-background text-text p-2">
 	<Header />

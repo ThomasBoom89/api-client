@@ -59,6 +59,9 @@
 			<li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
 				<button onclick={() => {navigate('/about')}}>About</button>
 			</li>
+			<li aria-current={$page.url.pathname === '/request' ? 'page' : undefined}>
+				<button onclick={() => {navigate('/request')}}>Request</button>
+			</li>
 		</ul>
 		<ul class="flex flex-row gap-2 items-center">
 			<li>

@@ -2,6 +2,7 @@ package main
 
 import (
 	"api-client/src/configuration"
+	"api-client/src/frontend"
 	"embed"
 	"github.com/rs/zerolog"
 	"github.com/wailsapp/wails/v2"
@@ -23,13 +24,15 @@ func main() {
 	app := NewApp()
 	xdgUserDir := configuration.NewXDG()
 	configurationReadWriter := configuration.NewReadWriter(xdgUserDir)
-
+	request := frontend.NewRequest()
 	// Create application with options
 	err := wails.Run(&options.App{
 		Title:     "Api-Client",
 		Frameless: true,
 		Width:     500,
 		Height:    500,
+		MaxWidth:  7680, // 8k
+		MaxHeight: 4320,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
@@ -39,6 +42,7 @@ func main() {
 		Bind: []interface{}{
 			app,
 			configurationReadWriter,
+			request,
 		},
 	})
 
