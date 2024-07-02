@@ -10,11 +10,14 @@ type UserDirTest struct {
 }
 
 const (
-	Test_Dir = "./tmp/"
+	TestDir = "./tmp/"
 )
 
-func (U *UserDirTest) GetPath() string {
-	return Test_Dir
+func (U *UserDirTest) GetConfigPath() string {
+	return TestDir
+}
+func (U *UserDirTest) GetDataPath() string {
+	return TestDir
 }
 
 func TestWriteRead(t *testing.T) {
@@ -36,7 +39,7 @@ func TestWriteRead(t *testing.T) {
 }
 
 func cleanup() {
-	err := os.RemoveAll(Test_Dir)
+	err := os.RemoveAll(TestDir)
 	if err != nil {
 		panic(err)
 	}

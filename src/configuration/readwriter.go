@@ -71,7 +71,7 @@ func (R *ReadWriter) Write(configuration Configuration) error {
 }
 
 func (R *ReadWriter) getFile() (*os.File, error) {
-	path := R.userDir.GetPath() + ConfigFileName
+	path := R.userDir.GetConfigPath() + ConfigFileName
 	err := os.MkdirAll(filepath.Dir(path), 0755)
 	if err != nil {
 		return nil, err
