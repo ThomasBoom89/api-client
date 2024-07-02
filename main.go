@@ -2,9 +2,12 @@ package main
 
 import (
 	"api-client/src/configuration"
+	"api-client/src/database"
 	"api-client/src/frontend"
+	"context"
 	"embed"
 	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
@@ -23,6 +26,11 @@ func main() {
 
 	app := NewApp()
 	xdgUserDir := configuration.NewXDG()
+	client := database.NewClient(xdgUserDir)
+	// Run the auto migration tool.
+	if err := client.Schema.Create(context.Background()); err != nil {
+		log.Fatal().Msgf("failed creating schema resources: %v", err)
+	}
 	configurationReadWriter := configuration.NewReadWriter(xdgUserDir)
 	request := frontend.NewRequest()
 	// Create application with options

@@ -2,6 +2,7 @@ package configuration
 
 import (
 	"github.com/pelletier/go-toml/v2"
+	"log"
 	"os"
 	"path/filepath"
 )
@@ -24,6 +25,7 @@ func NewReadWriter(userDir UserDir) *ReadWriter {
 }
 
 func (R *ReadWriter) Read() (Configuration, error) {
+	log.Println("bla")
 	configuration := Configuration{}
 	file, err := R.getFile()
 	if err != nil {
@@ -49,6 +51,7 @@ func (R *ReadWriter) Read() (Configuration, error) {
 }
 
 func (R *ReadWriter) Write(configuration Configuration) error {
+	log.Println("test write", configuration)
 	file, err := R.getFile()
 	if err != nil {
 		return err
