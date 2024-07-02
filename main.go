@@ -32,6 +32,7 @@ func main() {
 		log.Fatal().Msgf("failed creating schema resources: %v", err)
 	}
 	configurationReadWriter := configuration.NewReadWriter(xdgUserDir)
+	config := frontend.NewConfiguration(configurationReadWriter)
 	request := frontend.NewRequest()
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -49,7 +50,7 @@ func main() {
 		OnShutdown:       app.shutdown,
 		Bind: []interface{}{
 			app,
-			configurationReadWriter,
+			config,
 			request,
 		},
 	})

@@ -1,6 +1,6 @@
-import { Write } from '$lib/wailsjs/go/configuration/ReadWriter';
 import { configuration } from '$lib/wailsjs/go/models.ts';
 import { getContext, setContext } from 'svelte';
+import { Set } from '$lib/wailsjs/go/frontend/Configuration';
 
 class ConfigurationStore {
 	private readonly _configuration: configuration.Configuration = $state(new configuration.Configuration());
@@ -16,7 +16,7 @@ class ConfigurationStore {
 	setProperty(property: string, value: any): void {
 		// @ts-ignore
 		this._configuration[property] = value;
-		Write(this._configuration);
+		Set(this._configuration);
 	}
 }
 

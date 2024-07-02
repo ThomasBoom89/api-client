@@ -1,11 +1,11 @@
+import { Get } from '$lib/wailsjs/go/frontend/Configuration';
+
 export const prerender = true;
 export const ssr = false;
 
-import { Read } from '$lib/wailsjs/go/configuration/ReadWriter';
-
 export async function load() {
 	return {
-		configuration: await Read(),
+		configuration: await Get(),
 		delay: await delay(3000)
 	};
 }
