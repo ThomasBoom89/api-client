@@ -1,1 +1,9 @@
 build/** linguist-vendored
+frontend/src/lib/** linguist-generated
+src/ent/* linguist-generated
+src/ent/enttest linguist-generated
+src/ent/hook linguist-generated
+src/ent/migrate linguist-generated
+src/ent/predicate linguist-generated
+src/ent/request linguist-generated
+src/ent/runtime linguist-generated
