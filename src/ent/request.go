@@ -3,9 +3,11 @@
 package ent
 
 import (
+	"api-client/src/ent/collection"
 	"api-client/src/ent/request"
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -16,9 +18,38 @@ type Request struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// CreateTime holds the value of the "create_time" field.
+	CreateTime time.Time `json:"create_time,omitempty"`
+	// UpdateTime holds the value of the "update_time" field.
+	UpdateTime time.Time `json:"update_time,omitempty"`
 	// Name holds the value of the "name" field.
-	Name         string `json:"name,omitempty"`
+	Name string `json:"name,omitempty"`
+	// CollectionID holds the value of the "collection_id" field.
+	CollectionID int `json:"collection_id,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the RequestQuery when eager-loading is set.
+	Edges        RequestEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// RequestEdges holds the relations/edges for other nodes in the graph.
+type RequestEdges struct {
+	// Collection holds the value of the collection edge.
+	Collection *Collection `json:"collection,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// CollectionOrErr returns the Collection value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e RequestEdges) CollectionOrErr() (*Collection, error) {
+	if e.Collection != nil {
+		return e.Collection, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: collection.Label}
+	}
+	return nil, &NotLoadedError{edge: "collection"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -26,10 +57,12 @@ func (*Request) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case request.FieldID:
+		case request.FieldID, request.FieldCollectionID:
 			values[i] = new(sql.NullInt64)
 		case request.FieldName:
 			values[i] = new(sql.NullString)
+		case request.FieldCreateTime, request.FieldUpdateTime:
+			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -51,11 +84,29 @@ func (r *Request) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			r.ID = int(value.Int64)
+		case request.FieldCreateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field create_time", values[i])
+			} else if value.Valid {
+				r.CreateTime = value.Time
+			}
+		case request.FieldUpdateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field update_time", values[i])
+			} else if value.Valid {
+				r.UpdateTime = value.Time
+			}
 		case request.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
 				r.Name = value.String
+			}
+		case request.FieldCollectionID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field collection_id", values[i])
+			} else if value.Valid {
+				r.CollectionID = int(value.Int64)
 			}
 		default:
 			r.selectValues.Set(columns[i], values[i])
@@ -68,6 +119,11 @@ func (r *Request) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (r *Request) Value(name string) (ent.Value, error) {
 	return r.selectValues.Get(name)
+}
+
+// QueryCollection queries the "collection" edge of the Request entity.
+func (r *Request) QueryCollection() *CollectionQuery {
+	return NewRequestClient(r.config).QueryCollection(r)
 }
 
 // Update returns a builder for updating this Request.
@@ -93,8 +149,17 @@ func (r *Request) String() string {
 	var builder strings.Builder
 	builder.WriteString("Request(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", r.ID))
+	builder.WriteString("create_time=")
+	builder.WriteString(r.CreateTime.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("update_time=")
+	builder.WriteString(r.UpdateTime.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(r.Name)
+	builder.WriteString(", ")
+	builder.WriteString("collection_id=")
+	builder.WriteString(fmt.Sprintf("%v", r.CollectionID))
 	builder.WriteByte(')')
 	return builder.String()
 }

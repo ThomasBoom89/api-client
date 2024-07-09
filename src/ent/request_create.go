@@ -3,10 +3,12 @@
 package ent
 
 import (
+	"api-client/src/ent/collection"
 	"api-client/src/ent/request"
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -17,6 +19,34 @@ type RequestCreate struct {
 	config
 	mutation *RequestMutation
 	hooks    []Hook
+}
+
+// SetCreateTime sets the "create_time" field.
+func (rc *RequestCreate) SetCreateTime(t time.Time) *RequestCreate {
+	rc.mutation.SetCreateTime(t)
+	return rc
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (rc *RequestCreate) SetNillableCreateTime(t *time.Time) *RequestCreate {
+	if t != nil {
+		rc.SetCreateTime(*t)
+	}
+	return rc
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (rc *RequestCreate) SetUpdateTime(t time.Time) *RequestCreate {
+	rc.mutation.SetUpdateTime(t)
+	return rc
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (rc *RequestCreate) SetNillableUpdateTime(t *time.Time) *RequestCreate {
+	if t != nil {
+		rc.SetUpdateTime(*t)
+	}
+	return rc
 }
 
 // SetName sets the "name" field.
@@ -31,6 +61,17 @@ func (rc *RequestCreate) SetNillableName(s *string) *RequestCreate {
 		rc.SetName(*s)
 	}
 	return rc
+}
+
+// SetCollectionID sets the "collection_id" field.
+func (rc *RequestCreate) SetCollectionID(i int) *RequestCreate {
+	rc.mutation.SetCollectionID(i)
+	return rc
+}
+
+// SetCollection sets the "collection" edge to the Collection entity.
+func (rc *RequestCreate) SetCollection(c *Collection) *RequestCreate {
+	return rc.SetCollectionID(c.ID)
 }
 
 // Mutation returns the RequestMutation object of the builder.
@@ -68,6 +109,14 @@ func (rc *RequestCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (rc *RequestCreate) defaults() {
+	if _, ok := rc.mutation.CreateTime(); !ok {
+		v := request.DefaultCreateTime()
+		rc.mutation.SetCreateTime(v)
+	}
+	if _, ok := rc.mutation.UpdateTime(); !ok {
+		v := request.DefaultUpdateTime()
+		rc.mutation.SetUpdateTime(v)
+	}
 	if _, ok := rc.mutation.Name(); !ok {
 		v := request.DefaultName
 		rc.mutation.SetName(v)
@@ -76,8 +125,20 @@ func (rc *RequestCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (rc *RequestCreate) check() error {
+	if _, ok := rc.mutation.CreateTime(); !ok {
+		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "Request.create_time"`)}
+	}
+	if _, ok := rc.mutation.UpdateTime(); !ok {
+		return &ValidationError{Name: "update_time", err: errors.New(`ent: missing required field "Request.update_time"`)}
+	}
 	if _, ok := rc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Request.name"`)}
+	}
+	if _, ok := rc.mutation.CollectionID(); !ok {
+		return &ValidationError{Name: "collection_id", err: errors.New(`ent: missing required field "Request.collection_id"`)}
+	}
+	if _, ok := rc.mutation.CollectionID(); !ok {
+		return &ValidationError{Name: "collection", err: errors.New(`ent: missing required edge "Request.collection"`)}
 	}
 	return nil
 }
@@ -105,9 +166,34 @@ func (rc *RequestCreate) createSpec() (*Request, *sqlgraph.CreateSpec) {
 		_node = &Request{config: rc.config}
 		_spec = sqlgraph.NewCreateSpec(request.Table, sqlgraph.NewFieldSpec(request.FieldID, field.TypeInt))
 	)
+	if value, ok := rc.mutation.CreateTime(); ok {
+		_spec.SetField(request.FieldCreateTime, field.TypeTime, value)
+		_node.CreateTime = value
+	}
+	if value, ok := rc.mutation.UpdateTime(); ok {
+		_spec.SetField(request.FieldUpdateTime, field.TypeTime, value)
+		_node.UpdateTime = value
+	}
 	if value, ok := rc.mutation.Name(); ok {
 		_spec.SetField(request.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if nodes := rc.mutation.CollectionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   request.CollectionTable,
+			Columns: []string{request.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CollectionID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

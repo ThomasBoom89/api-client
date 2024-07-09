@@ -3,11 +3,13 @@
 package ent
 
 import (
+	"api-client/src/ent/collection"
 	"api-client/src/ent/predicate"
 	"api-client/src/ent/request"
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -27,6 +29,12 @@ func (ru *RequestUpdate) Where(ps ...predicate.Request) *RequestUpdate {
 	return ru
 }
 
+// SetUpdateTime sets the "update_time" field.
+func (ru *RequestUpdate) SetUpdateTime(t time.Time) *RequestUpdate {
+	ru.mutation.SetUpdateTime(t)
+	return ru
+}
+
 // SetName sets the "name" field.
 func (ru *RequestUpdate) SetName(s string) *RequestUpdate {
 	ru.mutation.SetName(s)
@@ -41,13 +49,39 @@ func (ru *RequestUpdate) SetNillableName(s *string) *RequestUpdate {
 	return ru
 }
 
+// SetCollectionID sets the "collection_id" field.
+func (ru *RequestUpdate) SetCollectionID(i int) *RequestUpdate {
+	ru.mutation.SetCollectionID(i)
+	return ru
+}
+
+// SetNillableCollectionID sets the "collection_id" field if the given value is not nil.
+func (ru *RequestUpdate) SetNillableCollectionID(i *int) *RequestUpdate {
+	if i != nil {
+		ru.SetCollectionID(*i)
+	}
+	return ru
+}
+
+// SetCollection sets the "collection" edge to the Collection entity.
+func (ru *RequestUpdate) SetCollection(c *Collection) *RequestUpdate {
+	return ru.SetCollectionID(c.ID)
+}
+
 // Mutation returns the RequestMutation object of the builder.
 func (ru *RequestUpdate) Mutation() *RequestMutation {
 	return ru.mutation
 }
 
+// ClearCollection clears the "collection" edge to the Collection entity.
+func (ru *RequestUpdate) ClearCollection() *RequestUpdate {
+	ru.mutation.ClearCollection()
+	return ru
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ru *RequestUpdate) Save(ctx context.Context) (int, error) {
+	ru.defaults()
 	return withHooks(ctx, ru.sqlSave, ru.mutation, ru.hooks)
 }
 
@@ -73,7 +107,26 @@ func (ru *RequestUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (ru *RequestUpdate) defaults() {
+	if _, ok := ru.mutation.UpdateTime(); !ok {
+		v := request.UpdateDefaultUpdateTime()
+		ru.mutation.SetUpdateTime(v)
+	}
+}
+
+// check runs all checks and user-defined validators on the builder.
+func (ru *RequestUpdate) check() error {
+	if _, ok := ru.mutation.CollectionID(); ru.mutation.CollectionCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Request.collection"`)
+	}
+	return nil
+}
+
 func (ru *RequestUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := ru.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(request.Table, request.Columns, sqlgraph.NewFieldSpec(request.FieldID, field.TypeInt))
 	if ps := ru.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -82,8 +135,40 @@ func (ru *RequestUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := ru.mutation.UpdateTime(); ok {
+		_spec.SetField(request.FieldUpdateTime, field.TypeTime, value)
+	}
 	if value, ok := ru.mutation.Name(); ok {
 		_spec.SetField(request.FieldName, field.TypeString, value)
+	}
+	if ru.mutation.CollectionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   request.CollectionTable,
+			Columns: []string{request.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.CollectionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   request.CollectionTable,
+			Columns: []string{request.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, ru.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -105,6 +190,12 @@ type RequestUpdateOne struct {
 	mutation *RequestMutation
 }
 
+// SetUpdateTime sets the "update_time" field.
+func (ruo *RequestUpdateOne) SetUpdateTime(t time.Time) *RequestUpdateOne {
+	ruo.mutation.SetUpdateTime(t)
+	return ruo
+}
+
 // SetName sets the "name" field.
 func (ruo *RequestUpdateOne) SetName(s string) *RequestUpdateOne {
 	ruo.mutation.SetName(s)
@@ -119,9 +210,34 @@ func (ruo *RequestUpdateOne) SetNillableName(s *string) *RequestUpdateOne {
 	return ruo
 }
 
+// SetCollectionID sets the "collection_id" field.
+func (ruo *RequestUpdateOne) SetCollectionID(i int) *RequestUpdateOne {
+	ruo.mutation.SetCollectionID(i)
+	return ruo
+}
+
+// SetNillableCollectionID sets the "collection_id" field if the given value is not nil.
+func (ruo *RequestUpdateOne) SetNillableCollectionID(i *int) *RequestUpdateOne {
+	if i != nil {
+		ruo.SetCollectionID(*i)
+	}
+	return ruo
+}
+
+// SetCollection sets the "collection" edge to the Collection entity.
+func (ruo *RequestUpdateOne) SetCollection(c *Collection) *RequestUpdateOne {
+	return ruo.SetCollectionID(c.ID)
+}
+
 // Mutation returns the RequestMutation object of the builder.
 func (ruo *RequestUpdateOne) Mutation() *RequestMutation {
 	return ruo.mutation
+}
+
+// ClearCollection clears the "collection" edge to the Collection entity.
+func (ruo *RequestUpdateOne) ClearCollection() *RequestUpdateOne {
+	ruo.mutation.ClearCollection()
+	return ruo
 }
 
 // Where appends a list predicates to the RequestUpdate builder.
@@ -139,6 +255,7 @@ func (ruo *RequestUpdateOne) Select(field string, fields ...string) *RequestUpda
 
 // Save executes the query and returns the updated Request entity.
 func (ruo *RequestUpdateOne) Save(ctx context.Context) (*Request, error) {
+	ruo.defaults()
 	return withHooks(ctx, ruo.sqlSave, ruo.mutation, ruo.hooks)
 }
 
@@ -164,7 +281,26 @@ func (ruo *RequestUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (ruo *RequestUpdateOne) defaults() {
+	if _, ok := ruo.mutation.UpdateTime(); !ok {
+		v := request.UpdateDefaultUpdateTime()
+		ruo.mutation.SetUpdateTime(v)
+	}
+}
+
+// check runs all checks and user-defined validators on the builder.
+func (ruo *RequestUpdateOne) check() error {
+	if _, ok := ruo.mutation.CollectionID(); ruo.mutation.CollectionCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Request.collection"`)
+	}
+	return nil
+}
+
 func (ruo *RequestUpdateOne) sqlSave(ctx context.Context) (_node *Request, err error) {
+	if err := ruo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(request.Table, request.Columns, sqlgraph.NewFieldSpec(request.FieldID, field.TypeInt))
 	id, ok := ruo.mutation.ID()
 	if !ok {
@@ -190,8 +326,40 @@ func (ruo *RequestUpdateOne) sqlSave(ctx context.Context) (_node *Request, err e
 			}
 		}
 	}
+	if value, ok := ruo.mutation.UpdateTime(); ok {
+		_spec.SetField(request.FieldUpdateTime, field.TypeTime, value)
+	}
 	if value, ok := ruo.mutation.Name(); ok {
 		_spec.SetField(request.FieldName, field.TypeString, value)
+	}
+	if ruo.mutation.CollectionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   request.CollectionTable,
+			Columns: []string{request.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.CollectionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   request.CollectionTable,
+			Columns: []string{request.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Request{config: ruo.config}
 	_spec.Assign = _node.assignValues

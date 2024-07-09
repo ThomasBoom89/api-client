@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"api-client/src/ent/collection"
+	"api-client/src/ent/project"
 	"api-client/src/ent/request"
 	"context"
 	"errors"
@@ -73,7 +75,9 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			request.Table: request.ValidColumn,
+			collection.Table: collection.ValidColumn,
+			project.Table:    project.ValidColumn,
+			request.Table:    request.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

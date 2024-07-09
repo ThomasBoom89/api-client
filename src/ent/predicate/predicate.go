@@ -6,5 +6,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// Collection is the predicate function for collection builders.
+type Collection func(*sql.Selector)
+
+// Project is the predicate function for project builders.
+type Project func(*sql.Selector)
+
 // Request is the predicate function for request builders.
 type Request func(*sql.Selector)

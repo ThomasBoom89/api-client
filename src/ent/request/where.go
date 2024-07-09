@@ -4,8 +4,10 @@ package request
 
 import (
 	"api-client/src/ent/predicate"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 // ID filters vertices based on their ID field.
@@ -53,9 +55,104 @@ func IDLTE(id int) predicate.Request {
 	return predicate.Request(sql.FieldLTE(FieldID, id))
 }
 
+// CreateTime applies equality check predicate on the "create_time" field. It's identical to CreateTimeEQ.
+func CreateTime(v time.Time) predicate.Request {
+	return predicate.Request(sql.FieldEQ(FieldCreateTime, v))
+}
+
+// UpdateTime applies equality check predicate on the "update_time" field. It's identical to UpdateTimeEQ.
+func UpdateTime(v time.Time) predicate.Request {
+	return predicate.Request(sql.FieldEQ(FieldUpdateTime, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.Request {
 	return predicate.Request(sql.FieldEQ(FieldName, v))
+}
+
+// CollectionID applies equality check predicate on the "collection_id" field. It's identical to CollectionIDEQ.
+func CollectionID(v int) predicate.Request {
+	return predicate.Request(sql.FieldEQ(FieldCollectionID, v))
+}
+
+// CreateTimeEQ applies the EQ predicate on the "create_time" field.
+func CreateTimeEQ(v time.Time) predicate.Request {
+	return predicate.Request(sql.FieldEQ(FieldCreateTime, v))
+}
+
+// CreateTimeNEQ applies the NEQ predicate on the "create_time" field.
+func CreateTimeNEQ(v time.Time) predicate.Request {
+	return predicate.Request(sql.FieldNEQ(FieldCreateTime, v))
+}
+
+// CreateTimeIn applies the In predicate on the "create_time" field.
+func CreateTimeIn(vs ...time.Time) predicate.Request {
+	return predicate.Request(sql.FieldIn(FieldCreateTime, vs...))
+}
+
+// CreateTimeNotIn applies the NotIn predicate on the "create_time" field.
+func CreateTimeNotIn(vs ...time.Time) predicate.Request {
+	return predicate.Request(sql.FieldNotIn(FieldCreateTime, vs...))
+}
+
+// CreateTimeGT applies the GT predicate on the "create_time" field.
+func CreateTimeGT(v time.Time) predicate.Request {
+	return predicate.Request(sql.FieldGT(FieldCreateTime, v))
+}
+
+// CreateTimeGTE applies the GTE predicate on the "create_time" field.
+func CreateTimeGTE(v time.Time) predicate.Request {
+	return predicate.Request(sql.FieldGTE(FieldCreateTime, v))
+}
+
+// CreateTimeLT applies the LT predicate on the "create_time" field.
+func CreateTimeLT(v time.Time) predicate.Request {
+	return predicate.Request(sql.FieldLT(FieldCreateTime, v))
+}
+
+// CreateTimeLTE applies the LTE predicate on the "create_time" field.
+func CreateTimeLTE(v time.Time) predicate.Request {
+	return predicate.Request(sql.FieldLTE(FieldCreateTime, v))
+}
+
+// UpdateTimeEQ applies the EQ predicate on the "update_time" field.
+func UpdateTimeEQ(v time.Time) predicate.Request {
+	return predicate.Request(sql.FieldEQ(FieldUpdateTime, v))
+}
+
+// UpdateTimeNEQ applies the NEQ predicate on the "update_time" field.
+func UpdateTimeNEQ(v time.Time) predicate.Request {
+	return predicate.Request(sql.FieldNEQ(FieldUpdateTime, v))
+}
+
+// UpdateTimeIn applies the In predicate on the "update_time" field.
+func UpdateTimeIn(vs ...time.Time) predicate.Request {
+	return predicate.Request(sql.FieldIn(FieldUpdateTime, vs...))
+}
+
+// UpdateTimeNotIn applies the NotIn predicate on the "update_time" field.
+func UpdateTimeNotIn(vs ...time.Time) predicate.Request {
+	return predicate.Request(sql.FieldNotIn(FieldUpdateTime, vs...))
+}
+
+// UpdateTimeGT applies the GT predicate on the "update_time" field.
+func UpdateTimeGT(v time.Time) predicate.Request {
+	return predicate.Request(sql.FieldGT(FieldUpdateTime, v))
+}
+
+// UpdateTimeGTE applies the GTE predicate on the "update_time" field.
+func UpdateTimeGTE(v time.Time) predicate.Request {
+	return predicate.Request(sql.FieldGTE(FieldUpdateTime, v))
+}
+
+// UpdateTimeLT applies the LT predicate on the "update_time" field.
+func UpdateTimeLT(v time.Time) predicate.Request {
+	return predicate.Request(sql.FieldLT(FieldUpdateTime, v))
+}
+
+// UpdateTimeLTE applies the LTE predicate on the "update_time" field.
+func UpdateTimeLTE(v time.Time) predicate.Request {
+	return predicate.Request(sql.FieldLTE(FieldUpdateTime, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
@@ -121,6 +218,49 @@ func NameEqualFold(v string) predicate.Request {
 // NameContainsFold applies the ContainsFold predicate on the "name" field.
 func NameContainsFold(v string) predicate.Request {
 	return predicate.Request(sql.FieldContainsFold(FieldName, v))
+}
+
+// CollectionIDEQ applies the EQ predicate on the "collection_id" field.
+func CollectionIDEQ(v int) predicate.Request {
+	return predicate.Request(sql.FieldEQ(FieldCollectionID, v))
+}
+
+// CollectionIDNEQ applies the NEQ predicate on the "collection_id" field.
+func CollectionIDNEQ(v int) predicate.Request {
+	return predicate.Request(sql.FieldNEQ(FieldCollectionID, v))
+}
+
+// CollectionIDIn applies the In predicate on the "collection_id" field.
+func CollectionIDIn(vs ...int) predicate.Request {
+	return predicate.Request(sql.FieldIn(FieldCollectionID, vs...))
+}
+
+// CollectionIDNotIn applies the NotIn predicate on the "collection_id" field.
+func CollectionIDNotIn(vs ...int) predicate.Request {
+	return predicate.Request(sql.FieldNotIn(FieldCollectionID, vs...))
+}
+
+// HasCollection applies the HasEdge predicate on the "collection" edge.
+func HasCollection() predicate.Request {
+	return predicate.Request(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, CollectionTable, CollectionColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCollectionWith applies the HasEdge predicate on the "collection" edge with a given conditions (other predicates).
+func HasCollectionWith(preds ...predicate.Collection) predicate.Request {
+	return predicate.Request(func(s *sql.Selector) {
+		step := newCollectionStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.
