@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"api-client/src/ent/collection"
 	"api-client/src/ent/predicate"
 	"api-client/src/ent/request"
 	"context"
@@ -17,10 +18,11 @@ import (
 // RequestQuery is the builder for querying Request entities.
 type RequestQuery struct {
 	config
-	ctx        *QueryContext
-	order      []request.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Request
+	ctx            *QueryContext
+	order          []request.OrderOption
+	inters         []Interceptor
+	predicates     []predicate.Request
+	withCollection *CollectionQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -55,6 +57,28 @@ func (rq *RequestQuery) Unique(unique bool) *RequestQuery {
 func (rq *RequestQuery) Order(o ...request.OrderOption) *RequestQuery {
 	rq.order = append(rq.order, o...)
 	return rq
+}
+
+// QueryCollection chains the current query on the "collection" edge.
+func (rq *RequestQuery) QueryCollection() *CollectionQuery {
+	query := (&CollectionClient{config: rq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(request.Table, request.FieldID, selector),
+			sqlgraph.To(collection.Table, collection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, request.CollectionTable, request.CollectionColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Request entity from the query.
@@ -244,15 +268,27 @@ func (rq *RequestQuery) Clone() *RequestQuery {
 		return nil
 	}
 	return &RequestQuery{
-		config:     rq.config,
-		ctx:        rq.ctx.Clone(),
-		order:      append([]request.OrderOption{}, rq.order...),
-		inters:     append([]Interceptor{}, rq.inters...),
-		predicates: append([]predicate.Request{}, rq.predicates...),
+		config:         rq.config,
+		ctx:            rq.ctx.Clone(),
+		order:          append([]request.OrderOption{}, rq.order...),
+		inters:         append([]Interceptor{}, rq.inters...),
+		predicates:     append([]predicate.Request{}, rq.predicates...),
+		withCollection: rq.withCollection.Clone(),
 		// clone intermediate query.
 		sql:  rq.sql.Clone(),
 		path: rq.path,
 	}
+}
+
+// WithCollection tells the query-builder to eager-load the nodes that are connected to
+// the "collection" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RequestQuery) WithCollection(opts ...func(*CollectionQuery)) *RequestQuery {
+	query := (&CollectionClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withCollection = query
+	return rq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -261,12 +297,12 @@ func (rq *RequestQuery) Clone() *RequestQuery {
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		CreateTime time.Time `json:"create_time,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Request.Query().
-//		GroupBy(request.FieldName).
+//		GroupBy(request.FieldCreateTime).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (rq *RequestQuery) GroupBy(field string, fields ...string) *RequestGroupBy {
@@ -284,11 +320,11 @@ func (rq *RequestQuery) GroupBy(field string, fields ...string) *RequestGroupBy 
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		CreateTime time.Time `json:"create_time,omitempty"`
 //	}
 //
 //	client.Request.Query().
-//		Select(request.FieldName).
+//		Select(request.FieldCreateTime).
 //		Scan(ctx, &v)
 func (rq *RequestQuery) Select(fields ...string) *RequestSelect {
 	rq.ctx.Fields = append(rq.ctx.Fields, fields...)
@@ -331,8 +367,11 @@ func (rq *RequestQuery) prepareQuery(ctx context.Context) error {
 
 func (rq *RequestQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Request, error) {
 	var (
-		nodes = []*Request{}
-		_spec = rq.querySpec()
+		nodes       = []*Request{}
+		_spec       = rq.querySpec()
+		loadedTypes = [1]bool{
+			rq.withCollection != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Request).scanValues(nil, columns)
@@ -340,6 +379,7 @@ func (rq *RequestQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Requ
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Request{config: rq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -351,7 +391,43 @@ func (rq *RequestQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Requ
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := rq.withCollection; query != nil {
+		if err := rq.loadCollection(ctx, query, nodes, nil,
+			func(n *Request, e *Collection) { n.Edges.Collection = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (rq *RequestQuery) loadCollection(ctx context.Context, query *CollectionQuery, nodes []*Request, init func(*Request), assign func(*Request, *Collection)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Request)
+	for i := range nodes {
+		fk := nodes[i].CollectionID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(collection.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "collection_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (rq *RequestQuery) sqlCount(ctx context.Context) (int, error) {
@@ -378,6 +454,9 @@ func (rq *RequestQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != request.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if rq.withCollection != nil {
+			_spec.Node.AddColumnOnce(request.FieldCollectionID)
 		}
 	}
 	if ps := rq.predicates; len(ps) > 0 {

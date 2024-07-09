@@ -3,16 +3,70 @@
 package ent
 
 import (
+	"api-client/src/ent/collection"
+	"api-client/src/ent/project"
 	"api-client/src/ent/request"
 	"api-client/src/ent/schema"
+	"time"
 )
 
 // The init function reads all schema descriptors with runtime code
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	collectionMixin := schema.Collection{}.Mixin()
+	collectionMixinFields0 := collectionMixin[0].Fields()
+	_ = collectionMixinFields0
+	collectionFields := schema.Collection{}.Fields()
+	_ = collectionFields
+	// collectionDescCreateTime is the schema descriptor for create_time field.
+	collectionDescCreateTime := collectionMixinFields0[0].Descriptor()
+	// collection.DefaultCreateTime holds the default value on creation for the create_time field.
+	collection.DefaultCreateTime = collectionDescCreateTime.Default.(func() time.Time)
+	// collectionDescUpdateTime is the schema descriptor for update_time field.
+	collectionDescUpdateTime := collectionMixinFields0[1].Descriptor()
+	// collection.DefaultUpdateTime holds the default value on creation for the update_time field.
+	collection.DefaultUpdateTime = collectionDescUpdateTime.Default.(func() time.Time)
+	// collection.UpdateDefaultUpdateTime holds the default value on update for the update_time field.
+	collection.UpdateDefaultUpdateTime = collectionDescUpdateTime.UpdateDefault.(func() time.Time)
+	// collectionDescName is the schema descriptor for name field.
+	collectionDescName := collectionFields[0].Descriptor()
+	// collection.DefaultName holds the default value on creation for the name field.
+	collection.DefaultName = collectionDescName.Default.(string)
+	projectMixin := schema.Project{}.Mixin()
+	projectMixinFields0 := projectMixin[0].Fields()
+	_ = projectMixinFields0
+	projectFields := schema.Project{}.Fields()
+	_ = projectFields
+	// projectDescCreateTime is the schema descriptor for create_time field.
+	projectDescCreateTime := projectMixinFields0[0].Descriptor()
+	// project.DefaultCreateTime holds the default value on creation for the create_time field.
+	project.DefaultCreateTime = projectDescCreateTime.Default.(func() time.Time)
+	// projectDescUpdateTime is the schema descriptor for update_time field.
+	projectDescUpdateTime := projectMixinFields0[1].Descriptor()
+	// project.DefaultUpdateTime holds the default value on creation for the update_time field.
+	project.DefaultUpdateTime = projectDescUpdateTime.Default.(func() time.Time)
+	// project.UpdateDefaultUpdateTime holds the default value on update for the update_time field.
+	project.UpdateDefaultUpdateTime = projectDescUpdateTime.UpdateDefault.(func() time.Time)
+	// projectDescName is the schema descriptor for name field.
+	projectDescName := projectFields[0].Descriptor()
+	// project.DefaultName holds the default value on creation for the name field.
+	project.DefaultName = projectDescName.Default.(string)
+	requestMixin := schema.Request{}.Mixin()
+	requestMixinFields0 := requestMixin[0].Fields()
+	_ = requestMixinFields0
 	requestFields := schema.Request{}.Fields()
 	_ = requestFields
+	// requestDescCreateTime is the schema descriptor for create_time field.
+	requestDescCreateTime := requestMixinFields0[0].Descriptor()
+	// request.DefaultCreateTime holds the default value on creation for the create_time field.
+	request.DefaultCreateTime = requestDescCreateTime.Default.(func() time.Time)
+	// requestDescUpdateTime is the schema descriptor for update_time field.
+	requestDescUpdateTime := requestMixinFields0[1].Descriptor()
+	// request.DefaultUpdateTime holds the default value on creation for the update_time field.
+	request.DefaultUpdateTime = requestDescUpdateTime.Default.(func() time.Time)
+	// request.UpdateDefaultUpdateTime holds the default value on update for the update_time field.
+	request.UpdateDefaultUpdateTime = requestDescUpdateTime.UpdateDefault.(func() time.Time)
 	// requestDescName is the schema descriptor for name field.
 	requestDescName := requestFields[0].Descriptor()
 	// request.DefaultName holds the default value on creation for the name field.
