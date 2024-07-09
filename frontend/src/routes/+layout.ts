@@ -6,8 +6,8 @@ export const ssr = false;
 export async function load() {
 	return {
 		configuration: await Get(),
-		delay: await delay(3000)
+		delay: await delay(3000),
 	};
 }
 
-const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));

@@ -10,8 +10,9 @@ export default {
 				secondary: 'var(--color-secondary)',
 				buttons: 'var(--color-buttons)',
 				typography: 'var(--color-typography)',
-				'background-accent': 'var(--color-background-accent)'
-			}
-		}
-	}, plugins: []
+				'background-accent': 'var(--color-background-accent)',
+			},
+		},
+	},
+	plugins: [],
 };
