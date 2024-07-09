@@ -13,8 +13,9 @@ class ConfigurationStore {
 		this._configuration = configuration;
 	}
 
+	/* eslint-disable @typescript-eslint/no-explicit-any */
 	setProperty(property: string, value: any): void {
-		// @ts-ignore
+		// @ts-expect-error this is fine!
 		this._configuration[property] = value;
 		Set(this._configuration);
 	}

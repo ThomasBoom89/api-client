@@ -3,7 +3,7 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
 	webServer: {
 		command: 'npm run build && npm run preview',
-		port: 4173
+		port: 4173,
 	},
 	testDir: 'tests',
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
@@ -11,16 +11,16 @@ export default defineConfig({
 		/* Test against desktop browsers */
 		{
 			name: 'chromium',
-			use: { ...devices['Desktop Chrome'] }
+			use: { ...devices['Desktop Chrome'] },
 		},
 		{
 			name: 'firefox',
-			use: { ...devices['Desktop Firefox'] }
+			use: { ...devices['Desktop Firefox'] },
 		},
 		{
 			name: 'webkit',
-			use: { ...devices['Desktop Safari'] }
-		}
+			use: { ...devices['Desktop Safari'] },
+		},
 		// /* Test against mobile viewports. */
 		// {
 		// 	name: 'Mobile Chrome',
@@ -39,5 +39,5 @@ export default defineConfig({
 		// 	name: 'Microsoft Edge',
 		// 	use: { ...devices['Desktop Edge'], channel: 'msedge' } // or 'msedge-dev'
 		// }
-	]
+	],
 });

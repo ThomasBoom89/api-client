@@ -7,14 +7,15 @@
 	initializeConfigurationStore(data.configuration);
 	document.getElementById('loader')?.remove();
 </script>
+
 <div class="w-[100vw] h-[100vh] bg-background text-text p-2">
 	<Header />
 	<hr class="border-background-accent" />
 	<main class="p-2">
 		{@render children()}
 	</main>
-	<footer>
-	</footer>
+	<footer></footer>
 </div>
+
 <style>
 </style>
