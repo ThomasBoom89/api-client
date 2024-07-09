@@ -19,5 +19,24 @@ ent-generate:
 	go generate ./src/ent
 
 test:
+	make test-backend
+	make test-frontend-e2e
+	make test-frontend-unit
+
+test-frontend-e2e:
+	cd frontend && npm run test:integration
+
+test-frontend-unit:
+	cd frontend && npm run test:unit
+
+test-backend:
 	go test ./...
 
+frontend-lint:
+	cd frontend && npm run lint
+
+frontend-format:
+	cd frontend && npm run format
+
+frontend-check:
+	cd frontend && npm run check
