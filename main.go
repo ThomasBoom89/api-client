@@ -4,7 +4,6 @@ import (
 	"api-client/src/configuration"
 	"api-client/src/database"
 	"api-client/src/frontend"
-	"context"
 	"embed"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -26,16 +25,17 @@ func main() {
 
 	app := NewApp()
 	xdgUserDir := configuration.NewXDG()
-	client := database.NewClient(xdgUserDir)
+	databaseClient := database.NewClient(xdgUserDir)
 	// Run the auto migration tool.
-	if err := client.Schema.Create(context.Background()); err != nil {
+	err := databaseClient.AutoMigrate(&database.Request{}, &database.Collection{}, &database.Project{})
+	if err != nil {
 		log.Fatal().Msgf("failed creating schema resources: %v", err)
 	}
 	configurationReadWriter := configuration.NewReadWriter(xdgUserDir)
 	config := frontend.NewConfiguration(configurationReadWriter)
 	request := frontend.NewRequest()
 	// Create application with options
-	err := wails.Run(&options.App{
+	err = wails.Run(&options.App{
 		Title:     "Api-Client",
 		Frameless: true,
 		Width:     500,

@@ -15,9 +15,6 @@ install-backend-dependencies:
 install-frontend-dependencies:
 	cd frontend && npm install
 
-ent-generate:
-	go generate ./src/ent
-
 test:
 	make test-backend
 	make test-frontend-e2e
