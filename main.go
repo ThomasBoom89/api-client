@@ -27,7 +27,15 @@ func main() {
 	xdgUserDir := configuration.NewXDG()
 	databaseClient := database.NewClient(xdgUserDir)
 	// Run the auto migration tool.
-	err := databaseClient.AutoMigrate(&database.Request{}, &database.Collection{}, &database.Project{})
+	err := databaseClient.AutoMigrate(
+		&database.Request{},
+		&database.Collection{},
+		&database.Project{},
+		&database.Http{},
+		&database.Grpc{},
+		&database.Websocket{},
+	)
+
 	if err != nil {
 		log.Fatal().Msgf("failed creating schema resources: %v", err)
 	}
