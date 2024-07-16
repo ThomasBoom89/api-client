@@ -1,12 +1,12 @@
 import { Get } from '$lib/wailsjs/go/frontend/Configuration';
 
-export const prerender = true;
+export const prerender = false;
 export const ssr = false;
 
 export async function load() {
 	return {
 		configuration: await Get(),
-		delay: await delay(3000),
+		delay: await delay(1000),
 	};
 }
 

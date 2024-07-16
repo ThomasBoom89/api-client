@@ -57,21 +57,19 @@
 				<button
 					onclick={() => {
 						navigate('/');
-					}}>Home</button
+					}}>Home
+				</button
 				>
 			</li>
-			<li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
-				<button
-					onclick={() => {
-						navigate('/about');
-					}}>About</button
-				>
+			<li aria-current={$page.url.pathname === '/overview' ? 'page' : undefined}>
+				<a href="/overview">Project Overview</a>
 			</li>
 			<li aria-current={$page.url.pathname === '/request' ? 'page' : undefined}>
 				<button
 					onclick={() => {
 						navigate('/request');
-					}}>Request</button
+					}}>Request
+				</button
 				>
 			</li>
 		</ul>
