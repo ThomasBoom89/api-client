@@ -23,6 +23,9 @@ test:
 test-frontend-e2e:
 	cd frontend && npm run test:integration
 
+test-frontend-e2e-ui:
+	cd frontend && npm run test:integration-ui
+
 test-frontend-unit:
 	cd frontend && npm run test:unit
 

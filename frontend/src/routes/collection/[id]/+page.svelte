@@ -8,7 +8,7 @@
 </script>
 
 <svelte:head>
-	<title>Project Overview</title>
+	<title>Api-Client :: Collection Overview</title>
 	<meta name="description" content="project overview" />
 </svelte:head>
 
