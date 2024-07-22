@@ -78,7 +78,7 @@
 				<button onclick={test}>Test</button>
 			</li>
 			<li class="flex items-center">
-				<button onclick={switchTheme}>
+				<button onclick={switchTheme} data-testid="dark-light-toggle">
 					{#if config.theme === 'dark'}
 						<svg
 							class="w-6 h-6"
