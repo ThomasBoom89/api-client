@@ -2,7 +2,7 @@
 </script>
 
 <svelte:head>
-	<title>Api-Client Startseite</title>
+	<title>Api-Client :: Startseite</title>
 	<meta name="description" content="Startseite" />
 </svelte:head>
 
