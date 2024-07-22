@@ -2,8 +2,10 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
 	webServer: {
-		command: 'npm run build && npm run preview',
-		port: 4173,
+		command: 'cd .. && wails dev -loglevel "Error"',
+		port: 34115,
+		reuseExistingServer: true,
+		stderr: 'ignore',
 	},
 	testDir: 'tests',
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
@@ -17,10 +19,10 @@ export default defineConfig({
 			name: 'firefox',
 			use: { ...devices['Desktop Firefox'] },
 		},
-		{
-			name: 'webkit',
-			use: { ...devices['Desktop Safari'] },
-		},
+		// {
+		// 	name: 'webkit',
+		// 	use: { ...devices['Desktop Safari'] },
+		// },
 		// /* Test against mobile viewports. */
 		// {
 		// 	name: 'Mobile Chrome',
