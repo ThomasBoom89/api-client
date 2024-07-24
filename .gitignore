@@ -5,4 +5,5 @@ frontend/dist
 frontend/build
 frontend/.idea
 frontend/test-results
+coverage
 .svelte-kit
