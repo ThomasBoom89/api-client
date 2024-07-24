@@ -1,11 +1,13 @@
 <script>
 	import './styles.css';
 	import Header from './Header.svelte';
-	import { initializeConfigurationStore } from './createConfigurationState.svelte.ts';
+	import { getConfigurationStore, initializeConfigurationStore } from '../lib/configurationStore.svelte.ts';
+	import { initializeThemeStore } from '../lib/themeStore.svelte.ts';
 	import Footer from './Footer.svelte';
 
 	let { children, data } = $props();
 	initializeConfigurationStore(data.configuration);
+	initializeThemeStore(getConfigurationStore());
 	document.getElementById('loader')?.remove();
 </script>
 
