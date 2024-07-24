@@ -1,27 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { LogDebug } from '$lib/wailsjs/runtime/runtime';
 	import { Test } from '$lib/wailsjs/go/main/App';
-	import { configuration } from '$lib/wailsjs/go/models.ts';
-	import { getConfigurationStore } from './createConfigurationState.svelte.ts';
+	import { getThemeStore } from '../lib/themeStore.svelte.ts';
 
-	const html = document.documentElement;
-	const configurationStore = getConfigurationStore();
-	let config: configuration.Configuration = configurationStore.configuration;
-	$effect(() => {
-		if (config.theme === '') {
-			if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-				html.setAttribute('data-theme', 'dark');
-				configurationStore.setProperty('theme', 'dark');
-			} else {
-				html.setAttribute('data-theme', 'light');
-				configurationStore.setProperty('theme', 'light');
-			}
-		} else {
-			html.setAttribute('data-theme', config.theme);
-		}
-	});
+	const themeStore = getThemeStore();
 
 	function navigate(page: string = ''): null {
 		console.warn(page);
@@ -31,18 +14,6 @@
 		goto(page, {});
 
 		return null;
-	}
-
-	function switchTheme(): void {
-		LogDebug('switchTheme');
-		const currentTheme = html.getAttribute('data-theme');
-		if (currentTheme == 'dark') {
-			html.setAttribute('data-theme', 'light');
-			configurationStore.setProperty('theme', 'light');
-		} else {
-			html.setAttribute('data-theme', 'dark');
-			configurationStore.setProperty('theme', 'dark');
-		}
 	}
 
 	function test(): void {
@@ -78,8 +49,8 @@
 				<button onclick={test}>Test</button>
 			</li>
 			<li class="flex items-center">
-				<button onclick={switchTheme} data-testid="dark-light-toggle">
-					{#if config.theme === 'dark'}
+				<button onclick={() => {themeStore.switchTheme()}} data-testid="dark-light-toggle">
+					{#if themeStore.currentTheme === 'dark'}
 						<svg
 							class="w-6 h-6"
 							aria-hidden="true"

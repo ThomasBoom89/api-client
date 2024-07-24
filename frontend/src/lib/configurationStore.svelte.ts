@@ -2,7 +2,7 @@ import { configuration } from '$lib/wailsjs/go/models.ts';
 import { getContext, setContext } from 'svelte';
 import { Set } from '$lib/wailsjs/go/frontend/Configuration';
 
-class ConfigurationStore {
+export class ConfigurationStore {
 	private readonly _configuration: configuration.Configuration = $state(new configuration.Configuration());
 
 	get configuration(): configuration.Configuration {

@@ -1,5 +1,8 @@
 install:
 	make install-wails
+	make install-dependencies
+
+dev:
 	wails dev
 
 install-wails:
@@ -28,6 +31,12 @@ test-frontend-e2e-ui:
 
 test-frontend-unit:
 	cd frontend && npm run test:unit
+
+test-frontend-unit-watch:
+	cd frontend && npm run test:unit-watch
+
+test-frontend-unit-coverage:
+	cd frontend && npm run test:unit-coverage
 
 test-backend:
 	go test ./...
