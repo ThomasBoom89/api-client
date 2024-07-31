@@ -2,8 +2,10 @@
 build/bin
 node_modules
 frontend/dist
-frontend/build
+frontend/build/**
 frontend/.idea
 frontend/test-results
 coverage
 .svelte-kit
+
+!frontend/build/.gitkeep
