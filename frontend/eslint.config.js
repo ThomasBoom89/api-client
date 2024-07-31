@@ -28,6 +28,6 @@ export default [
 		},
 	},
 	{
-		ignores: ['build/', '.svelte-kit/', 'dist/', 'src/lib'],
+		ignores: ['build/', '.svelte-kit/', 'dist/', 'src/lib/wailsjs', 'coverage'],
 	},
 ];
