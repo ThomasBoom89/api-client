@@ -14,8 +14,7 @@ export class ThemeStore {
 		document.documentElement.setAttribute('data-theme', currentTheme);
 	}
 
-	public constructor(private readonly configurationStore: ConfigurationStore) {
-	}
+	public constructor(private readonly configurationStore: ConfigurationStore) {}
 
 	public switchTheme(): string {
 		if (this.currentTheme === 'dark') {

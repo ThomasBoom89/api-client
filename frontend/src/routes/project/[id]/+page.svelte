@@ -1,5 +1,4 @@
 <script lang="ts">
-
 	import { page } from '$app/stores';
 	import Loader from '$lib/Loader.svelte';
 

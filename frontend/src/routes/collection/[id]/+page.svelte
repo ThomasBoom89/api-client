@@ -4,7 +4,6 @@
 
 	let { data } = $props();
 	const id: number = Number($page.params.id);
-
 </script>
 
 <svelte:head>
