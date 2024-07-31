@@ -41,6 +41,12 @@ test-frontend-unit-coverage:
 test-backend:
 	go test ./...
 
+backend-format-check:
+	gofmt -l .
+
+backend-format:
+	gofmt -w .
+
 frontend-lint:
 	cd frontend && npm run lint
 
