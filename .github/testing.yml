@@ -2,6 +2,7 @@ name: Testing Pipeline
 on:
   pull_request:
   push:
+  workflow_dispatch:
 
 jobs:
   Go-Test:
