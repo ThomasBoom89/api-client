@@ -28,9 +28,9 @@
 				<button
 					onclick={() => {
 						navigate('/');
-					}}>Home
-				</button
-				>
+					}}
+					>Home
+				</button>
 			</li>
 			<li aria-current={$page.url.pathname === '/overview' ? 'page' : undefined}>
 				<a href="/overview">Project Overview</a>
@@ -39,9 +39,9 @@
 				<button
 					onclick={() => {
 						navigate('/request');
-					}}>Request
-				</button
-				>
+					}}
+					>Request
+				</button>
 			</li>
 		</ul>
 		<ul class="flex flex-row gap-2 items-center">
@@ -49,7 +49,12 @@
 				<button onclick={test}>Test</button>
 			</li>
 			<li class="flex items-center">
-				<button onclick={() => {themeStore.switchTheme()}} data-testid="dark-light-toggle">
+				<button
+					onclick={() => {
+						themeStore.switchTheme();
+					}}
+					data-testid="dark-light-toggle"
+				>
 					{#if themeStore.currentTheme === 'dark'}
 						<svg
 							class="w-6 h-6"

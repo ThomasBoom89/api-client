@@ -4,6 +4,7 @@ package-lock.json
 .svelte-kit
 build
 node_modules
-src/lib
+src/lib/wailsjs
 static
 test-results
+coverage

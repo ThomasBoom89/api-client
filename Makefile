@@ -47,8 +47,8 @@ backend-format-check:
 backend-format:
 	gofmt -w .
 
-frontend-lint:
-	cd frontend && npm run lint
+frontend-format-check:
+	cd frontend && npm run format:check
 
 frontend-format:
 	cd frontend && npm run format
