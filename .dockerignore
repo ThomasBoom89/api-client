@@ -1,0 +1,8 @@
+build/bin
+frontend/.svelte-kit
+frontend/build/**
+frontend/coverage
+frontend/node_modules
+frontend/test-results
+
+!frontend/build/.gitkeep
