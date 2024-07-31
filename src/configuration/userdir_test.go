@@ -1,19 +1,32 @@
 package configuration
 
-import "testing"
+import (
+	"runtime"
+	"strings"
+	"testing"
+)
 
 func TestGetConfigPath(t *testing.T) {
+	if runtime.GOOS != "linux" {
+		t.Log("test not running on different platform than linux")
+		return
+	}
 	xdg := NewXDG()
 	// currently only working on linux and if the users name is thomas
-	if "/home/thomas/.config/row-api-client/" != xdg.GetConfigPath() {
+	if !strings.Contains(xdg.GetConfigPath(), "/.config/row-api-client") {
 		t.Fatal("not equal")
 	}
 }
 
 func TestGetDataPath(t *testing.T) {
+	if runtime.GOOS != "linux" {
+		t.Log("test not running on different platform than linux")
+		return
+	}
+
 	xdg := NewXDG()
 	// currently only working on linux and if the users name is thomas
-	if "/home/thomas/.local/share/row-api-client/" != xdg.GetDataPath() {
+	if !strings.Contains(xdg.GetDataPath(), "/share/row-api-client") {
 		t.Fatal("not equal")
 	}
 }
