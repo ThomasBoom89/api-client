@@ -4,8 +4,8 @@ export default defineConfig({
 	webServer: {
 		command: 'cd .. && wails dev -loglevel "Error"',
 		port: 34115,
-		reuseExistingServer: true,
-		stderr: 'ignore',
+		reuseExistingServer: false,
+		// stderr: 'ignore',
 	},
 	testDir: 'tests',
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,

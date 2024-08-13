@@ -40,6 +40,8 @@ jobs:
   Playwright:
     name: "Playwright"
     runs-on: ubuntu-latest
+    env:
+      DISPLAY: :1
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
