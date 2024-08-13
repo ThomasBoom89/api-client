@@ -18,10 +18,17 @@ install-backend-dependencies:
 install-frontend-dependencies:
 	cd frontend && npm install
 
+install-frontend-playwright:
+	cd frontend && npx playwright install
+
 test:
 	make test-backend
 	make test-frontend-e2e
 	make test-frontend-unit
+
+test-frontend-e2e-container:
+	Xvfb :1 -screen 0 1920x1080x8 -nolisten tcp -nolisten unix &
+	cd frontend && npm run test:integration
 
 test-frontend-e2e:
 	cd frontend && npm run test:integration
@@ -46,6 +53,9 @@ backend-format-check:
 
 backend-format:
 	gofmt -w .
+
+frontend-build:
+	cd frontend && npm run build
 
 frontend-format-check:
 	cd frontend && npm run format:check
