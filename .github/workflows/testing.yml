@@ -58,6 +58,6 @@ jobs:
       - name: Install dependencies
         run: make install && make frontend-build && make install-frontend-playwright
       - name: Install packages
-        run: apt update && apt install -y xvfb libgtk-3-dev libwebkit2gtk-4.0-dev
+        run: sudo apt update && sudo apt install -y xvfb libgtk-3-dev libwebkit2gtk-4.0-dev
       - name: Run tests
         run: make test-frontend-e2e-container
