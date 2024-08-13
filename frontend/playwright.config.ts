@@ -3,9 +3,10 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
 	webServer: {
 		command: 'cd .. && wails dev -loglevel "Error"',
+		timeout: 120000,
 		port: 34115,
-		reuseExistingServer: false,
-		// stderr: 'ignore',
+		reuseExistingServer: true,
+		stderr: 'ignore',
 	},
 	testDir: 'tests',
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
