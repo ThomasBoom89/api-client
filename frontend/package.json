@@ -22,7 +22,7 @@
 	"devDependencies": {
 		"@playwright/test": "^1.46.0",
 		"@sveltejs/adapter-static": "^3.0.4",
-		"@sveltejs/kit": "2.5.18",
+		"@sveltejs/kit": "2.5.24",
 		"@sveltejs/vite-plugin-svelte": "3.1.1",
 		"@types/eslint": "^8.56.10",
 		"@vitest/coverage-v8": "^2.0.5",
