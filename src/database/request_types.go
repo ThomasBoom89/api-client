@@ -2,26 +2,21 @@ package database
 
 import "gorm.io/gorm"
 
-type Http struct {
+type HttpRequest struct {
 	gorm.Model
+	Name         string
+	CollectionID uint
+	Url          string
 }
 
-type Grpc struct {
+type GrpcRequest struct {
 	gorm.Model
+	Name         string
+	CollectionID uint
 }
 
-type Websocket struct {
+type WebsocketRequest struct {
 	gorm.Model
-}
-
-func (Http) TableName() string {
-	return "http_requests"
-}
-
-func (Grpc) TableName() string {
-	return "grpc_requests"
-}
-
-func (Websocket) TableName() string {
-	return "websocket_requests"
+	Name         string
+	CollectionID uint
 }
