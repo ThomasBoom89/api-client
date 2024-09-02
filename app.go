@@ -27,7 +27,9 @@ func (A *App) Greet(name string) string {
 }
 
 func (A *App) Test() {
-
+	//xdg := configuration.NewXDG()
+	//databaseClient := database.NewClient(xdg)
+	//database.SeedDatabase(databaseClient)
 }
 
 func (A *App) shutdown(ctx context.Context) {
