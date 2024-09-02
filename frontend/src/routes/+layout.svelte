@@ -4,9 +4,15 @@
 	import { getConfigurationStore, initializeConfigurationStore } from '../lib/configurationStore.svelte.ts';
 	import { initializeThemeStore } from '../lib/themeStore.svelte.ts';
 	import Footer from './Footer.svelte';
+	import { initializeProjectStore } from '../lib/projectStore.svelte.ts';
+	import { initializeCollectionStore } from '../lib/collectionStore.svelte.ts';
+	import { initializeRequestStore } from '../lib/requestStore.svelte.ts';
 
 	let { children, data } = $props();
 	initializeConfigurationStore(data.configuration);
+	initializeProjectStore(data.projects);
+	initializeCollectionStore(data.collections);
+	initializeRequestStore(data.requests);
 	initializeThemeStore(getConfigurationStore());
 	document.getElementById('loader')?.remove();
 </script>

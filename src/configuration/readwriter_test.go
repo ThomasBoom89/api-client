@@ -1,27 +1,14 @@
 package configuration
 
 import (
-	"os"
+	"api-client/src/test"
 	"reflect"
 	"testing"
 )
 
-type UserDirTest struct {
-}
-
-const (
-	TestDir = "./tmp/"
-)
-
-func (U *UserDirTest) GetConfigPath() string {
-	return TestDir
-}
-func (U *UserDirTest) GetDataPath() string {
-	return TestDir
-}
-
 func TestWriteRead(t *testing.T) {
-	userDirTest := &UserDirTest{}
+	defer test.Cleanup()
+	userDirTest := &test.UserDir{}
 	readWriter := NewReadWriter(userDirTest)
 	expectedConfiguration := Configuration{Theme: "dark"}
 	err := readWriter.Write(expectedConfiguration)
@@ -34,13 +21,5 @@ func TestWriteRead(t *testing.T) {
 	}
 	if !reflect.DeepEqual(expectedConfiguration, currentConfiguration) {
 		t.Fatal("Expected configuration to be equal", expectedConfiguration, currentConfiguration)
-	}
-	cleanup()
-}
-
-func cleanup() {
-	err := os.RemoveAll(TestDir)
-	if err != nil {
-		panic(err)
 	}
 }

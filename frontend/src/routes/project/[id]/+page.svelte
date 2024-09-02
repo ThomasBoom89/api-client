@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import Loader from '$lib/Loader.svelte';
+	import { getCollectionStore } from '../../../lib/collectionStore.svelte';
 
-	let { data } = $props();
+	const collectionStore = getCollectionStore();
 	const id: number = Number($page.params.id);
 </script>
 
@@ -11,17 +11,11 @@
 	<meta name="description" content="project details" />
 </svelte:head>
 
-{#await data.promise}
-	<div class="w-full h-full">
-		<Loader />
-	</div>
-{:then data}
-	<h2>Project {id}</h2>
-	{#each data.collections as collection}
-		<section>
-			<a href="/collection/{collection.id}">
-				{collection.name}
-			</a>
-		</section>
-	{/each}
-{/await}
+<h2>Project {id}</h2>
+{#each collectionStore.getByProjectId(id) as collection}
+	<section>
+		<a href="/collection/{collection.id}">
+			{collection.name}
+		</a>
+	</section>
+{/each}

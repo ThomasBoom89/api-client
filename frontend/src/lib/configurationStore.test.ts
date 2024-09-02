@@ -4,7 +4,7 @@ import { ConfigurationStore } from './configurationStore.svelte';
 import * as models from '$lib/wailsjs/go/frontend/Configuration';
 import Configuration = configuration.Configuration;
 
-test('foo', () => {
+test('toggle theme', () => {
 	// Set needs to be mocked
 	vi.spyOn(models, 'Set').mockImplementationOnce((): Promise<void> => {
 		return new Promise<void>((resolve) => {

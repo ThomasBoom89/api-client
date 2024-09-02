@@ -4,7 +4,9 @@ import "gorm.io/gorm"
 
 type Collection struct {
 	gorm.Model
-	Name      string
-	Requests  []Request
-	ProjectID uint
+	Name              string
+	ProjectID         uint
+	HttpRequests      []HttpRequest
+	GrpcRequests      []GrpcRequest
+	WebsocketRequests []WebsocketRequest
 }

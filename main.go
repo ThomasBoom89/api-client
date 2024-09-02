@@ -6,7 +6,6 @@ import (
 	"api-client/src/frontend"
 	"embed"
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
@@ -26,24 +25,18 @@ func main() {
 	app := NewApp()
 	xdgUserDir := configuration.NewXDG()
 	databaseClient := database.NewClient(xdgUserDir)
-	// Run the auto migration tool.
-	err := databaseClient.AutoMigrate(
-		&database.Request{},
-		&database.Collection{},
-		&database.Project{},
-		&database.Http{},
-		&database.Grpc{},
-		&database.Websocket{},
-	)
-
-	if err != nil {
-		log.Fatal().Msgf("failed creating schema resources: %v", err)
-	}
+	database.AutoMigrate(databaseClient)
 	configurationReadWriter := configuration.NewReadWriter(xdgUserDir)
 	config := frontend.NewConfiguration(configurationReadWriter)
 	request := frontend.NewRequest()
+	projectRepository := database.NewRepository[database.Project](databaseClient)
+	collectionsRepository := database.NewRepository[database.Collection](databaseClient)
+	httpRequestRepository := database.NewRepository[database.HttpRequest](databaseClient)
+	projects := frontend.NewProjects(projectRepository)
+	collections := frontend.NewCollections(collectionsRepository)
+	requests := frontend.NewRequests(httpRequestRepository)
 	// Create application with options
-	err = wails.Run(&options.App{
+	err := wails.Run(&options.App{
 		Title:     "Api-Client",
 		Frameless: true,
 		Width:     500,
@@ -60,6 +53,9 @@ func main() {
 			app,
 			config,
 			request,
+			projects,
+			collections,
+			requests,
 		},
 	})
 

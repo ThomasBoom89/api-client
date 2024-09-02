@@ -25,3 +25,16 @@ func NewClient(userDir configuration.UserDir) *gorm.DB {
 
 	return database
 }
+
+func AutoMigrate(databaseClient *gorm.DB) {
+	err := databaseClient.AutoMigrate(
+		&HttpRequest{},
+		&GrpcRequest{},
+		&WebsocketRequest{},
+		&Collection{},
+		&Project{},
+	)
+	if err != nil {
+		log.Fatal().Msg("migration was not successful")
+	}
+}
