@@ -7,7 +7,6 @@
 	const themeStore = getThemeStore();
 
 	function navigate(page: string = ''): null {
-		console.warn(page);
 		if (page == undefined) {
 			return null;
 		}
