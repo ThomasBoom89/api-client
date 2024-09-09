@@ -23,7 +23,7 @@
 		"@playwright/test": "^1.46.1",
 		"@sveltejs/adapter-static": "^3.0.4",
 		"@sveltejs/kit": "2.5.25",
-		"@sveltejs/vite-plugin-svelte": "4.0.0-next.6",
+		"@sveltejs/vite-plugin-svelte": "4.0.0-next.7",
 		"@types/eslint": "^9.6.1",
 		"@vitest/coverage-v8": "^2.0.5",
 		"autoprefixer": "^10.4.20",
