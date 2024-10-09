@@ -7,7 +7,7 @@ on:
 jobs:
   Go-Test:
     name: "Go Test"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -23,7 +23,7 @@ jobs:
         run: make test-backend
   Vitest:
     name: "Vitest"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -39,7 +39,7 @@ jobs:
         run: make test-frontend-unit
   Playwright:
     name: "Playwright"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     env:
       DISPLAY: :1
     steps:
