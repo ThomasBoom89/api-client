@@ -24,7 +24,7 @@ RUN make install-frontend-dependencies
 CMD ["make", "test-frontend-unit"]
 
 
-FROM node:20.16.0 AS test-e2e-frontend
+FROM node:20.17.0 AS test-e2e-frontend
 RUN apt update
 RUN apt install -y xvfb libgtk-3-dev libwebkit2gtk-4.0-dev
 
