@@ -20,9 +20,9 @@
 		"test:unit-watch": "vitest watch"
 	},
 	"devDependencies": {
-		"@playwright/test": "^1.46.1",
+		"@playwright/test": "^1.48.0",
 		"@sveltejs/adapter-static": "^3.0.4",
-		"@sveltejs/kit": "2.5.25",
+		"@sveltejs/kit": "2.6.4",
 		"@sveltejs/vite-plugin-svelte": "4.0.0-next.7",
 		"@types/eslint": "^9.6.1",
 		"@vitest/coverage-v8": "^2.0.5",
@@ -35,7 +35,7 @@
 		"postcss": "^8.4.44",
 		"prettier": "^3.3.3",
 		"prettier-plugin-svelte": "^3.2.6",
-		"svelte": "^5.0.0-next.243",
+		"svelte": "^5.0.0-next.264",
 		"svelte-check": "^4.0.4",
 		"tailwindcss": "^3.4.10",
 		"tslib": "^2.7.0",
