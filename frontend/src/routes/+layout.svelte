@@ -20,7 +20,7 @@
 <div class="w-[100vw] h-[100vh] bg-background text-text p-2 grid grid-rows-[min-content_min-content_1fr_min-content]">
 	<Header />
 	<hr class="border-background-accent" />
-	<main class="w-full overflow-y-scroll mt-2">
+	<main class="w-full h-full mt-2 overflow-hidden">
 		{@render children()}
 	</main>
 	<Footer />

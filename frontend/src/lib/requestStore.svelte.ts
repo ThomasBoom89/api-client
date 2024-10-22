@@ -1,5 +1,6 @@
 import { getContext, setContext } from 'svelte';
 import { frontend } from './wailsjs/go/models';
+import { Update } from './wailsjs/go/frontend/HttpRequests';
 import HttpRequestDto = frontend.HttpRequestDto;
 
 export class RequestStore {
@@ -11,6 +12,10 @@ export class RequestStore {
 
 	public getByCollectionId(collectionId: number): HttpRequestDto[] {
 		return this._requests.filter((request: HttpRequestDto) => request.collectionId === collectionId);
+	}
+
+	public update(request: HttpRequestDto): void {
+		Update(request);
 	}
 }
 

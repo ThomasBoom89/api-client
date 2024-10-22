@@ -26,6 +26,7 @@ type HttpRequestDto struct {
 	Type         string    `json:"type"`
 	CollectionID uint      `json:"collectionId"`
 	Url          string    `json:"url"`
+	Method       string    `json:"method"`
 }
 
 type Projects struct {
@@ -207,6 +208,7 @@ func (H *HttpRequests) GetAll() ([]HttpRequestDto, error) {
 			CollectionID: request.CollectionID,
 			Url:          request.Url,
 			Type:         "http",
+			Method:       request.Method,
 		}
 	}
 
@@ -237,6 +239,7 @@ func (H *HttpRequests) Update(httpRequestDto HttpRequestDto) (HttpRequestDto, er
 		Name:         httpRequestDto.Name,
 		CollectionID: httpRequestDto.CollectionID,
 		Url:          httpRequestDto.Url,
+		Method:       httpRequestDto.Method,
 	}
 	httpRequest, err := H.httpRequestRepository.Update(httpRequest)
 	if err != nil {
