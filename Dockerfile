@@ -1,4 +1,4 @@
-FROM golang:1.22 AS test-backend
+FROM golang:1.23 AS test-backend
 
 RUN useradd -ms /bin/sh user
 USER user
@@ -11,7 +11,7 @@ RUN make install-backend-dependencies
 CMD ["make", "test-backend"]
 
 
-FROM node:20.16.0 AS test-unit-frontend
+FROM node:20.18.0 AS test-unit-frontend
 
 RUN useradd -ms /bin/sh user
 USER user
@@ -24,12 +24,12 @@ RUN make install-frontend-dependencies
 CMD ["make", "test-frontend-unit"]
 
 
-FROM node:20.17.0 AS test-e2e-frontend
+FROM node:20.18.0 AS test-e2e-frontend
 RUN apt update
 RUN apt install -y xvfb libgtk-3-dev libwebkit2gtk-4.0-dev
 
-RUN wget https://go.dev/dl/go1.22.6.linux-amd64.tar.gz
-RUN tar -C /usr/local -xzf go1.22.6.linux-amd64.tar.gz
+RUN wget https://go.dev/dl/go1.23.2.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf go1.23.2.linux-amd64.tar.gz
 
 RUN useradd -ms /bin/sh user
 USER user
