@@ -7,6 +7,7 @@ type HttpRequest struct {
 	Name         string
 	CollectionID uint
 	Url          string
+	Method       string `gorm:"default:GET"`
 }
 
 type GrpcRequest struct {

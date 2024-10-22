@@ -62,6 +62,7 @@ export namespace frontend {
 	    type: string;
 	    collectionId: number;
 	    url: string;
+	    method: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new HttpRequestDto(source);
@@ -75,6 +76,7 @@ export namespace frontend {
 	        this.type = source["type"];
 	        this.collectionId = source["collectionId"];
 	        this.url = source["url"];
+	        this.method = source["method"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
