@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
 	webServer: {
-		command: 'cd .. && wails dev -loglevel "Error"',
+		command: 'cd .. && wails dev -race -loglevel "Error"',
 		timeout: 120000,
 		port: 34115,
 		reuseExistingServer: true,

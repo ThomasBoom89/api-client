@@ -1,6 +1,4 @@
-install:
-	make install-wails
-	make install-dependencies
+install: install-wails install-dependencies
 
 dev:
 	wails dev
@@ -46,7 +44,7 @@ test-frontend-unit-coverage:
 	cd frontend && npm run test:unit-coverage
 
 test-backend:
-	go test ./...
+	go test -race ./...
 
 backend-format-check:
 	gofmt -l .
