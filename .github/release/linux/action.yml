@@ -1,0 +1,27 @@
+name: "Wails Build Action for Linux"
+inputs:
+  build-name:
+    description: "Build name"
+    type: string
+  build-platform:
+    description: "Platform to build for"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Prepare build environment
+      uses: ./.github/release/prepare
+    - name: Install Linux Wails dependencies
+      run: sudo apt-get update && sudo apt-get install -y libgtk-3-0 libwebkit2gtk-4.0-dev gcc-aarch64-linux-gnu
+      shell: bash
+    - name: Build app
+      run: wails build --platform ${{ inputs.build-platform }} -webview2 download -o ${{ inputs.build-name }}
+      shell: bash
+    - name: Fix permission
+      run: chmod +x build/bin/*
+      shell: bash
+    - name: Handle artifacts
+      uses: ./.github/release/artifact
+      with:
+        build-name: ${{ inputs.build-name }}

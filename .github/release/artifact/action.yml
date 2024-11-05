@@ -1,0 +1,23 @@
+name: "Wails Artifact Action"
+
+inputs:
+  build-name:
+    description: "artifact name"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Upload build assets
+      uses: actions/upload-artifact@v4
+      with:
+        name: Wails Build ${{inputs.build-name}}
+        path: |
+          */bin/
+          *\bin\*
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: |
+          */bin/*
