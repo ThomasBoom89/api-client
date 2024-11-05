@@ -1,14 +1,15 @@
-name: "Wails Build Action for Linux"
+name: Wails Build Action for Linux
+
 inputs:
   build-name:
-    description: "Build name"
+    description: Build name
     type: string
   build-platform:
-    description: "Platform to build for"
+    description: Platform to build for
     type: string
 
 runs:
-  using: "composite"
+  using: composite
   steps:
     - name: Prepare build environment
       uses: ./.github/release/prepare

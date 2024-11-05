@@ -7,7 +7,7 @@ on:
 
 env:
   # Necessary for most environments as build failure can occur due to OOM issues
-  NODE_OPTIONS: "--max-old-space-size=4096"
+  NODE_OPTIONS: --max-old-space-size=4096
 
 jobs:
   linux:
@@ -16,14 +16,14 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: "api-client-linux-amd64"
+          - name: api-client-linux-amd64
             platform: linux/amd64
-          - name: "api-client-linux-arm64"
+          - name: api-client-linux-arm64
             platform: linux/arm64
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-      - name: build linux
+      - name: build on linux
         uses: ./.github/release/linux
         with:
           build-name: ${{ matrix.name }}
