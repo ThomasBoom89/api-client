@@ -1,0 +1,22 @@
+name: Wails Build Action for Windows
+
+inputs:
+  build-name:
+    description: Build name
+    type: string
+  build-platform:
+    description: Platform to build for
+    type: string
+
+runs:
+  using: composite
+  steps:
+    - name: Prepare build environment
+      uses: ./.github/release/prepare
+    - name: Build app
+      run: wails build --platform ${{ inputs.build-platform }} -webview2 download -o ${{ inputs.build-name }}
+      shell: bash
+    - name: Handle artifacts
+      uses: ./.github/release/artifact
+      with:
+        build-name: ${{ inputs.build-name }}

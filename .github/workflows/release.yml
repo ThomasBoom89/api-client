@@ -1,0 +1,66 @@
+name: Wails build
+
+on:
+  workflow_dispatch:
+  release:
+    types: [ created ]
+
+env:
+  # Necessary for most environments as build failure can occur due to OOM issues
+  NODE_OPTIONS: --max-old-space-size=4096
+
+jobs:
+  linux:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: api-client-linux-amd64
+            platform: linux/amd64
+          - name: api-client-linux-arm64
+            platform: linux/arm64
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: build on linux
+        uses: ./.github/release/linux
+        with:
+          build-name: ${{ matrix.name }}
+          build-platform: ${{ matrix.platform }}
+
+  windows:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: api-client-windows-amd64
+            platform: windows/amd64
+          - name: api-client-windows-arm64
+            platform: windows/arm64
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: build on windows
+        uses: ./.github/release/windows
+        with:
+          build-name: ${{ matrix.name }}
+          build-platform: ${{ matrix.platform }}
+
+  macos:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: api-client-macos-universal
+            platform: darwin/universal
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: build on macos
+        uses: ./.github/release/macos
+        with:
+          build-name: ${{ matrix.name }}
+          build-platform: ${{ matrix.platform }}
