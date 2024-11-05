@@ -14,13 +14,13 @@ runs:
     - name: Prepare build environment
       uses: ./.github/release/prepare
     - name: Build app
-      run: wails build --platform ${{ inputs.build-platform }} -webview2 download -o ${{ inputs.build-name }}
+      run: wails build --platform ${{ inputs.build-platform }} -webview2 download -o api-client
       shell: bash
     - name: Fix permission
       run: chmod +x build/bin/*/Contents/MacOS/*
       shell: bash
     - name: package build
-      run: productbuild --component ./build/bin/api-client.app /Applications ./build/bin/${{inputs.build-name}}.pkg && rm -rf ./build/bin${{inputs.build-name}}.app
+      run: productbuild --component ./build/bin/api-client.app /Applications ./build/bin/${{inputs.build-name}}.pkg
       shell: bash
     - name: Handle artifacts
       uses: ./.github/release/artifact
