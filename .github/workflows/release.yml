@@ -54,10 +54,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: api-client-macos-amd64
-            platform: darwin/amd64
-          - name: api-client-macos-arm64
-            platform: darwin/arm64
+          - name: api-client-macos-universal
+            platform: darwin/universal
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
