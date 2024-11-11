@@ -4,7 +4,7 @@
 
 	const requestStore = getRequestStore();
 
-	let { request }: { request: frontend.HttpRequestDto } = $props();
+	let { request, submit }: { request: frontend.HttpRequestDto; submit: () => void } = $props();
 	let update = (): void => {
 		requestStore.update(request);
 	};
@@ -34,4 +34,5 @@
 			update();
 		}}
 	/>
+	<input type="button" value="submit" onclick={submit} />
 </div>

@@ -132,6 +132,30 @@ export namespace frontend {
 		    return a;
 		}
 	}
+	export class RequestResponseDTO {
+	    error: string;
+	    url: string;
+	    method: string;
+	    responseBody: string;
+	    sendHeader: {[key: string]: string[]};
+	    receivedHeader: {[key: string]: string[]};
+	    elapsedTime: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new RequestResponseDTO(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.error = source["error"];
+	        this.url = source["url"];
+	        this.method = source["method"];
+	        this.responseBody = source["responseBody"];
+	        this.sendHeader = source["sendHeader"];
+	        this.receivedHeader = source["receivedHeader"];
+	        this.elapsedTime = source["elapsedTime"];
+	    }
+	}
 
 }
 
