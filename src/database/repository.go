@@ -48,3 +48,13 @@ func (R *Repository[T]) GetAll() ([]T, error) {
 
 	return values, nil
 }
+
+func (R *Repository[T]) GetById(id uint) (T, error) {
+	var value T
+	err := R.database.Find(&value, id)
+	if err.Error != nil {
+		return value, err.Error
+	}
+
+	return value, nil
+}
