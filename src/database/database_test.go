@@ -34,6 +34,10 @@ func TestDatabase(t *testing.T) {
 	if len(projects) != 1 {
 		t.Fatal("expected 1 project")
 	}
+	_, err = projectRepository.GetById(projects[0].ID)
+	if err != nil {
+		t.Fatalf("project with id %d was", projects[0].ID)
+	}
 
 	collection := &Collection{
 		Name:              "TestCollection1",
