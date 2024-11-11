@@ -2,20 +2,19 @@ package test
 
 import "os"
 
-const Dir = "./tmp/"
-
 type UserDir struct {
+	Dir string
 }
 
 func (U *UserDir) GetConfigPath() string {
-	return Dir
+	return U.Dir
 }
 func (U *UserDir) GetDataPath() string {
-	return Dir
+	return U.Dir
 }
 
-func Cleanup() {
-	err := os.RemoveAll(Dir)
+func (U *UserDir) Cleanup() {
+	err := os.RemoveAll(U.Dir)
 	if err != nil {
 		panic(err)
 	}

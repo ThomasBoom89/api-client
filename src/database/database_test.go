@@ -6,8 +6,9 @@ import (
 )
 
 func TestDatabase(t *testing.T) {
-	defer test.Cleanup()
-	databaseClient := NewClient(&test.UserDir{})
+	userDir := test.UserDir{Dir: "./tmp-database_test/"}
+	defer userDir.Cleanup()
+	databaseClient := NewClient(&userDir)
 	AutoMigrate(databaseClient)
 
 	projectRepository := NewRepository[Project](databaseClient)

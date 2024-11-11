@@ -7,8 +7,9 @@ import (
 )
 
 func TestEntities(t *testing.T) {
-	defer test.Cleanup()
-	databaseClient := database.NewClient(&test.UserDir{})
+	userDir := test.UserDir{Dir: "./tmp-entities_test/"}
+	defer userDir.Cleanup()
+	databaseClient := database.NewClient(&userDir)
 	database.AutoMigrate(databaseClient)
 	projectRepository := database.NewRepository[database.Project](databaseClient)
 	collectionsRepository := database.NewRepository[database.Collection](databaseClient)

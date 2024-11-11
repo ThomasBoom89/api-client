@@ -7,9 +7,9 @@ import (
 )
 
 func TestWriteRead(t *testing.T) {
-	defer test.Cleanup()
-	userDirTest := &test.UserDir{}
-	readWriter := NewReadWriter(userDirTest)
+	userDir := test.UserDir{Dir: "./tmp-readwriter_test/"}
+	defer userDir.Cleanup()
+	readWriter := NewReadWriter(&userDir)
 	expectedConfiguration := Configuration{Theme: "dark"}
 	err := readWriter.Write(expectedConfiguration)
 	if err != nil {

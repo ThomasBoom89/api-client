@@ -8,7 +8,8 @@ import (
 )
 
 func TestRequest(t *testing.T) {
-	defer test.Cleanup()
+	userDir := test.UserDir{Dir: "./tmp-request_test/"}
+	defer userDir.Cleanup()
 
 	http.HandleFunc("GET /", func(writer http.ResponseWriter, request *http.Request) {
 		writer.Write([]byte("Yolo"))
@@ -31,7 +32,7 @@ func TestRequest(t *testing.T) {
 	}
 	go server.ListenAndServe()
 
-	databaseClient := database.NewClient(&test.UserDir{})
+	databaseClient := database.NewClient(&userDir)
 	database.AutoMigrate(databaseClient)
 	projectRepository := database.NewRepository[database.Project](databaseClient)
 	project, err := projectRepository.Create(&database.Project{
