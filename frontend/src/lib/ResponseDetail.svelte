@@ -10,6 +10,10 @@
 {:else if response.elapsedTime === undefined}{:else}
 	<div class="flex flex-col gap-2 h-full">
 		<h3>Current Response {response.method} {response.url}</h3>
+		<h4>Send Header:</h4>
+		{#each Object.entries(response.sendHeader) as [key, value]}
+			<p>{key} {value}</p>
+		{/each}
 		{#if response.error !== ''}
 			<div>Error: {response.error}</div>
 		{/if}
