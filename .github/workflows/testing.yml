@@ -1,7 +1,9 @@
 name: Testing Pipeline
 on:
-  pull_request:
   push:
+    branches:
+      - main
+  pull_request:
   workflow_dispatch:
 
 jobs:
