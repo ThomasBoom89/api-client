@@ -13,10 +13,10 @@ func TestEntities(t *testing.T) {
 	database.AutoMigrate(databaseClient)
 	projectRepository := database.NewRepository[database.Project](databaseClient)
 	collectionsRepository := database.NewRepository[database.Collection](databaseClient)
-	httpRequestRepository := database.NewRepository[database.HttpRequest](databaseClient)
+	httpRequestRepository := database.NewHttpRequestRepository(databaseClient)
 	projects := NewProjects(projectRepository)
 	collections := NewCollections(collectionsRepository)
-	httpRequests := NewRequests(httpRequestRepository)
+	httpRequests := NewHttpRequests(httpRequestRepository)
 
 	projectDtos, err := projects.GetAll()
 	if err != nil {
@@ -102,6 +102,11 @@ func TestEntities(t *testing.T) {
 		Type:         "http",
 		CollectionID: collectionDto.ID,
 		Url:          "superurl",
+		Method:       "POST",
+		Body: HttpRequestBodyDto{
+			Type:    "json",
+			Payload: `{"key": "value"}`,
+		},
 	}
 	httpRequestDto, err = httpRequests.Create(httpRequestDto)
 	if err != nil {
@@ -111,12 +116,16 @@ func TestEntities(t *testing.T) {
 		t.Fatal("http request name should be httpRequest1")
 	}
 	httpRequestDto.Url = "superurl2"
+	httpRequestDto.Body.Payload = `{"key2": "value2"}`
 	httpRequestDto, err = httpRequests.Update(httpRequestDto)
 	if err != nil {
 		t.Fatal("error updating http request", err)
 	}
 	if httpRequestDto.Url != "superurl2" {
 		t.Fatal("http request url should be superurl2")
+	}
+	if httpRequestDto.Body.Payload != `{"key2": "value2"}` {
+		t.Fatal("http request body payload should be `{\"key2\":\"value2\"}`")
 	}
 	httpRequestDtos, err = httpRequestRepository.GetAll()
 	if err != nil {

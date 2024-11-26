@@ -4,11 +4,13 @@ import (
 	"api-client/src/database"
 	"io"
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
 )
 
 type Request struct {
-	requestRepository *database.Repository[database.HttpRequest]
+	httpRequestRepository *database.HttpRequestRepository
 }
 
 type RequestResponseDTO struct {
@@ -19,24 +21,40 @@ type RequestResponseDTO struct {
 	SendHeader     map[string][]string `json:"sendHeader"`
 	ReceivedHeader map[string][]string `json:"receivedHeader"`
 	ElapsedTime    string              `json:"elapsedTime"`
+	StatusCode     int                 `json:"statusCode"`
 }
 
-func NewRequest(requestRepository *database.Repository[database.HttpRequest]) *Request {
-	return &Request{requestRepository: requestRepository}
+func NewRequest(httpRequestRepository *database.HttpRequestRepository) *Request {
+	return &Request{httpRequestRepository: httpRequestRepository}
 }
 
 func (R *Request) Submit(requestId uint) (requestResponseDto RequestResponseDTO) {
-	httpRequest, err := R.requestRepository.GetById(requestId)
+	httpRequest, err := R.httpRequestRepository.GetById(requestId)
 	if err != nil {
 		requestResponseDto.Error = err.Error()
 		return
 	}
-	request, err := http.NewRequest(httpRequest.Method, httpRequest.Url, nil)
+	var request *http.Request
+	if httpRequest.HttpRequestBody.Type == "none" {
+		request, err = http.NewRequest(httpRequest.Method, httpRequest.Url, nil)
+	} else {
+		request, err = http.NewRequest(httpRequest.Method, httpRequest.Url, strings.NewReader(httpRequest.HttpRequestBody.Payload))
+	}
 	if err != nil {
 		requestResponseDto.Error = err.Error()
 		return
 	}
-	R.handleHeader(request, requestResponseDto)
+
+	switch httpRequest.HttpRequestBody.Type {
+	case "json":
+		request.Header.Set("Content-Type", "application/json")
+	case "plaintext":
+		request.Header.Set("Content-Type", "text/plain")
+	}
+
+	requestResponseDto.Url = request.URL.String()
+	requestResponseDto.Method = request.Method
+	R.handleHeader(request, &requestResponseDto)
 
 	client := http.Client{
 		Transport: &http.Transport{
@@ -53,6 +71,10 @@ func (R *Request) Submit(requestId uint) (requestResponseDto RequestResponseDTO)
 		return
 	}
 	requestResponseDto.ReceivedHeader = response.Header
+	if response.ContentLength > -1 {
+		requestResponseDto.ReceivedHeader["Content-Length"] = []string{strconv.Itoa(int(response.ContentLength))}
+	}
+	requestResponseDto.StatusCode = response.StatusCode
 
 	var buffer []byte
 	buffer, err = io.ReadAll(response.Body)
@@ -65,11 +87,8 @@ func (R *Request) Submit(requestId uint) (requestResponseDto RequestResponseDTO)
 	return
 }
 
-func (R *Request) handleHeader(request *http.Request, requestResponseDto RequestResponseDTO) {
+func (R *Request) handleHeader(request *http.Request, requestResponseDto *RequestResponseDTO) {
 	request.Header.Set("User-Agent", "")
-	requestResponseDto.Url = request.URL.String()
-	requestResponseDto.Method = request.Method
-
 	buildHeaders := request.Header.Clone()
 	buildHeaders.Add("Host", request.Host)
 	if buildHeaders.Get("User-Agent") == "" {
@@ -77,4 +96,7 @@ func (R *Request) handleHeader(request *http.Request, requestResponseDto Request
 	}
 
 	requestResponseDto.SendHeader = buildHeaders
+	if request.ContentLength > -1 {
+		requestResponseDto.SendHeader["Content-Length"] = []string{strconv.Itoa(int(request.ContentLength))}
+	}
 }
