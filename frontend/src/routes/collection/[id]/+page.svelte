@@ -5,14 +5,18 @@
 	import RequestDetail from '../../../lib/RequestDetail.svelte';
 	import ResponseDetail from '../../../lib/ResponseDetail.svelte';
 	import { Submit } from '../../../lib/wailsjs/go/frontend/Request';
+	import Tabs from '../../../lib/Tabs.svelte';
+	import { PageTabIndex } from '../../../lib/enums/PageTabIndex';
+	import Body from '../../../lib/Body.svelte';
 
 	const id: number = Number($page.params.id);
 
 	const requestStore = getRequestStore();
-
+	const tabs: PageTabIndex[] = [PageTabIndex.Body, PageTabIndex.Params, PageTabIndex.Header, PageTabIndex.Response];
 	let selectedRequest = $state(requestStore.getByCollectionId(id)[0]);
 	let currentResponse: frontend.RequestResponseDTO = $state(new frontend.RequestResponseDTO());
 	let loading = $state(false);
+	let currentTab = $state(PageTabIndex.Body);
 
 	function changeSelectedRequest(request: frontend.HttpRequestDto) {
 		currentResponse = new frontend.RequestResponseDTO();
@@ -20,12 +24,20 @@
 	}
 
 	let submit = () => {
+		currentTab = PageTabIndex.Response;
 		loading = true;
-		Submit(selectedRequest.id).then((res: frontend.RequestResponseDTO) => {
-			loading = false;
-			currentResponse = res;
-		});
+		Submit(selectedRequest.id)
+			.then((res: frontend.RequestResponseDTO) => {
+				currentResponse = res;
+			})
+			.finally(() => {
+				loading = false;
+			});
 	};
+
+	function changeTab(tabId: PageTabIndex) {
+		currentTab = tabId;
+	}
 </script>
 
 <svelte:head>
@@ -50,8 +62,15 @@
 			</section>
 		{/each}
 	</div>
-	<section class="h-full overflow-hidden">
+	<section class="h-full overflow-y-hidden">
 		<RequestDetail request={selectedRequest} {submit} />
-		<ResponseDetail response={currentResponse} {loading}></ResponseDetail>
+		<Tabs {tabs} {changeTab} {currentTab} />
+		{#if currentTab === PageTabIndex.Body}
+			<Body request={selectedRequest} />
+		{:else if currentTab === PageTabIndex.Header}
+			<p>hallo aus tab 2</p>
+		{:else if currentTab === PageTabIndex.Response}
+			<ResponseDetail response={currentResponse} {loading}></ResponseDetail>
+		{/if}
 	</section>
 </div>

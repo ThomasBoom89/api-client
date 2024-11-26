@@ -9,9 +9,9 @@ export const ssr = false;
 export async function load() {
 	return {
 		configuration: await Get(),
-		projects: await GetAll(),
-		collections: await GetAllCollections(),
-		requests: await GetAllRequests(),
+		projects: (await GetAll()) || [],
+		collections: (await GetAllCollections()) || [],
+		requests: (await GetAllRequests()) || [],
 		// delay: await delay(1000),
 	};
 }
