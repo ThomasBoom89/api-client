@@ -30,17 +30,17 @@ func main() {
 	config := frontend.NewConfiguration(configurationReadWriter)
 	projectRepository := database.NewRepository[database.Project](databaseClient)
 	collectionsRepository := database.NewRepository[database.Collection](databaseClient)
-	httpRequestRepository := database.NewRepository[database.HttpRequest](databaseClient)
+	httpRequestRepository := database.NewHttpRequestRepository(databaseClient)
 	request := frontend.NewRequest(httpRequestRepository)
 	projects := frontend.NewProjects(projectRepository)
 	collections := frontend.NewCollections(collectionsRepository)
-	requests := frontend.NewRequests(httpRequestRepository)
+	httpRequest := frontend.NewHttpRequests(httpRequestRepository)
 	// Create application with options
 	err := wails.Run(&options.App{
 		Title:     "Api-Client",
 		Frameless: true,
-		Width:     500,
-		Height:    500,
+		Width:     800,
+		Height:    1000,
 		MaxWidth:  7680, // 8k
 		MaxHeight: 4320,
 		AssetServer: &assetserver.Options{
@@ -55,7 +55,7 @@ func main() {
 			request,
 			projects,
 			collections,
-			requests,
+			httpRequest,
 		},
 	})
 

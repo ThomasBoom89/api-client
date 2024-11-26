@@ -53,7 +53,7 @@ func TestRequest(t *testing.T) {
 	if err != nil {
 		t.Fatal("should not fail to create collection")
 	}
-	httpRequestRepository := database.NewRepository[database.HttpRequest](databaseClient)
+	httpRequestRepository := database.NewHttpRequestRepository(databaseClient)
 	request := NewRequest(httpRequestRepository)
 	httpRequest, err := httpRequestRepository.Create(&database.HttpRequest{
 		Name:         "test request",
@@ -62,10 +62,28 @@ func TestRequest(t *testing.T) {
 		Method:       "GET",
 	})
 	if err != nil {
-		t.Fatal("should not fail to create http request")
+		t.Fatal("should not fail to create http get request")
 	}
 	requestResponseDTO := request.Submit(httpRequest.ID)
 	if requestResponseDTO.Error != "" {
-		t.Fatal("should not fail to receive response of http request")
+		t.Fatal("should not fail to receive response of http get request")
+	}
+
+	httpRequest, err = httpRequestRepository.Create(&database.HttpRequest{
+		Name:         "test request",
+		CollectionID: collection.ID,
+		Url:          "http://localhost:8898",
+		Method:       "POST",
+		HttpRequestBody: database.HttpRequestBody{
+			Type:    "json",
+			Payload: `{"key": "value"}`,
+		},
+	})
+	if err != nil {
+		t.Fatal("should not fail to create http post request")
+	}
+	requestResponseDTO = request.Submit(httpRequest.ID)
+	if requestResponseDTO.Error != "" {
+		t.Fatal("should not fail to receive response of http post request")
 	}
 }

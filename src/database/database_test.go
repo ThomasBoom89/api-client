@@ -13,7 +13,7 @@ func TestDatabase(t *testing.T) {
 
 	projectRepository := NewRepository[Project](databaseClient)
 	collectionRepository := NewRepository[Collection](databaseClient)
-	httpRequestRepository := NewRepository[HttpRequest](databaseClient)
+	httpRequestRepository := NewHttpRequestRepository(databaseClient)
 
 	project := &Project{
 		Name:        "NewProject1",
@@ -68,12 +68,17 @@ func TestDatabase(t *testing.T) {
 		Name:         "httpRequest1",
 		CollectionID: collection.ID,
 		Url:          "superurl",
+		HttpRequestBody: HttpRequestBody{
+			Type:    "none",
+			Payload: "",
+		},
 	}
-	_, err = httpRequestRepository.Create(httpRequest)
+	httpRequest, err = httpRequestRepository.Create(httpRequest)
 	if err != nil {
 		t.Fatal("http request was not created")
 	}
 	httpRequest.Url = "superurl2"
+	httpRequest.HttpRequestBody.Payload = "payload"
 	_, err = httpRequestRepository.Update(httpRequest)
 	if err != nil {
 		t.Fatal("http request was not updated")
@@ -84,6 +89,10 @@ func TestDatabase(t *testing.T) {
 	}
 	if len(httpRequests) != 1 {
 		t.Fatal("expected 1 http request")
+	}
+	_, err = httpRequestRepository.GetById(httpRequests[0].ID)
+	if err != nil {
+		t.Fatal("http request was not retrieved")
 	}
 
 	err = projectRepository.Delete(project)

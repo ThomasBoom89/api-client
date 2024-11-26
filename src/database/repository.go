@@ -4,11 +4,11 @@ import (
 	"gorm.io/gorm"
 )
 
-type Repository[T Project | Collection | HttpRequest | GrpcRequest | WebsocketRequest] struct {
+type Repository[T Project | Collection | GrpcRequest | WebsocketRequest] struct {
 	database *gorm.DB
 }
 
-func NewRepository[T Project | Collection | HttpRequest | GrpcRequest | WebsocketRequest](database *gorm.DB) *Repository[T] {
+func NewRepository[T Project | Collection | GrpcRequest | WebsocketRequest](database *gorm.DB) *Repository[T] {
 	return &Repository[T]{database}
 }
 
@@ -22,7 +22,7 @@ func (R *Repository[T]) Create(value *T) (*T, error) {
 }
 
 func (R *Repository[T]) Update(value *T) (*T, error) {
-	err := R.database.Save(value)
+	err := R.database.Updates(value)
 	if err.Error != nil {
 		return value, err.Error
 	}

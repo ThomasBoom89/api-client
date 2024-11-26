@@ -20,13 +20,22 @@ type CollectionDto struct {
 }
 
 type HttpRequestDto struct {
-	ID           uint      `json:"id"`
-	UpdatedAt    time.Time `json:"updatedAt"`
-	Name         string    `json:"name"`
-	Type         string    `json:"type"`
-	CollectionID uint      `json:"collectionId"`
-	Url          string    `json:"url"`
-	Method       string    `json:"method"`
+	ID           uint               `json:"id"`
+	UpdatedAt    time.Time          `json:"updatedAt"`
+	Name         string             `json:"name"`
+	Type         string             `json:"type"`
+	CollectionID uint               `json:"collectionId"`
+	Url          string             `json:"url"`
+	Method       string             `json:"method"`
+	Body         HttpRequestBodyDto `json:"body"`
+}
+
+type HttpRequestBodyDto struct {
+	ID            uint      `json:"id"`
+	UpdatedAt     time.Time `json:"updatedAt"`
+	HttpRequestID uint      `json:"httpRequestID"`
+	Type          string    `json:"type"`
+	Payload       string    `json:"payload"`
 }
 
 type Projects struct {
@@ -38,7 +47,7 @@ type Collections struct {
 }
 
 type HttpRequests struct {
-	httpRequestRepository *database.Repository[database.HttpRequest]
+	httpRequestRepository *database.HttpRequestRepository
 }
 
 func NewProjects(projectRepository *database.Repository[database.Project]) *Projects {
@@ -49,7 +58,7 @@ func NewCollections(collectionRepository *database.Repository[database.Collectio
 	return &Collections{collectionRepository}
 }
 
-func NewRequests(httpRequestRepository *database.Repository[database.HttpRequest]) *HttpRequests {
+func NewHttpRequests(httpRequestRepository *database.HttpRequestRepository) *HttpRequests {
 	return &HttpRequests{httpRequestRepository}
 }
 
@@ -209,6 +218,13 @@ func (H *HttpRequests) GetAll() ([]HttpRequestDto, error) {
 			Url:          request.Url,
 			Type:         "http",
 			Method:       request.Method,
+			Body: HttpRequestBodyDto{
+				ID:            request.HttpRequestBody.ID,
+				UpdatedAt:     request.HttpRequestBody.UpdatedAt,
+				HttpRequestID: request.HttpRequestBody.HttpRequestID,
+				Type:          request.HttpRequestBody.Type,
+				Payload:       request.HttpRequestBody.Payload,
+			},
 		}
 	}
 
@@ -220,6 +236,10 @@ func (H *HttpRequests) Create(httpRequestDto HttpRequestDto) (HttpRequestDto, er
 		Name:         httpRequestDto.Name,
 		CollectionID: httpRequestDto.CollectionID,
 		Url:          httpRequestDto.Url,
+		HttpRequestBody: database.HttpRequestBody{
+			Type:    "none",
+			Payload: "",
+		},
 	}
 	httpRequest, err := H.httpRequestRepository.Create(httpRequest)
 	if err != nil {
@@ -228,10 +248,17 @@ func (H *HttpRequests) Create(httpRequestDto HttpRequestDto) (HttpRequestDto, er
 	httpRequestDto.ID = httpRequest.ID
 	httpRequestDto.UpdatedAt = httpRequest.UpdatedAt
 
+	httpRequestDto.Body.HttpRequestID = httpRequest.ID
+	httpRequestDto.Body.ID = httpRequest.HttpRequestBody.ID
+	httpRequestDto.Body.Type = httpRequest.HttpRequestBody.Type
+	httpRequestDto.Body.Payload = httpRequest.HttpRequestBody.Payload
+	httpRequestDto.Body.UpdatedAt = httpRequest.HttpRequestBody.UpdatedAt
+
 	return httpRequestDto, nil
 }
 
 func (H *HttpRequests) Update(httpRequestDto HttpRequestDto) (HttpRequestDto, error) {
+
 	httpRequest := &database.HttpRequest{
 		Model: gorm.Model{
 			ID: httpRequestDto.ID,
@@ -240,6 +267,14 @@ func (H *HttpRequests) Update(httpRequestDto HttpRequestDto) (HttpRequestDto, er
 		CollectionID: httpRequestDto.CollectionID,
 		Url:          httpRequestDto.Url,
 		Method:       httpRequestDto.Method,
+		HttpRequestBody: database.HttpRequestBody{
+			Model: gorm.Model{
+				ID: httpRequestDto.Body.ID,
+			},
+			HttpRequestID: httpRequestDto.ID,
+			Type:          httpRequestDto.Body.Type,
+			Payload:       httpRequestDto.Body.Payload,
+		},
 	}
 	httpRequest, err := H.httpRequestRepository.Update(httpRequest)
 	if err != nil {

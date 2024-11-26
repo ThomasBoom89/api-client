@@ -14,6 +14,11 @@
 		{#each Object.entries(response.sendHeader) as [key, value]}
 			<p>{key} {value}</p>
 		{/each}
+		<h4>Status-Code: {response.statusCode}</h4>
+		<h4>Received Header:</h4>
+		{#each Object.entries(response.receivedHeader) as [key, value]}
+			<p>{key} {value}</p>
+		{/each}
 		{#if response.error !== ''}
 			<div>Error: {response.error}</div>
 		{/if}

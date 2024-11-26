@@ -14,8 +14,8 @@ export class RequestStore {
 		return this._requests.filter((request: HttpRequestDto) => request.collectionId === collectionId);
 	}
 
-	public update(request: HttpRequestDto): void {
-		Update(request);
+	public update(request: HttpRequestDto): Promise<HttpRequestDto> {
+		return Update(request);
 	}
 }
 
