@@ -2,7 +2,6 @@ package frontend
 
 import (
 	"api-client/src/database"
-	"fmt"
 	"gorm.io/gorm"
 	"time"
 )
@@ -210,7 +209,6 @@ func (H *HttpRequests) GetAll() ([]HttpRequestDto, error) {
 		return nil, err
 	}
 	httpRequestDtos := make([]HttpRequestDto, len(httpRequests))
-	fmt.Println(httpRequests[0])
 	for iter, request := range httpRequests {
 		httpRequestDtos[iter] = HttpRequestDto{
 			ID:           request.ID,
