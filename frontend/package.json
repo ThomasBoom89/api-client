@@ -25,7 +25,7 @@
 		"@sveltejs/kit": "2.7.0",
 		"@sveltejs/vite-plugin-svelte": "4.0.0",
 		"@types/eslint": "^9.6.1",
-		"@vitest/coverage-v8": "^2.0.5",
+		"@vitest/coverage-v8": "^2.1.5",
 		"autoprefixer": "^10.4.20",
 		"eslint": "^9.13.0",
 		"eslint-config-prettier": "^9.1.0",
