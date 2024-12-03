@@ -10,28 +10,20 @@ test('project workflow', async ({ page }) => {
 
 	await expect(page).toHaveTitle('Api-Client :: Project Overview');
 
-	await page.getByRole('textbox', { name: 'insert new project name' }).fill('new project name');
+	const projectUUID = crypto.randomUUID();
+	await page.getByRole('textbox', { name: 'insert new project name' }).fill(projectUUID);
 	await page.getByRole('button', { name: 'create' }).click();
 	await expect(page.getByRole('textbox', { name: 'insert new project name' })).toBeEmpty();
-	expect(page.getByTestId('projects')).not.toBeNull();
+	await expect(page.getByTestId('projects').getByRole('link', { name: projectUUID })).toBeVisible();
 	// update
-	await page
-		.getByTestId('projects')
-		.filter({ hasText: 'new project name' })
-		.getByRole('button', { name: 'edit' })
-		.first()
-		.click();
+	await page.getByRole('listitem').filter({ hasText: projectUUID }).getByRole('button', { name: 'edit' }).click();
 
-	await page.getByTestId('projects').getByRole('textbox').fill('other project name');
+	const newProjectUUID = crypto.randomUUID();
+	await page.getByTestId('projects').getByRole('textbox').fill(newProjectUUID);
 	await page.getByTestId('projects').getByRole('button', { name: 'save' }).click();
 
 	// delete
-	await page
-		.getByTestId('projects')
-		.filter({ hasText: 'other project name' })
-		.getByRole('button', { name: 'delete' })
-		.first()
-		.click();
+	await page.getByRole('listitem').filter({ hasText: newProjectUUID }).getByRole('button', { name: 'delete' }).click();
 
-	await expect(page.getByTestId('projects')).toBeEmpty();
+	await expect(page.getByRole('listitem').getByRole('link', { name: newProjectUUID })).not.toBeVisible();
 });
