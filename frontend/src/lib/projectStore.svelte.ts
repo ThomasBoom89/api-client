@@ -38,6 +38,10 @@ export class ProjectStore {
 			this._projects[index] = project;
 		});
 	}
+
+	public getById(id: number): ProjectDto {
+		return this._projects.find((project) => project.id === id) || new ProjectDto();
+	}
 }
 
 const projectStoreContextKey = 'projectStore';
