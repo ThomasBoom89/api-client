@@ -26,7 +26,7 @@
 		<li class="flex flex-row gap-2">
 			{#if project.id !== projectInEdit}
 				<a href="/project/{project.id}">
-					<h3>{project.name}</h3>
+					{project.name}
 				</a>
 				<button onclick={() => (projectInEdit = project.id)}>edit</button>
 			{:else}
