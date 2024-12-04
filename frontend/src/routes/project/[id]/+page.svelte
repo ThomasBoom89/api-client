@@ -16,14 +16,16 @@
 </svelte:head>
 
 <h2>Project {projectStore.getById(id).name}</h2>
-<input type="text" placeholder="insert new collection name" bind:value={newCollectionName} />
-<button
-	onclick={() => {
-		collectionStore.create(id, newCollectionName);
-		newCollectionName = '';
-	}}
-	>create
-</button>
+<div class="flex flex-row gap-y-2">
+	<input type="text" placeholder="insert new collection name" bind:value={newCollectionName} />
+	<button
+		onclick={() => {
+			collectionStore.create(id, newCollectionName);
+			newCollectionName = '';
+		}}
+		>create
+	</button>
+</div>
 <ol data-testid="collections">
 	{#each collectionStore.getByProjectId(id) as collection}
 		<li class="flex flex-row gap-2">
