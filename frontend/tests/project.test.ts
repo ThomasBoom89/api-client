@@ -1,15 +1,11 @@
 import { expect, test } from '@playwright/test';
+import { navigateToProject } from './setup';
+
+test.beforeEach('project setup', async ({ page }) => {
+	await navigateToProject(page);
+});
 
 test('project workflow', async ({ page }) => {
-	await page.goto('/');
-	const loader = page.locator('#loader');
-	await loader.waitFor({ state: 'hidden', timeout: 10000 });
-	await expect(page).toHaveTitle('Api-Client :: Startseite');
-	await page.waitForSelector('footer');
-	await page.getByRole('link', { name: 'Project Overview' }).click();
-
-	await expect(page).toHaveTitle('Api-Client :: Project Overview');
-
 	const projectUUID = crypto.randomUUID();
 	await page.getByRole('textbox', { name: 'insert new project name' }).fill(projectUUID);
 	await page.getByRole('button', { name: 'create' }).click();
