@@ -8,7 +8,7 @@
 {#if loading}
 	<Loader></Loader>
 {:else if response.elapsedTime === undefined}{:else}
-	<div class="flex flex-col gap-2 h-full">
+	<div class="flex flex-col h-full overflow-y-auto overflow-x-hidden p-2 border">
 		<h3>Current Response {response.method} {response.url}</h3>
 		<h4>Send Header:</h4>
 		{#each Object.entries(response.sendHeader) as [key, value]}
@@ -23,6 +23,6 @@
 			<div>Error: {response.error}</div>
 		{/if}
 		<div>Elapsed Time: {response.elapsedTime}</div>
-		<div class="overflow-y-auto">{response.responseBody}</div>
+		<div>{response.responseBody}</div>
 	</div>
 {/if}

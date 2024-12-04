@@ -247,7 +247,8 @@ func (H *HttpRequests) Create(httpRequestDto HttpRequestDto) (HttpRequestDto, er
 	}
 	httpRequestDto.ID = httpRequest.ID
 	httpRequestDto.UpdatedAt = httpRequest.UpdatedAt
-
+	httpRequestDto.Type = "http"
+	httpRequestDto.Method = "GET"
 	httpRequestDto.Body.HttpRequestID = httpRequest.ID
 	httpRequestDto.Body.ID = httpRequest.HttpRequestBody.ID
 	httpRequestDto.Body.Type = httpRequest.HttpRequestBody.Type

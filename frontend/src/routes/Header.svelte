@@ -83,4 +83,5 @@
 			</li>
 		</ul>
 	</nav>
+	<hr class="border-background-accent" />
 </header>

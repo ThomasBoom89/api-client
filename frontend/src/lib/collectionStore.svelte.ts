@@ -37,6 +37,10 @@ export class CollectionStore {
 			this._collections[index] = collection;
 		});
 	}
+
+	public getById(id: number): CollectionDto {
+		return this._collections.find((collection) => collection.id === id) || new CollectionDto();
+	}
 }
 
 const collectionStoreContextKey = 'collectionStore';

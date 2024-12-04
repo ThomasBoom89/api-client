@@ -12,15 +12,17 @@
 </svelte:head>
 
 <h2>Project Overview</h2>
-<input type="text" placeholder="insert new project name" bind:value={newProjectName} />
-<button
-	type="button"
-	onclick={() => {
-		projectStore.create(newProjectName);
-		newProjectName = '';
-	}}
-	>create
-</button>
+<div class="flex flex-row gap-y-2">
+	<input type="text" placeholder="insert new project name" bind:value={newProjectName} />
+	<button
+		type="button"
+		onclick={() => {
+			projectStore.create(newProjectName);
+			newProjectName = '';
+		}}
+		>create
+	</button>
+</div>
 <ol data-testid="projects">
 	{#each projectStore.projects as project}
 		<li class="flex flex-row gap-2">
