@@ -17,10 +17,9 @@
 	document.getElementById('loader')?.remove();
 </script>
 
-<div class="w-[100vw] h-[100vh] bg-background text-text p-2 grid grid-rows-[min-content_min-content_1fr_min-content]">
+<div class="w-[100vw] h-[100vh] bg-background text-text flex flex-col overflow-hidden">
 	<Header />
-	<hr class="border-background-accent" />
-	<main class="w-full h-full mt-2 overflow-hidden">
+	<main class="flex flex-col w-full h-full overflow-hidden flex-1">
 		{@render children()}
 	</main>
 	<Footer />
