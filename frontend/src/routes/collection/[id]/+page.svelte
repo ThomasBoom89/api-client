@@ -2,41 +2,20 @@
 	import { frontend } from '../../../lib/wailsjs/go/models';
 	import { page } from '$app/stores';
 	import { getRequestStore } from '../../../lib/requestStore.svelte';
-	import RequestDetail from '../../../lib/RequestDetail.svelte';
-	import ResponseDetail from '../../../lib/ResponseDetail.svelte';
-	import { Submit } from '../../../lib/wailsjs/go/frontend/Request';
-	import Tabs from '../../../lib/Tabs.svelte';
-	import { PageTabIndex } from '../../../lib/enums/PageTabIndex';
-	import Body from '../../../lib/Body.svelte';
+	import { getCollectionStore } from '../../../lib/collectionStore.svelte';
+	import Request from '../../../lib/Request.svelte';
 
-	const id: number = Number($page.params.id);
-
+	const collectionId: number = Number($page.params.id);
+	const collectionStore = getCollectionStore();
 	const requestStore = getRequestStore();
-	const tabs: PageTabIndex[] = [PageTabIndex.Body, PageTabIndex.Params, PageTabIndex.Header, PageTabIndex.Response];
-	let selectedRequest = $state(requestStore.getByCollectionId(id)[0]);
+	let selectedRequest = $state<frontend.HttpRequestDto>();
+	let newRequestName = $state('');
+	let requestInEdit = $state(0);
 	let currentResponse: frontend.RequestResponseDTO = $state(new frontend.RequestResponseDTO());
-	let loading = $state(false);
-	let currentTab = $state(PageTabIndex.Body);
 
 	function changeSelectedRequest(request: frontend.HttpRequestDto) {
-		currentResponse = new frontend.RequestResponseDTO();
 		selectedRequest = request;
-	}
-
-	let submit = () => {
-		currentTab = PageTabIndex.Response;
-		loading = true;
-		Submit(selectedRequest.id)
-			.then((res: frontend.RequestResponseDTO) => {
-				currentResponse = res;
-			})
-			.finally(() => {
-				loading = false;
-			});
-	};
-
-	function changeTab(tabId: PageTabIndex) {
-		currentTab = tabId;
+		currentResponse = new frontend.RequestResponseDTO();
 	}
 </script>
 
@@ -45,32 +24,50 @@
 	<meta name="description" content="project overview" />
 </svelte:head>
 
-<h2>Collection {id}</h2>
-<div class="grid grid-cols-[30%_70%] h-full">
+<h2>Collection {collectionStore.getById(collectionId).name}</h2>
+<div class="grid grid-cols-[40%_60%] overflow-hidden h-full">
 	<div class="flex flex-col gap-y-2 pr-2 overflow-y-auto">
-		{#each requestStore.getByCollectionId(id) as request}
-			<section
-				class="border-[1px]"
+		<div class="flex flex-row gap-y-2">
+			<input type="text" placeholder="insert new request name" bind:value={newRequestName} />
+			<button
 				onclick={() => {
-					changeSelectedRequest(request);
+					requestStore.create(collectionId, newRequestName);
+					newRequestName = '';
 				}}
-			>
-				{#if request.type === 'http'}
-					<p>{request.method}>>{request.name}</p>
-					<p>{request.url}</p>
-				{/if}
-			</section>
-		{/each}
+				>create
+			</button>
+		</div>
+		<ol data-testid="requests">
+			{#each requestStore.getByCollectionId(collectionId) as request}
+				<li class="border-[1px]">
+					<div class="flex flex-row gap-x-2">
+						{#if request.type === 'http'}
+							{request.method}>>
+						{/if}
+						{#if request.id !== requestInEdit}
+							<button onclick={() => changeSelectedRequest(request)} class="w-full text-left">
+								{request.name}
+							</button>
+							<button onclick={() => (requestInEdit = request.id)}>edit</button>
+						{:else}
+							<input bind:value={request.name} />
+							<button
+								onclick={() => {
+									requestStore.update(request);
+									requestInEdit = 0;
+								}}
+								>save
+							</button>
+						{/if}
+						<button onclick={() => requestStore.delete(request)}>delete</button>
+					</div>
+				</li>
+			{/each}
+		</ol>
 	</div>
-	<section class="h-full overflow-y-hidden">
-		<RequestDetail request={selectedRequest} {submit} />
-		<Tabs {tabs} {changeTab} {currentTab} />
-		{#if currentTab === PageTabIndex.Body}
-			<Body request={selectedRequest} />
-		{:else if currentTab === PageTabIndex.Header}
-			<p>hallo aus tab 2</p>
-		{:else if currentTab === PageTabIndex.Response}
-			<ResponseDetail response={currentResponse} {loading}></ResponseDetail>
+	<section class="flex flex-col h-full overflow-y-hidden">
+		{#if selectedRequest !== undefined}
+			<Request request={selectedRequest} {currentResponse}></Request>
 		{/if}
 	</section>
 </div>
