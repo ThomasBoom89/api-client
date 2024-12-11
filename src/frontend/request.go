@@ -4,6 +4,7 @@ import (
 	"api-client/src/database"
 	"io"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -34,11 +35,14 @@ func (R *Request) Submit(requestId uint) (requestResponseDto RequestResponseDTO)
 		requestResponseDto.Error = err.Error()
 		return
 	}
+
+	url := R.prepareUrl(httpRequest)
+
 	var request *http.Request
 	if httpRequest.HttpRequestBody.Type == "none" {
-		request, err = http.NewRequest(httpRequest.Method, httpRequest.Url, nil)
+		request, err = http.NewRequest(httpRequest.Method, url, nil)
 	} else {
-		request, err = http.NewRequest(httpRequest.Method, httpRequest.Url, strings.NewReader(httpRequest.HttpRequestBody.Payload))
+		request, err = http.NewRequest(httpRequest.Method, url, strings.NewReader(httpRequest.HttpRequestBody.Payload))
 	}
 	if err != nil {
 		requestResponseDto.Error = err.Error()
@@ -99,4 +103,13 @@ func (R *Request) handleHeader(request *http.Request, requestResponseDto *Reques
 	if request.ContentLength > -1 {
 		requestResponseDto.SendHeader["Content-Length"] = []string{strconv.Itoa(int(request.ContentLength))}
 	}
+}
+
+func (R *Request) prepareUrl(request *database.HttpRequest) string {
+	queryParameter := url.Values{}
+	for _, parameter := range request.HttpRequestParameter {
+		queryParameter.Add(parameter.Key, parameter.Value)
+	}
+
+	return request.Url + "?" + queryParameter.Encode()
 }
