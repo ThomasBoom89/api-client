@@ -7,6 +7,7 @@
 	import { Submit } from './wailsjs/go/frontend/Request';
 	import { frontend } from './wailsjs/go/models';
 	import Params from './Params.svelte';
+	import Header from './Header.svelte';
 
 	let { request, currentResponse }: { request: frontend.HttpRequestDto; currentResponse: frontend.RequestResponseDTO } =
 		$props();
@@ -39,7 +40,7 @@
 {:else if currentTab === PageTabIndex.Params}
 	<Params {request} />
 {:else if currentTab === PageTabIndex.Header}
-	<p>hallo aus tab 2</p>
+	<Header {request} />
 {:else if currentTab === PageTabIndex.Response}
 	<ResponseDetail response={currentResponse} {loading}></ResponseDetail>
 {/if}
