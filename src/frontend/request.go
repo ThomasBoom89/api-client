@@ -56,6 +56,10 @@ func (R *Request) Submit(requestId uint) (requestResponseDto RequestResponseDTO)
 		request.Header.Set("Content-Type", "text/plain")
 	}
 
+	for _, header := range httpRequest.HttpRequestHeader {
+		request.Header.Set(header.Key, header.Value)
+	}
+
 	requestResponseDto.Url = request.URL.String()
 	requestResponseDto.Method = request.Method
 	R.handleHeader(request, &requestResponseDto)
@@ -100,7 +104,7 @@ func (R *Request) handleHeader(request *http.Request, requestResponseDto *Reques
 	}
 
 	requestResponseDto.SendHeader = buildHeaders
-	if request.ContentLength > -1 {
+	if request.ContentLength > 0 {
 		requestResponseDto.SendHeader["Content-Length"] = []string{strconv.Itoa(int(request.ContentLength))}
 	}
 }
