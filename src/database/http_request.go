@@ -13,6 +13,7 @@ type HttpRequest struct {
 	Method               string `gorm:"default:GET"`
 	HttpRequestBody      HttpRequestBody
 	HttpRequestParameter []HttpRequestParameter
+	HttpRequestHeader    []HttpRequestHeader
 }
 
 type HttpRequestBody struct {
@@ -23,6 +24,13 @@ type HttpRequestBody struct {
 }
 
 type HttpRequestParameter struct {
+	gorm.Model
+	HttpRequestID uint
+	Key           string
+	Value         string
+}
+
+type HttpRequestHeader struct {
 	gorm.Model
 	HttpRequestID uint
 	Key           string
@@ -94,6 +102,24 @@ func (H *HttpRequestRepository) CreateParameter(httpRequestParameter *HttpReques
 
 func (H *HttpRequestRepository) DeleteParameter(httpRequestParameter *HttpRequestParameter) error {
 	err := H.database.Delete(httpRequestParameter).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (H *HttpRequestRepository) CreateHeader(httpRequestHeader *HttpRequestHeader) (*HttpRequestHeader, error) {
+	err := H.database.Create(httpRequestHeader).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return httpRequestHeader, nil
+}
+
+func (H *HttpRequestRepository) DeleteHeader(httpRequestHeader *HttpRequestHeader) error {
+	err := H.database.Delete(httpRequestHeader).Error
 	if err != nil {
 		return err
 	}
