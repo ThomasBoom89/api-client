@@ -32,6 +32,7 @@ func NewClient(userDir configuration.UserDir) *gorm.DB {
 
 func AutoMigrate(databaseClient *gorm.DB) {
 	err := databaseClient.AutoMigrate(
+		&HttpRequestHeader{},
 		&HttpRequestParameter{},
 		&HttpRequestBody{},
 		&HttpRequest{},
