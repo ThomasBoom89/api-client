@@ -29,9 +29,7 @@
 				return;
 			}
 		}
-		httpRequestStore.update(request).then((result) => {
-			request = result;
-		});
+		httpRequestStore.update(request);
 	}
 </script>
 

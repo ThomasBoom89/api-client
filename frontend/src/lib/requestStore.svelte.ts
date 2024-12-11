@@ -14,8 +14,11 @@ export class RequestStore {
 		return this._requests.filter((request: HttpRequestDto) => request.collectionId === collectionId);
 	}
 
-	public update(request: HttpRequestDto): Promise<HttpRequestDto> {
-		return Update(request);
+	public update(request: HttpRequestDto): void {
+		Update(request).then((newRequest: HttpRequestDto) => {
+			const index = this._requests.findIndex((request) => request.id === newRequest.id);
+			this._requests[index] = newRequest;
+		});
 	}
 
 	public create(collectionId: number, newRequestName: string): void {

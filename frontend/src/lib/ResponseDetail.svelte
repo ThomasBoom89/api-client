@@ -7,6 +7,8 @@
 
 {#if loading}
 	<Loader></Loader>
+{:else if response.error !== ''}
+	<p>{response.error}</p>
 {:else if response.elapsedTime === undefined}{:else}
 	<div class="flex flex-col h-full overflow-y-auto overflow-x-hidden p-2 border">
 		<h3>Current Response {response.method} {response.url}</h3>
