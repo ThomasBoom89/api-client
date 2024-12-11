@@ -30,7 +30,7 @@
 		class="w-full"
 		type="text"
 		bind:value={request.url}
-		onchange={() => {
+		oninput={() => {
 			update();
 		}}
 	/>
