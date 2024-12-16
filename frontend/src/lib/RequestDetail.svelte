@@ -13,6 +13,7 @@
 <p>{request.name}</p>
 <div class="flex flex-row gap-2">
 	<select
+		id="request-method"
 		bind:value={request.method}
 		onchange={() => {
 			update();
@@ -29,6 +30,7 @@
 	<input
 		class="w-full"
 		type="text"
+		placeholder="insert url"
 		bind:value={request.url}
 		oninput={() => {
 			update();

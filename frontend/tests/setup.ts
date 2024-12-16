@@ -55,3 +55,43 @@ export async function cleanupCollections(page: Page, projectSetupUUID: string, c
 	await expect(page.getByRole('listitem').getByRole('link', { name: collectionsSetupUUID })).not.toBeVisible();
 	await cleanupProjects(page, projectSetupUUID);
 }
+
+export async function setupRequest(
+	page: Page,
+	projectSetupUUID: string,
+	collectionSetupUUID: string,
+	requestSetupUUID: string,
+) {
+	await setupCollections(page, projectSetupUUID, collectionSetupUUID);
+
+	await page.getByRole('textbox', { name: 'insert new request name' }).fill(requestSetupUUID);
+	await page.getByRole('button', { name: 'create' }).click();
+	await expect(page.getByRole('textbox', { name: 'insert new request name' })).toBeEmpty();
+	await expect(page.getByTestId('requests').getByRole('listitem').filter({ hasText: requestSetupUUID })).toBeVisible();
+	await page.getByTestId('requests').getByRole('listitem').filter({ hasText: requestSetupUUID }).click();
+	// await expect(page.getByRole('heading', { name: `Collection ${collectionSetupUUID}` })).toBeVisible();
+}
+
+export async function cleanupRequest(
+	page: Page,
+	projectSetupUUID: string,
+	collectionsSetupUUID: string,
+	requestSetupUUID: string,
+) {
+	await navigateToProject(page);
+	await page.getByTestId('projects').getByRole('link', { name: projectSetupUUID }).click();
+	await expect(page.getByRole('heading', { name: `Project ${projectSetupUUID}` })).toBeVisible();
+	await page.getByTestId('collections').getByRole('link', { name: collectionsSetupUUID }).click();
+	await expect(page.getByRole('heading', { name: `Collection ${collectionsSetupUUID}` })).toBeVisible();
+	await page
+		.getByRole('listitem')
+		.filter({ hasText: requestSetupUUID })
+		.getByRole('button', { name: 'delete' })
+		.click();
+
+	await expect(
+		page.getByTestId('requests').getByRole('listitem').filter({ hasText: requestSetupUUID }),
+	).not.toBeVisible();
+
+	await cleanupCollections(page, projectSetupUUID, collectionsSetupUUID);
+}
