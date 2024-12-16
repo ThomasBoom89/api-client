@@ -14,7 +14,7 @@
 
 	let loading = $state(false);
 	let currentTab = $state(PageTabIndex.Body);
-	const tabs: PageTabIndex[] = [PageTabIndex.Body, PageTabIndex.Params, PageTabIndex.Header, PageTabIndex.Response];
+	const tabs: PageTabIndex[] = [PageTabIndex.Body, PageTabIndex.Parameter, PageTabIndex.Header, PageTabIndex.Response];
 
 	let submit = () => {
 		currentTab = PageTabIndex.Response;
@@ -37,7 +37,7 @@
 <Tabs {tabs} {changeTab} {currentTab} />
 {#if currentTab === PageTabIndex.Body}
 	<Body {request} />
-{:else if currentTab === PageTabIndex.Params}
+{:else if currentTab === PageTabIndex.Parameter}
 	<Params {request} />
 {:else if currentTab === PageTabIndex.Header}
 	<Header {request} />
