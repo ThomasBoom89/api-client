@@ -114,6 +114,9 @@ func (R *Request) prepareUrl(request *database.HttpRequest) string {
 	for _, parameter := range request.HttpRequestParameter {
 		queryParameter.Add(parameter.Key, parameter.Value)
 	}
+	if queryParameter.Encode() == "" {
+		return request.Url
+	}
 
 	return request.Url + "?" + queryParameter.Encode()
 }
