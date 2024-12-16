@@ -358,37 +358,37 @@ func (H *HttpRequests) Delete(httpRequestDto HttpRequestDto) error {
 }
 
 func (H *HttpRequests) prepareParameter(httpRequestDto HttpRequestDto, currentHttpRequest *database.HttpRequest) ([]database.HttpRequestParameter, error) {
-	httpRequestParameter := make([]database.HttpRequestParameter, len(httpRequestDto.Parameter))
-	notDelete := make(map[int]bool)
-	for iter, parameter := range httpRequestDto.Parameter {
+	var httpRequestParameter []database.HttpRequestParameter
+	notDelete := make(map[uint]bool)
+	for _, parameter := range httpRequestDto.Parameter {
 		if parameter.ID == 0 {
 			newParameter, err := H.createParameter(parameter)
 			if err != nil {
 				return nil, err
 			}
-			httpRequestParameter[iter] = newParameter
+			httpRequestParameter = append(httpRequestParameter, newParameter)
 			parameter.ID = newParameter.ID
 			parameter.UpdatedAt = newParameter.UpdatedAt
 			parameter.HttpRequestID = newParameter.HttpRequestID
 
 			continue
 		}
-		for jiter, currentParameter := range currentHttpRequest.HttpRequestParameter {
+		for _, currentParameter := range currentHttpRequest.HttpRequestParameter {
 			if parameter.ID != currentParameter.ID {
 				continue
 			}
-			httpRequestParameter[iter] = currentParameter
 			if parameter.Key != currentParameter.Key {
-				httpRequestParameter[iter].Key = parameter.Key
+				currentParameter.Key = parameter.Key
 			}
 			if parameter.Value != currentParameter.Value {
-				httpRequestParameter[iter].Value = parameter.Value
+				currentParameter.Value = parameter.Value
 			}
-			notDelete[jiter] = true
+			httpRequestParameter = append(httpRequestParameter, currentParameter)
+			notDelete[currentParameter.ID] = true
 		}
 	}
-	for iter, parameter := range currentHttpRequest.HttpRequestParameter {
-		if _, ok := notDelete[iter]; !ok {
+	for _, parameter := range currentHttpRequest.HttpRequestParameter {
+		if _, ok := notDelete[parameter.ID]; !ok {
 			err := H.httpRequestRepository.DeleteParameter(&parameter)
 			if err != nil {
 				return nil, err
@@ -414,37 +414,37 @@ func (H *HttpRequests) createParameter(httpRequestParameterDto HttpRequestParame
 }
 
 func (H *HttpRequests) prepareHeader(httpRequestDto HttpRequestDto, currentHttpRequest *database.HttpRequest) ([]database.HttpRequestHeader, error) {
-	httpRequestHeaders := make([]database.HttpRequestHeader, len(httpRequestDto.Parameter))
-	notDelete := make(map[int]bool)
-	for iter, header := range httpRequestDto.Header {
+	var httpRequestHeaders []database.HttpRequestHeader
+	notDelete := make(map[uint]bool)
+	for _, header := range httpRequestDto.Header {
 		if header.ID == 0 {
 			newParameter, err := H.createHeader(header)
 			if err != nil {
 				return nil, err
 			}
-			httpRequestHeaders[iter] = newParameter
+			httpRequestHeaders = append(httpRequestHeaders, newParameter)
 			header.ID = newParameter.ID
 			header.UpdatedAt = newParameter.UpdatedAt
 			header.HttpRequestID = newParameter.HttpRequestID
 
 			continue
 		}
-		for jiter, currentHeader := range currentHttpRequest.HttpRequestHeader {
+		for _, currentHeader := range currentHttpRequest.HttpRequestHeader {
 			if header.ID != currentHeader.ID {
 				continue
 			}
-			httpRequestHeaders[iter] = currentHeader
 			if header.Key != currentHeader.Key {
-				httpRequestHeaders[iter].Key = header.Key
+				currentHeader.Key = header.Key
 			}
 			if header.Value != currentHeader.Value {
-				httpRequestHeaders[iter].Value = header.Value
+				currentHeader.Value = header.Value
 			}
-			notDelete[jiter] = true
+			httpRequestHeaders = append(httpRequestHeaders, currentHeader)
+			notDelete[currentHeader.ID] = true
 		}
 	}
-	for iter, header := range currentHttpRequest.HttpRequestHeader {
-		if _, ok := notDelete[iter]; !ok {
+	for _, header := range currentHttpRequest.HttpRequestHeader {
+		if _, ok := notDelete[header.ID]; !ok {
 			err := H.httpRequestRepository.DeleteHeader(&header)
 			if err != nil {
 				return nil, err
