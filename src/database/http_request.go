@@ -19,7 +19,7 @@ type HttpRequest struct {
 type HttpRequestBody struct {
 	gorm.Model
 	HttpRequestID uint
-	Type          string `gorm:"default:plaintext"`
+	Type          string `gorm:"default:none"`
 	Payload       string
 }
 
