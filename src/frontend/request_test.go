@@ -12,6 +12,17 @@ func TestRequest(t *testing.T) {
 	defer userDir.Cleanup()
 
 	http.HandleFunc("GET /", func(writer http.ResponseWriter, request *http.Request) {
+		header := request.Header.Get("tom")
+		if header != "riddle" {
+			t.Errorf("expecting riddle got %s", header)
+		}
+		query := request.URL.Query().Get("hera")
+		if query != "aax" {
+			t.Errorf("expecting aax got %s", query)
+		}
+		writer.Write([]byte("Yolo"))
+	})
+	http.HandleFunc("GET /nobody", func(writer http.ResponseWriter, request *http.Request) {
 		writer.Write([]byte("Yolo"))
 	})
 	server := &http.Server{
@@ -58,7 +69,7 @@ func TestRequest(t *testing.T) {
 	httpRequest, err := httpRequestRepository.Create(&database.HttpRequest{
 		Name:         "test request",
 		CollectionID: collection.ID,
-		Url:          "http://localhost:8898",
+		Url:          "http://localhost:8898/nobody",
 		Method:       "GET",
 	})
 	if err != nil {
@@ -82,6 +93,22 @@ func TestRequest(t *testing.T) {
 	if err != nil {
 		t.Fatal("should not fail to create http post request")
 	}
+	httpRequestHeader := &database.HttpRequestHeader{
+		HttpRequestID: httpRequest.ID,
+		Key:           "tom",
+		Value:         "riddle",
+	}
+
+	httpRequestParameter := &database.HttpRequestParameter{
+		HttpRequestID: httpRequest.ID,
+		Key:           "hero",
+		Value:         "aax",
+	}
+	_, _ = httpRequestRepository.CreateHeader(httpRequestHeader)
+	_, _ = httpRequestRepository.CreateParameter(httpRequestParameter)
+
+	httpRequest, _ = httpRequestRepository.GetById(httpRequest.ID)
+
 	requestResponseDTO = request.Submit(httpRequest.ID)
 	if requestResponseDTO.Error != "" {
 		t.Fatal("should not fail to receive response of http post request")
