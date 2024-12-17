@@ -7,6 +7,9 @@
 	let newParameterKey = $state('');
 	let newParameterValue = $state('');
 	let buildPreview = (request: frontend.HttpRequestDto): string => {
+		if (request.parameter === null || request.parameter === undefined) {
+			return request.url;
+		}
 		let param: { [key: string]: string } = {};
 		for (const parameter of request.parameter) {
 			param[parameter.key] = parameter.value;
@@ -44,7 +47,7 @@
 	};
 </script>
 
-<div>{preview}</div>
+<div data-testid="request-parameter-preview">{preview}</div>
 <div class="flex flex-row">
 	<input bind:value={newParameterKey} type="text" placeholder="Enter parameter name" />
 	<input bind:value={newParameterValue} type="text" placeholder="Enter parameter value" />
@@ -55,25 +58,27 @@
 		>save
 	</button>
 </div>
-{#each request.parameter as parameter, iter}
-	<div class="flex flex-row">
-		<input
-			bind:value={parameter.key}
-			oninput={() => {
-				update();
-			}}
-		/>
-		<input
-			bind:value={parameter.value}
-			oninput={() => {
-				update();
-			}}
-		/>
-		<button
-			onclick={() => {
-				deleteParameter(iter);
-			}}
-			>delete
-		</button>
-	</div>
-{/each}
+<ul data-testid="request-parameters">
+	{#each request.parameter as parameter, iter}
+		<li class="flex flex-row">
+			<input
+				bind:value={parameter.key}
+				oninput={() => {
+					update();
+				}}
+			/>
+			<input
+				bind:value={parameter.value}
+				oninput={() => {
+					update();
+				}}
+			/>
+			<button
+				onclick={() => {
+					deleteParameter(iter);
+				}}
+				>delete
+			</button>
+		</li>
+	{/each}
+</ul>

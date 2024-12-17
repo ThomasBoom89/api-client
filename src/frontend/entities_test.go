@@ -90,7 +90,7 @@ func TestEntities(t *testing.T) {
 		t.Fatal("collections should have one collection")
 	}
 
-	httpRequestDtos, err := httpRequestRepository.GetAll()
+	httpRequestDtos, err := httpRequests.GetAll()
 	if err != nil {
 		t.Fatal("could not get http requests from database", err)
 	}
@@ -127,7 +127,49 @@ func TestEntities(t *testing.T) {
 	if httpRequestDto.Body.Payload != `{"key2": "value2"}` {
 		t.Fatal("http request body payload should be `{\"key2\":\"value2\"}`")
 	}
-	httpRequestDtos, err = httpRequestRepository.GetAll()
+	// header parameter update arie
+	httpRequestDto.Header = append(httpRequestDto.Header, HttpRequestHeaderDto{
+		HttpRequestID: httpRequestDto.ID,
+		Key:           "foo",
+		Value:         "bar",
+	})
+
+	httpRequestDto.Parameter = append(httpRequestDto.Parameter, HttpRequestParameterDto{
+		HttpRequestID: httpRequestDto.ID,
+		Key:           "hello",
+		Value:         "world",
+	})
+
+	httpRequestDto.Header = append(httpRequestDto.Header, HttpRequestHeaderDto{
+		HttpRequestID: httpRequestDto.ID,
+		Key:           "tom",
+		Value:         "riddle",
+	})
+
+	httpRequestDto.Parameter = append(httpRequestDto.Parameter, HttpRequestParameterDto{
+		HttpRequestID: httpRequestDto.ID,
+		Key:           "hero",
+		Value:         "aax",
+	})
+	httpRequestDto, err = httpRequests.Update(httpRequestDto)
+	if err != nil {
+		t.Fatal("error updating http request with header and parameter", err)
+	}
+
+	httpRequestDto.Header = httpRequestDto.Header[1:]
+	httpRequestDto.Parameter = httpRequestDto.Parameter[1:]
+
+	httpRequestDto.Header[0].Key = "abc"
+	httpRequestDto.Header[0].Value = "def"
+	httpRequestDto.Parameter[0].Key = "frodo"
+	httpRequestDto.Parameter[0].Value = "sam"
+
+	httpRequestDto, err = httpRequests.Update(httpRequestDto)
+	if err != nil {
+		t.Fatal("error updating http request with removing and adding header and parameter", err)
+	}
+
+	httpRequestDtos, err = httpRequests.GetAll()
 	if err != nil {
 		t.Fatal("could not get http requests from database", err)
 	}

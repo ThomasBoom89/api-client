@@ -32,8 +32,8 @@
 </script>
 
 <div class="flex flex-row">
-	<input bind:value={newHeaderKey} type="text" placeholder="Enter parameter name" />
-	<input bind:value={newHeaderValue} type="text" placeholder="Enter parameter value" />
+	<input bind:value={newHeaderKey} type="text" placeholder="Enter header key" />
+	<input bind:value={newHeaderValue} type="text" placeholder="Enter header value" />
 	<button
 		onclick={() => {
 			appendHeader();
@@ -41,25 +41,27 @@
 		>save
 	</button>
 </div>
-{#each request.header as header, iter}
-	<div class="flex flex-row">
-		<input
-			bind:value={header.key}
-			oninput={() => {
-				update();
-			}}
-		/>
-		<input
-			bind:value={header.value}
-			oninput={() => {
-				update();
-			}}
-		/>
-		<button
-			onclick={() => {
-				deleteHeader(iter);
-			}}
-			>delete
-		</button>
-	</div>
-{/each}
+<ul data-testid="request-headers">
+	{#each request.header as header, iter}
+		<li class="flex flex-row">
+			<input
+				bind:value={header.key}
+				oninput={() => {
+					update();
+				}}
+			/>
+			<input
+				bind:value={header.value}
+				oninput={() => {
+					update();
+				}}
+			/>
+			<button
+				onclick={() => {
+					deleteHeader(iter);
+				}}
+				>delete
+			</button>
+		</li>
+	{/each}
+</ul>

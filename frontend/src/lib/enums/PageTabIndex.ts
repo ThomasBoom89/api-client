@@ -1,6 +1,6 @@
 export enum PageTabIndex {
 	Body = 'Body',
-	Params = 'Params',
+	Parameter = 'Parameter',
 	Header = 'Header',
 	Response = 'Response',
 }

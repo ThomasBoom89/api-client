@@ -39,7 +39,7 @@ func (R *Request) Submit(requestId uint) (requestResponseDto RequestResponseDTO)
 	url := R.prepareUrl(httpRequest)
 
 	var request *http.Request
-	if httpRequest.HttpRequestBody.Type == "none" {
+	if httpRequest.HttpRequestBody.Type == "" || httpRequest.HttpRequestBody.Type == "none" {
 		request, err = http.NewRequest(httpRequest.Method, url, nil)
 	} else {
 		request, err = http.NewRequest(httpRequest.Method, url, strings.NewReader(httpRequest.HttpRequestBody.Payload))
@@ -113,6 +113,9 @@ func (R *Request) prepareUrl(request *database.HttpRequest) string {
 	queryParameter := url.Values{}
 	for _, parameter := range request.HttpRequestParameter {
 		queryParameter.Add(parameter.Key, parameter.Value)
+	}
+	if queryParameter.Encode() == "" {
+		return request.Url
 	}
 
 	return request.Url + "?" + queryParameter.Encode()

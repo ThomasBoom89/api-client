@@ -58,5 +58,5 @@
 ></textarea>
 
 {#if request.body.type === 'json' && jsonError}
-	<p class="text-red-500 h-36">{jsonError}</p>
+	<p data-testid="json-body-error" class="text-red-500 h-36">{jsonError}</p>
 {/if}
