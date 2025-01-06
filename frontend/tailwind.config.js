@@ -11,6 +11,8 @@ export default {
 				buttons: 'var(--color-buttons)',
 				typography: 'var(--color-typography)',
 				'background-accent': 'var(--color-background-accent)',
+				'text-accent': 'var(--color-text-accent)',
+				'text-disabled': 'var(--color-text-disabled)',
 			},
 		},
 	},
