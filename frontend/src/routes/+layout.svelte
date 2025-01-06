@@ -6,6 +6,7 @@
 	import { initializeProjectStore } from '../lib/projectStore.svelte.ts';
 	import { initializeCollectionStore } from '../lib/collectionStore.svelte.ts';
 	import { initializeRequestStore } from '../lib/requestStore.svelte.ts';
+	import { initializeNavigationSystem } from '$lib/navigationSystem.svelte.ts';
 
 	let { children, data } = $props();
 	initializeConfigurationStore(data.configuration);
@@ -13,6 +14,7 @@
 	initializeCollectionStore(data.collections);
 	initializeRequestStore(data.requests);
 	initializeThemeStore(getConfigurationStore());
+	initializeNavigationSystem();
 	document.getElementById('loader')?.remove();
 </script>
 

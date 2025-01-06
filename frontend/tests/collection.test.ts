@@ -17,7 +17,7 @@ test('collection workflow', async ({ page }) => {
 	await page.getByRole('button', { name: 'create' }).click();
 
 	await expect(page.getByRole('textbox', { name: 'insert new collection name' })).toBeEmpty();
-	await expect(page.getByTestId('collections').getByRole('link', { name: collectionUUID })).toBeVisible();
+	await expect(page.getByTestId('collections').getByRole('button', { name: collectionUUID })).toBeVisible();
 
 	// update
 	await page.getByRole('listitem').filter({ hasText: collectionUUID }).getByRole('button', { name: 'edit' }).click();
@@ -34,5 +34,5 @@ test('collection workflow', async ({ page }) => {
 		.getByRole('button', { name: 'delete' })
 		.click();
 
-	await expect(page.getByRole('listitem').getByRole('link', { name: otherCollectionUUID })).not.toBeVisible();
+	await expect(page.getByRole('listitem').getByRole('button', { name: otherCollectionUUID })).not.toBeVisible();
 });

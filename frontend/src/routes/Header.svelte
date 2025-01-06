@@ -1,10 +1,15 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { Test } from '$lib/wailsjs/go/main/App';
 	import { getThemeStore } from '../lib/themeStore.svelte.ts';
+	import { NavigationState } from '$lib/enums/NavigationState.ts';
+	import { getNavigationSystem } from '$lib/navigationSystem.svelte.ts';
+	import { getCollectionStore } from '$lib/collectionStore.svelte.ts';
+	import { getProjectStore } from '$lib/projectStore.svelte.ts';
 
 	const themeStore = getThemeStore();
+	const navigationSystem = getNavigationSystem();
+	const collectionStore = getCollectionStore();
+	const projectStore = getProjectStore();
 
 	function navigate(page: string = ''): null {
 		if (page == undefined) {
@@ -14,31 +19,130 @@
 
 		return null;
 	}
-
-	function test(): void {
-		Test();
-	}
 </script>
 
 <header class="px-2 pb-2">
-	<nav class="flex flex-row justify-between items-center">
-		<ul class="flex flex-row gap-2">
-			<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
-				<button
-					onclick={() => {
-						navigate('/');
-					}}
-					>Home
-				</button>
-			</li>
-			<li aria-current={$page.url.pathname === '/overview' ? 'page' : undefined}>
-				<a href="/overview">Project Overview</a>
-			</li>
-		</ul>
-		<ul class="flex flex-row gap-2 items-center">
-			<li>
-				<button onclick={test}>Test</button>
-			</li>
+	<div class="flex flex-row items-center">
+		<nav aria-label="Breadcrumb">
+			<ol class="flex items-stretch gap-2 list-none">
+				<li class="flex items-center gap-2">
+					<button
+						onclick={() => navigationSystem.navigateToHome()}
+						class="flex max-w-[20ch] items-center gap-1 truncate whitespace-nowrap text-text transition-colors hover:text-text-accent"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="w-5 h-5"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							stroke-width="1.5"
+							aria-hidden="true"
+							aria-labelledby="title-01 description-01"
+							role="link"
+						>
+							<title id="title-01">Home</title>
+							<desc id="description-01"> Home button indicating the homepage of the website.</desc>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+							/>
+						</svg>
+						Home
+					</button>
+					{#if navigationSystem.currentState > NavigationState.Home}
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="flex-none w-4 h-4 text-text rotate-180"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							stroke-width="1.5"
+							aria-hidden="true"
+							aria-labelledby="title-02 description-02"
+							role="graphics-symbol"
+						>
+							<title id="title-02">Arrow</title>
+							<desc id="description-02">
+								Arrow icon that points to the next page in big screen resolution sizes and previous page in small screen
+								resolution sizes.
+							</desc>
+							<path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+						</svg>
+					{/if}
+				</li>
+				{#if navigationSystem.currentState > NavigationState.Home}
+					<li class="items-center flex gap-2">
+						<button
+							onclick={() => navigationSystem.navigateToOverview()}
+							class="flex max-w-[20ch] truncate whitespace-nowrap text-text transition-colors hover:text-text-accent"
+							>projects
+						</button>
+						{#if navigationSystem.currentState > NavigationState.Overview}
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="flex-none w-4 h-4 text-text rotate-180"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								stroke-width="1.5"
+								aria-hidden="true"
+								aria-labelledby="title-03 description-03"
+								role="graphics-symbol"
+							>
+								<title id="title-03">Arrow</title>
+								<desc id="description-03">
+									Arrow icon that points to the next page in big screen resolution sizes and previous page in small
+									screen resolution sizes.
+								</desc>
+								<path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+							</svg>
+						{/if}
+					</li>
+				{/if}
+				{#if navigationSystem.currentState > NavigationState.Overview}
+					<li class="flex items-center gap-2">
+						<button
+							onclick={() => navigationSystem.navigateToProject(navigationSystem.currentProjectId)}
+							class="flex max-w-[20ch] truncate whitespace-nowrap text-text transition-colors hover:text-text-accent"
+							>{projectStore.getById(navigationSystem.currentProjectId).name}
+						</button>
+						{#if navigationSystem.currentState > NavigationState.Project}
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="flex-none w-4 h-4 text-text rotate-180"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								stroke-width="1.5"
+								aria-hidden="true"
+								aria-labelledby="title-04 description-04"
+								role="graphics-symbol"
+							>
+								<title id="title-04">Arrow</title>
+								<desc id="description-04">
+									Arrow icon that points to the next page in big screen resolution sizes and previous page in small
+									screen resolution sizes.
+								</desc>
+								<path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+							</svg>
+						{/if}
+					</li>
+				{/if}
+				{#if navigationSystem.currentState > NavigationState.Project}
+					<li class="flex items-center flex-1">
+						<button
+							onclick={() => navigationSystem.navigateToCollection(navigationSystem.currentCollectionId)}
+							aria-current="page"
+							class="pointer-events-none max-w-[20ch] truncate whitespace-nowrap text-text-disabled"
+							>{collectionStore.getById(navigationSystem.currentCollectionId).name}
+						</button>
+					</li>
+				{/if}
+			</ol>
+		</nav>
+		<ul class="flex flex-row gap-2 ml-auto items-center">
 			<li class="flex items-center">
 				<button
 					onclick={() => {
@@ -82,6 +186,6 @@
 				</button>
 			</li>
 		</ul>
-	</nav>
+	</div>
 	<hr class="border-background-accent" />
 </header>

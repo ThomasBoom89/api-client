@@ -2,11 +2,13 @@
 	import { page } from '$app/stores';
 	import { getCollectionStore } from '../../../lib/collectionStore.svelte';
 	import { getProjectStore } from '../../../lib/projectStore.svelte';
+	import { getNavigationSystem } from '$lib/navigationSystem.svelte.ts';
 
 	let newCollectionName = $state('');
 	let collectionInEdit: number = $state(0);
 	const collectionStore = getCollectionStore();
 	const projectStore = getProjectStore();
+	const navigationSystem = getNavigationSystem();
 	const id: number = Number($page.params.id);
 </script>
 
@@ -30,9 +32,9 @@
 	{#each collectionStore.getByProjectId(id) as collection}
 		<li class="flex flex-row gap-2">
 			{#if collection.id !== collectionInEdit}
-				<a href="/collection/{collection.id}">
+				<button onclick={() => navigationSystem.navigateToCollection(collection.id)}>
 					{collection.name}
-				</a>
+				</button>
 				<button onclick={() => (collectionInEdit = collection.id)}>edit</button>
 			{:else}
 				<input type="text" bind:value={collection.name} />

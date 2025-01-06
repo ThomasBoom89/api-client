@@ -10,7 +10,7 @@ test('project workflow', async ({ page }) => {
 	await page.getByRole('textbox', { name: 'insert new project name' }).fill(projectUUID);
 	await page.getByRole('button', { name: 'create' }).click();
 	await expect(page.getByRole('textbox', { name: 'insert new project name' })).toBeEmpty();
-	await expect(page.getByTestId('projects').getByRole('link', { name: projectUUID })).toBeVisible();
+	await expect(page.getByTestId('projects').getByRole('button', { name: projectUUID })).toBeVisible();
 	// update
 	await page.getByRole('listitem').filter({ hasText: projectUUID }).getByRole('button', { name: 'edit' }).click();
 
@@ -21,5 +21,5 @@ test('project workflow', async ({ page }) => {
 	// delete
 	await page.getByRole('listitem').filter({ hasText: newProjectUUID }).getByRole('button', { name: 'delete' }).click();
 
-	await expect(page.getByRole('listitem').getByRole('link', { name: newProjectUUID })).not.toBeVisible();
+	await expect(page.getByRole('listitem').getByRole('button', { name: newProjectUUID })).not.toBeVisible();
 });

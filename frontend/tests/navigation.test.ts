@@ -5,8 +5,7 @@ test('application is navigable', async ({ page }) => {
 	const loader = page.locator('#loader');
 	await loader.waitFor({ state: 'hidden', timeout: 10000 });
 	await expect(page).toHaveTitle('Api-Client :: Startseite');
-	await page.waitForSelector('footer');
-	await page.getByRole('link', { name: 'Project Overview' }).click();
+	await page.getByRole('button', { name: 'to project overview' }).click();
 
 	await expect(page).toHaveTitle('Api-Client :: Project Overview');
 });

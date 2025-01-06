@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { getProjectStore } from '../../lib/projectStore.svelte';
+	import { getNavigationSystem } from '$lib/navigationSystem.svelte.ts';
 
 	const projectStore = getProjectStore();
+	const navigationSystem = getNavigationSystem();
 	let newProjectName: string = $state('');
 	let projectInEdit: number = $state(0);
 </script>
@@ -27,9 +29,9 @@
 	{#each projectStore.projects as project}
 		<li class="flex flex-row gap-2">
 			{#if project.id !== projectInEdit}
-				<a href="/project/{project.id}">
+				<button onclick={() => navigationSystem.navigateToProject(project.id)}>
 					{project.name}
-				</a>
+				</button>
 				<button onclick={() => (projectInEdit = project.id)}>edit</button>
 			{:else}
 				<input type="text" bind:value={project.name} />
@@ -37,8 +39,9 @@
 					onclick={() => {
 						projectStore.update(project);
 						projectInEdit = 0;
-					}}>save</button
-				>
+					}}
+					>save
+				</button>
 			{/if}
 			<button onclick={() => projectStore.delete(project)}>delete</button>
 		</li>
