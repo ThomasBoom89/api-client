@@ -3,7 +3,6 @@
 	import Header from './Header.svelte';
 	import { getConfigurationStore, initializeConfigurationStore } from '../lib/configurationStore.svelte.ts';
 	import { initializeThemeStore } from '../lib/themeStore.svelte.ts';
-	import Footer from './Footer.svelte';
 	import { initializeProjectStore } from '../lib/projectStore.svelte.ts';
 	import { initializeCollectionStore } from '../lib/collectionStore.svelte.ts';
 	import { initializeRequestStore } from '../lib/requestStore.svelte.ts';
@@ -22,7 +21,6 @@
 	<main class="flex flex-col w-full h-full overflow-hidden flex-1">
 		{@render children()}
 	</main>
-	<Footer />
 </div>
 
 <style>
