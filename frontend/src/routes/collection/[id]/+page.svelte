@@ -24,7 +24,6 @@
 	<meta name="description" content="project overview" />
 </svelte:head>
 
-<h2>Collection {collectionStore.getById(collectionId).name}</h2>
 <div class="grid grid-cols-[40%_60%] overflow-hidden h-full">
 	<div class="flex flex-col gap-y-2 pr-2 overflow-y-auto">
 		<div class="flex flex-row gap-y-2">

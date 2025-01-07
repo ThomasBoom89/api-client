@@ -13,7 +13,6 @@
 	<meta name="description" content="project overview" />
 </svelte:head>
 
-<h2>Project Overview</h2>
 <div class="flex flex-row gap-y-2">
 	<input type="text" placeholder="insert new project name" bind:value={newProjectName} />
 	<button

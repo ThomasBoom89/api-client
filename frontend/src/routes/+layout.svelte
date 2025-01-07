@@ -20,7 +20,7 @@
 
 <div class="w-[100vw] h-[100vh] bg-background text-text flex flex-col overflow-hidden">
 	<Header />
-	<main class="flex flex-col w-full h-full overflow-hidden flex-1">
+	<main class="flex flex-col w-full h-full overflow-hidden flex-1 px-2 pb-2">
 		{@render children()}
 	</main>
 </div>

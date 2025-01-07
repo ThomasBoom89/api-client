@@ -17,7 +17,6 @@
 	<meta name="description" content="project details" />
 </svelte:head>
 
-<h2>Project {projectStore.getById(id).name}</h2>
 <div class="flex flex-row gap-y-2">
 	<input type="text" placeholder="insert new collection name" bind:value={newCollectionName} />
 	<button
