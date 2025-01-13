@@ -13,10 +13,10 @@ test.afterEach('project cleanup', async ({ page }) => {
 
 test('collection workflow', async ({ page }) => {
 	const collectionUUID = crypto.randomUUID();
-	await page.getByRole('textbox', { name: 'insert new collection name' }).fill(collectionUUID);
-	await page.getByRole('button', { name: 'create' }).click();
+	await page.locator('#new-collection').fill(collectionUUID);
+	await page.locator('#create-new-collection').click();
 
-	await expect(page.getByRole('textbox', { name: 'insert new collection name' })).toBeEmpty();
+	await expect(page.locator('#new-collection')).toBeEmpty();
 	await expect(page.getByTestId('collections').getByRole('button', { name: collectionUUID })).toBeVisible();
 
 	// update

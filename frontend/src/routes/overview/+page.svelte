@@ -51,7 +51,6 @@
 			<path d="M12 9v6" />
 		</svg>
 	</div>
-	<!--	<div data-testid="projects" class="flex flex-row gap-2 flex-wrap w-full">-->
 	<div data-testid="projects" class="grid grid-cols-projectOverview gap-2">
 		{#each projectStore.projects as project}
 			<div

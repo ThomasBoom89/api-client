@@ -29,9 +29,11 @@ export async function cleanupProjects(page: Page, projectSetupUUID: string) {
 
 export async function setupCollections(page: Page, projectSetupUUID: string, collectionSetupUUID: string) {
 	await setupProjects(page, projectSetupUUID);
-	await page.getByRole('textbox', { name: 'insert new collection name' }).fill(collectionSetupUUID);
-	await page.getByRole('button', { name: 'create' }).click();
-	await expect(page.getByRole('textbox', { name: 'insert new collection name' })).toBeEmpty();
+
+	await page.locator('#new-collection').fill(collectionSetupUUID);
+	await page.locator('#create-new-collection').click();
+
+	await expect(page.locator('#new-collection')).toBeEmpty();
 	await expect(page.getByTestId('collections').getByRole('button', { name: collectionSetupUUID })).toBeVisible();
 	await page.getByTestId('collections').getByRole('button', { name: collectionSetupUUID }).click();
 	await expect(page.getByRole('button', { name: collectionSetupUUID })).toBeVisible();
