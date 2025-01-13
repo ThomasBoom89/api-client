@@ -3,6 +3,10 @@ export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
 		extend: {
+			gridTemplateColumns: {
+				projectOverview: 'repeat(auto-fit, minmax(20rem, 1fr))',
+				collectionOverview: 'repeat(auto-fit, minmax(20rem, 1fr))',
+			},
 			colors: {
 				background: 'var(--color-background)',
 				text: 'var(--color-text)',

@@ -12,8 +12,8 @@ export async function navigateToProject(page: Page): Promise<void> {
 export async function setupProjects(page: Page, projectSetupUUID: string): Promise<void> {
 	await navigateToProject(page);
 
-	await page.getByRole('textbox', { name: 'insert new project name' }).fill(projectSetupUUID);
-	await page.getByRole('button', { name: 'create' }).click();
+	await page.locator('#new-project').fill(projectSetupUUID);
+	await page.locator('#create-new-project').click();
 	await page.getByTestId('projects').getByRole('button', { name: projectSetupUUID }).click();
 
 	await expect(page).toHaveTitle('Api-Client :: Project Details');
@@ -23,11 +23,7 @@ export async function setupProjects(page: Page, projectSetupUUID: string): Promi
 export async function cleanupProjects(page: Page, projectSetupUUID: string) {
 	await navigateToProject(page);
 
-	await page
-		.getByRole('listitem')
-		.filter({ hasText: projectSetupUUID })
-		.getByRole('button', { name: 'delete' })
-		.click();
+	await page.getByTestId('project').filter({ hasText: projectSetupUUID }).getByLabel('delete').click();
 	await expect(page.getByTestId('projects').getByRole('button', { name: projectSetupUUID })).not.toBeVisible();
 }
 
