@@ -36,20 +36,19 @@ export async function setupCollections(page: Page, projectSetupUUID: string, col
 	await expect(page.locator('#new-collection')).toBeEmpty();
 	await expect(page.getByTestId('collections').getByRole('button', { name: collectionSetupUUID })).toBeVisible();
 	await page.getByTestId('collections').getByRole('button', { name: collectionSetupUUID }).click();
+
+	await expect(page).toHaveTitle('Api-Client :: Collection Overview');
 	await expect(page.getByRole('button', { name: collectionSetupUUID })).toBeVisible();
 }
 
 export async function cleanupCollections(page: Page, projectSetupUUID: string, collectionsSetupUUID: string) {
 	await navigateToProject(page);
 	await page.getByTestId('projects').getByRole('button', { name: projectSetupUUID }).click();
-	await expect(page.getByRole('button', { name: projectSetupUUID })).toBeVisible();
-	await page
-		.getByRole('listitem')
-		.filter({ hasText: collectionsSetupUUID })
-		.getByRole('button', { name: 'delete' })
-		.click();
+	await expect(page).toHaveTitle('Api-Client :: Project Details');
 
-	await expect(page.getByRole('listitem').getByRole('button', { name: collectionsSetupUUID })).not.toBeVisible();
+	await expect(page.getByRole('button', { name: projectSetupUUID })).toBeVisible();
+	await page.getByTestId('collection').filter({ hasText: collectionsSetupUUID }).getByLabel('delete').click();
+
 	await cleanupProjects(page, projectSetupUUID);
 }
 

@@ -4,11 +4,11 @@ import { cleanupCollections, setupCollections } from './setup';
 const projectSetupUUID = crypto.randomUUID();
 const collectionsSetupUUID = crypto.randomUUID();
 
-test.beforeEach('project setup', async ({ page }) => {
+test.beforeEach('collection and project setup', async ({ page }) => {
 	await setupCollections(page, projectSetupUUID, collectionsSetupUUID);
 });
 
-test.afterEach('project cleanup', async ({ page }) => {
+test.afterEach('collection and project cleanup', async ({ page }) => {
 	await cleanupCollections(page, projectSetupUUID, collectionsSetupUUID);
 });
 

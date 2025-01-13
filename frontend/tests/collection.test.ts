@@ -20,7 +20,7 @@ test('collection workflow', async ({ page }) => {
 	await expect(page.getByTestId('collections').getByRole('button', { name: collectionUUID })).toBeVisible();
 
 	// update
-	await page.getByRole('listitem').filter({ hasText: collectionUUID }).getByRole('button', { name: 'edit' }).click();
+	await page.getByTestId('collection').filter({ hasText: collectionUUID }).getByLabel('edit').click();
 
 	const otherCollectionUUID = crypto.randomUUID();
 
@@ -28,11 +28,7 @@ test('collection workflow', async ({ page }) => {
 	await page.getByTestId('collections').getByRole('button', { name: 'save' }).click();
 
 	// delete
-	await page
-		.getByRole('listitem')
-		.filter({ hasText: otherCollectionUUID })
-		.getByRole('button', { name: 'delete' })
-		.click();
+	await page.getByTestId('collection').filter({ hasText: otherCollectionUUID }).getByLabel('delete').click();
 
 	await expect(page.getByRole('listitem').getByRole('button', { name: otherCollectionUUID })).not.toBeVisible();
 });

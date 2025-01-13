@@ -54,26 +54,91 @@
 			<path d="M12 9v6" />
 		</svg>
 	</div>
-	<ol data-testid="collections">
+	<div data-testid="collections" class="grid grid-cols-collectionOverview gap-2">
 		{#each collectionStore.getByProjectId(id) as collection}
-			<li class="flex flex-row gap-2">
+			<div
+				data-testid="collection"
+				class="flex flex-row gap-2 overflow-hidden rounded shadow-sm shadow-[--color-background-accent] p-2"
+			>
 				{#if collection.id !== collectionInEdit}
-					<button onclick={() => navigationSystem.navigateToCollection(collection.id)}>
+					<button
+						class=" text-left w-full truncate"
+						onclick={() => navigationSystem.navigateToCollection(collection.id)}
+					>
 						{collection.name}
 					</button>
-					<button onclick={() => (collectionInEdit = collection.id)}>edit</button>
-				{:else}
-					<input type="text" bind:value={collection.name} />
 					<button
+						aria-label="edit"
+						onclick={() => {
+							collectionInEdit = collection.id;
+						}}
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+							<path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+							<path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+							<path d="M16 5l3 3" />
+						</svg>
+					</button>
+				{:else}
+					<input type="text" class="border-none w-full" bind:value={collection.name} />
+					<button
+						aria-label="save"
 						onclick={() => {
 							collectionStore.update(collection);
 							collectionInEdit = 0;
 						}}
-						>save
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+							<path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" />
+							<path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+							<path d="M14 4l0 4l-6 0l0 -4" />
+						</svg>
 					</button>
 				{/if}
-				<button onclick={() => collectionStore.delete(collection)}>delete</button>
-			</li>
+				<button aria-label="delete" onclick={() => collectionStore.delete(collection)}>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+						<path d="M4 7l16 0" />
+						<path d="M10 11l0 6" />
+						<path d="M14 11l0 6" />
+						<path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+						<path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+					</svg>
+				</button>
+			</div>
 		{/each}
-	</ol>
+		<div style="width: 0px; height: 0px; grid-column: 1 / -1"></div>
+	</div>
 </div>
