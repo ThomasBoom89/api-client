@@ -60,9 +60,10 @@ export async function setupRequest(
 ) {
 	await setupCollections(page, projectSetupUUID, collectionSetupUUID);
 
-	await page.getByRole('textbox', { name: 'insert new request name' }).fill(requestSetupUUID);
-	await page.getByRole('button', { name: 'create' }).click();
-	await expect(page.getByRole('textbox', { name: 'insert new request name' })).toBeEmpty();
+	await page.locator('#new-request').fill(requestSetupUUID);
+	await page.locator('#create-new-request').click();
+
+	await expect(page.locator('#new-request')).toBeEmpty();
 	await expect(page.getByTestId('requests').getByRole('listitem').filter({ hasText: requestSetupUUID })).toBeVisible();
 	await page.getByTestId('requests').getByRole('listitem').filter({ hasText: requestSetupUUID }).click();
 }

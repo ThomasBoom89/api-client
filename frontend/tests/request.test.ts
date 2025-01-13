@@ -14,9 +14,11 @@ test.afterEach('collection and project cleanup', async ({ page }) => {
 
 test('request workflow', async ({ page }) => {
 	const requestUUID = crypto.randomUUID();
-	await page.getByRole('textbox', { name: 'insert new request name' }).fill(requestUUID);
-	await page.getByRole('button', { name: 'create' }).click();
-	await expect(page.getByRole('textbox', { name: 'insert new request name' })).toBeEmpty();
+
+	await page.locator('#new-request').fill(requestUUID);
+	await page.locator('#create-new-request').click();
+
+	await expect(page.locator('#new-request')).toBeEmpty();
 	await expect(page.getByTestId('requests').getByRole('listitem').filter({ hasText: requestUUID })).toBeVisible();
 
 	//update
