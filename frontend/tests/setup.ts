@@ -64,8 +64,9 @@ export async function setupRequest(
 	await page.locator('#create-new-request').click();
 
 	await expect(page.locator('#new-request')).toBeEmpty();
-	await expect(page.getByTestId('requests').getByRole('listitem').filter({ hasText: requestSetupUUID })).toBeVisible();
-	await page.getByTestId('requests').getByRole('listitem').filter({ hasText: requestSetupUUID }).click();
+	await expect(page.getByRole('button', { name: requestSetupUUID })).toBeVisible();
+
+	await page.getByTestId('requests').getByRole('button', { name: requestSetupUUID }).click();
 }
 
 export async function cleanupRequest(
@@ -79,15 +80,10 @@ export async function cleanupRequest(
 	await expect(page.getByRole('button', { name: projectSetupUUID })).toBeVisible();
 	await page.getByTestId('collections').getByRole('button', { name: collectionsSetupUUID }).click();
 	await expect(page.getByRole('button', { name: collectionsSetupUUID })).toBeVisible();
-	await page
-		.getByRole('listitem')
-		.filter({ hasText: requestSetupUUID })
-		.getByRole('button', { name: 'delete' })
-		.click();
 
-	await expect(
-		page.getByTestId('requests').getByRole('listitem').filter({ hasText: requestSetupUUID }),
-	).not.toBeVisible();
+	await page.getByTestId('requests').filter({ hasText: requestSetupUUID }).getByLabel('delete').click();
+
+	await expect(page.getByRole('button', { name: requestSetupUUID })).not.toBeVisible();
 
 	await cleanupCollections(page, projectSetupUUID, collectionsSetupUUID);
 }
