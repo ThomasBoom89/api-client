@@ -11,6 +11,7 @@
         --color-text-accent: #a53dff;
         --color-text-disabled: #878787;
         --color-border: #4b4b4b;
+        --color-text-highlight: #909090;
     }
 }
 
@@ -22,6 +23,7 @@ html[data-theme='dark'] {
     --color-text-accent: #a53dff;
     --color-text-disabled: #878787;
     --color-border: #4b4b4b;
+    --color-text-highlight: #909090;
 }
 
 html[data-theme='light'] {
@@ -32,6 +34,7 @@ html[data-theme='light'] {
     --color-text-accent: #8005db;
     --color-text-disabled: #878787;
     --color-border: #dcdcdc;
+    --color-text-highlight: #646464;
 }
 
 * {
@@ -39,7 +42,7 @@ html[data-theme='light'] {
     padding: 0;
     box-sizing: border-box;
     -webkit-appearance: none;
-    font-size: 1.2rem;
+    font-size: 1rem;
     border-color: var(--color-border);
 }
 

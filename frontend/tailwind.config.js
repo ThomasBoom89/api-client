@@ -14,6 +14,7 @@ export default {
 				'background-accent': 'var(--color-background-accent)',
 				'text-accent': 'var(--color-text-accent)',
 				'text-disabled': 'var(--color-text-disabled)',
+				'text-highlight': 'var(--color-text-highlight)',
 			},
 		},
 	},
