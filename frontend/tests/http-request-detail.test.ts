@@ -17,35 +17,35 @@ test('request workflow', async ({ page }) => {
 	const url = 'https://localhost:1234';
 	await page.locator('#request-method').selectOption('POST');
 	await expect(page.locator('#request-method')).toHaveValue('POST');
-	await page.getByRole('textbox', { name: 'insert url' }).fill(url);
-	await page.getByRole('button', { name: 'submit' }).click();
+	await page.locator('#request-url').fill(url);
+	await page.locator('#run-request-icon').click();
 	await expect(page.getByTestId('response-error')).toHaveText(
 		'Post "' + url + '": dial tcp [::1]:1234: connect: connection refused\n',
 	);
 
 	// body
 	await page.getByTestId('request-tabs').getByText('Body').click();
-	await page.locator('#type-selector').selectOption('json');
+	await page.locator('#body-type').selectOption('json');
 	await expect(page.getByTestId('json-body-error')).toBeVisible();
-	await page.getByPlaceholder('write your body').fill('{"foo": "bar"}');
+	await page.getByPlaceholder('> your body here <').fill('{"foo": "bar"}');
 	await expect(page.getByTestId('json-body-error')).not.toBeVisible();
 
 	// parameter
 	await page.getByTestId('request-tabs').getByText('Parameter').click();
 	await expect(page.getByTestId('request-parameter-preview')).toHaveText(url);
-	await page.getByPlaceholder('Enter parameter name').fill('hello');
-	await page.getByPlaceholder('Enter parameter value').fill('world');
-	await page.getByRole('button', { name: 'save' }).click();
+	await page.locator('#new-parameter-name').fill('hello');
+	await page.locator('#new-parameter-value').fill('world');
+	await page.getByLabel('save').click();
 	await expect(page.getByTestId('request-parameter-preview')).toHaveText(url + '?hello=world');
-	await page.getByTestId('request-parameters').getByRole('button', { name: 'delete' }).click();
+	await page.getByTestId('request-parameters').getByLabel('delete').click();
 	await expect(page.getByTestId('request-parameters')).toBeEmpty();
 
 	// header
 	await page.getByTestId('request-tabs').getByText('Header').click();
-	await page.getByPlaceholder('Enter header key').fill('foo');
-	await page.getByPlaceholder('Enter header value').fill('bar');
-	await page.getByRole('button', { name: 'save' }).click();
+	await page.locator('#new-header-key').fill('foo');
+	await page.locator('#new-header-value').fill('bar');
+	await page.getByLabel('save').click();
 	await expect(page.getByTestId('request-headers')).toHaveCount(1);
-	await page.getByTestId('request-headers').getByRole('button', { name: 'delete' }).click();
+	await page.getByTestId('request-headers').getByLabel('delete').click();
 	await expect(page.getByTestId('request-headers')).toBeEmpty();
 });

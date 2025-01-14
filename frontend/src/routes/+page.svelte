@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { getNavigationSystem } from '$lib/navigationSystem.svelte.ts';
+
+	const navigationSystem = getNavigationSystem();
 </script>
 
 <svelte:head>
@@ -6,4 +9,4 @@
 	<meta name="description" content="Startseite" />
 </svelte:head>
 
-<h1>Startseite /</h1>
+<button onclick={() => navigationSystem.navigateToOverview()}>to project overview</button>

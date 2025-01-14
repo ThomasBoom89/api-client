@@ -13,14 +13,14 @@ test.afterEach('project cleanup', async ({ page }) => {
 
 test('collection workflow', async ({ page }) => {
 	const collectionUUID = crypto.randomUUID();
-	await page.getByRole('textbox', { name: 'insert new collection name' }).fill(collectionUUID);
-	await page.getByRole('button', { name: 'create' }).click();
+	await page.locator('#new-collection').fill(collectionUUID);
+	await page.locator('#create-new-collection').click();
 
-	await expect(page.getByRole('textbox', { name: 'insert new collection name' })).toBeEmpty();
-	await expect(page.getByTestId('collections').getByRole('link', { name: collectionUUID })).toBeVisible();
+	await expect(page.locator('#new-collection')).toBeEmpty();
+	await expect(page.getByTestId('collections').getByRole('button', { name: collectionUUID })).toBeVisible();
 
 	// update
-	await page.getByRole('listitem').filter({ hasText: collectionUUID }).getByRole('button', { name: 'edit' }).click();
+	await page.getByTestId('collection').filter({ hasText: collectionUUID }).getByLabel('edit').click();
 
 	const otherCollectionUUID = crypto.randomUUID();
 
@@ -28,11 +28,7 @@ test('collection workflow', async ({ page }) => {
 	await page.getByTestId('collections').getByRole('button', { name: 'save' }).click();
 
 	// delete
-	await page
-		.getByRole('listitem')
-		.filter({ hasText: otherCollectionUUID })
-		.getByRole('button', { name: 'delete' })
-		.click();
+	await page.getByTestId('collection').filter({ hasText: otherCollectionUUID }).getByLabel('delete').click();
 
-	await expect(page.getByRole('listitem').getByRole('link', { name: otherCollectionUUID })).not.toBeVisible();
+	await expect(page.getByRole('listitem').getByRole('button', { name: otherCollectionUUID })).not.toBeVisible();
 });

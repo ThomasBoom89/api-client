@@ -7,19 +7,19 @@ test.beforeEach('project setup', async ({ page }) => {
 
 test('project workflow', async ({ page }) => {
 	const projectUUID = crypto.randomUUID();
-	await page.getByRole('textbox', { name: 'insert new project name' }).fill(projectUUID);
-	await page.getByRole('button', { name: 'create' }).click();
-	await expect(page.getByRole('textbox', { name: 'insert new project name' })).toBeEmpty();
-	await expect(page.getByTestId('projects').getByRole('link', { name: projectUUID })).toBeVisible();
+	await page.locator('#new-project').fill(projectUUID);
+	await page.locator('#create-new-project').click();
+	await expect(page.locator('#new-project')).toBeEmpty();
+	await expect(page.getByTestId('projects').getByRole('button', { name: projectUUID })).toBeVisible();
 	// update
-	await page.getByRole('listitem').filter({ hasText: projectUUID }).getByRole('button', { name: 'edit' }).click();
+	await page.getByTestId('project').filter({ hasText: projectUUID }).getByLabel('edit').click();
 
 	const newProjectUUID = crypto.randomUUID();
 	await page.getByTestId('projects').getByRole('textbox').fill(newProjectUUID);
-	await page.getByTestId('projects').getByRole('button', { name: 'save' }).click();
+	await page.getByTestId('projects').getByLabel('save').click();
 
 	// delete
-	await page.getByRole('listitem').filter({ hasText: newProjectUUID }).getByRole('button', { name: 'delete' }).click();
+	await page.getByTestId('project').filter({ hasText: newProjectUUID }).getByLabel('delete').click();
 
-	await expect(page.getByRole('listitem').getByRole('link', { name: newProjectUUID })).not.toBeVisible();
+	await expect(page.getByTestId('projects').getByRole('button', { name: projectUUID })).not.toBeVisible();
 });
