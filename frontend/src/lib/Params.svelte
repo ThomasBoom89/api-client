@@ -51,7 +51,7 @@
 </script>
 
 <div class="flex flex-col h-full">
-	<div data-testid="request-parameter-preview" class="pr-4">{preview}</div>
+	<div data-testid="request-parameter-preview" class="pr-4 break-words">{preview}</div>
 	<div class="flex flex-row gap-1 pr-4 mt-4">
 		<div class="relative mx-auto w-full">
 			<input

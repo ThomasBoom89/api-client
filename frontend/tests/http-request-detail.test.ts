@@ -42,10 +42,10 @@ test('request workflow', async ({ page }) => {
 
 	// header
 	await page.getByTestId('request-tabs').getByText('Header').click();
-	await page.getByPlaceholder('Enter header key').fill('foo');
-	await page.getByPlaceholder('Enter header value').fill('bar');
-	await page.getByRole('button', { name: 'save' }).click();
+	await page.locator('#new-header-key').fill('foo');
+	await page.locator('#new-header-value').fill('bar');
+	await page.getByLabel('save').click();
 	await expect(page.getByTestId('request-headers')).toHaveCount(1);
-	await page.getByTestId('request-headers').getByRole('button', { name: 'delete' }).click();
+	await page.getByTestId('request-headers').getByLabel('delete').click();
 	await expect(page.getByTestId('request-headers')).toBeEmpty();
 });
