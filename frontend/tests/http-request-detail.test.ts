@@ -17,8 +17,8 @@ test('request workflow', async ({ page }) => {
 	const url = 'https://localhost:1234';
 	await page.locator('#request-method').selectOption('POST');
 	await expect(page.locator('#request-method')).toHaveValue('POST');
-	await page.getByRole('textbox', { name: 'insert url' }).fill(url);
-	await page.getByRole('button', { name: 'submit' }).click();
+	await page.locator('#request-url').fill(url);
+	await page.locator('#run-request-icon').click();
 	await expect(page.getByTestId('response-error')).toHaveText(
 		'Post "' + url + '": dial tcp [::1]:1234: connect: connection refused\n',
 	);
