@@ -33,7 +33,7 @@
 	}
 </script>
 
-<div class="relative">
+<div class="relative mt-2">
 	<select
 		name="body-type"
 		id="body-type"

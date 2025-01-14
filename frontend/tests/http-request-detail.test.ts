@@ -33,11 +33,11 @@ test('request workflow', async ({ page }) => {
 	// parameter
 	await page.getByTestId('request-tabs').getByText('Parameter').click();
 	await expect(page.getByTestId('request-parameter-preview')).toHaveText(url);
-	await page.getByPlaceholder('Enter parameter name').fill('hello');
-	await page.getByPlaceholder('Enter parameter value').fill('world');
-	await page.getByRole('button', { name: 'save' }).click();
+	await page.locator('#new-parameter-name').fill('hello');
+	await page.locator('#new-parameter-value').fill('world');
+	await page.getByLabel('save').click();
 	await expect(page.getByTestId('request-parameter-preview')).toHaveText(url + '?hello=world');
-	await page.getByTestId('request-parameters').getByRole('button', { name: 'delete' }).click();
+	await page.getByTestId('request-parameters').getByLabel('delete').click();
 	await expect(page.getByTestId('request-parameters')).toBeEmpty();
 
 	// header

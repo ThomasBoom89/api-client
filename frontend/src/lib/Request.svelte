@@ -35,7 +35,7 @@
 
 <RequestDetail {request} {submit} />
 <Tabs {tabs} {changeTab} {currentTab} />
-<div class="mt-4 w-full h-full">
+<div class="mt-2 w-full h-full overflow-hidden">
 	{#if currentTab === PageTabIndex.Body}
 		<Body {request} />
 	{:else if currentTab === PageTabIndex.Parameter}
