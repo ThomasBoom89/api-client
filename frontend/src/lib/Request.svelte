@@ -35,12 +35,14 @@
 
 <RequestDetail {request} {submit} />
 <Tabs {tabs} {changeTab} {currentTab} />
-{#if currentTab === PageTabIndex.Body}
-	<Body {request} />
-{:else if currentTab === PageTabIndex.Parameter}
-	<Params {request} />
-{:else if currentTab === PageTabIndex.Header}
-	<Header {request} />
-{:else if currentTab === PageTabIndex.Response}
-	<ResponseDetail response={currentResponse} {loading}></ResponseDetail>
-{/if}
+<div class="mt-2 w-full h-full">
+	{#if currentTab === PageTabIndex.Body}
+		<Body {request} />
+	{:else if currentTab === PageTabIndex.Parameter}
+		<Params {request} />
+	{:else if currentTab === PageTabIndex.Header}
+		<Header {request} />
+	{:else if currentTab === PageTabIndex.Response}
+		<ResponseDetail response={currentResponse} {loading}></ResponseDetail>
+	{/if}
+</div>

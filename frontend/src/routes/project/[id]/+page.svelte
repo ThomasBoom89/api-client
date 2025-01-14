@@ -28,7 +28,7 @@
 		<label
 			for="new-collection"
 			class="cursor-text peer-focus:cursor-default peer-autofill:-top-2 absolute left-2 -top-2 z-[1] px-2 text-xs
-				  transition-all before:absolute before:top-0 before:left-0 before:z-[-1] before:block before:h-full
+				  transition-all before:bg-background before:absolute before:top-0 before:left-0 before:z-[-1] before:block before:h-full
 				  before:w-full before:transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm
 				  peer-focus:-top-2 peer-focus:text-xs"
 			>New Collection
