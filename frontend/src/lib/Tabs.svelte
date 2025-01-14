@@ -8,7 +8,7 @@
 	}: { tabs: PageTabIndex[]; changeTab: (tabId: PageTabIndex) => void; currentTab: PageTabIndex } = $props();
 </script>
 
-<ul data-testid="request-tabs" class="flex items-center border-b border-slate-200" role="tablist">
+<ul data-testid="request-tabs" class="flex items-center" role="tablist">
 	{#each tabs as tab}
 		<li class="flex-1" role="presentation">
 			<button
@@ -25,7 +25,7 @@
 				aria-controls="tab-panel-1a"
 				aria-selected="true"
 			>
-				<span class="">{tab}</span>
+				<span>{tab}</span>
 			</button>
 		</li>
 	{/each}
