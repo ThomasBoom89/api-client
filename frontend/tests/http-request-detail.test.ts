@@ -25,9 +25,9 @@ test('request workflow', async ({ page }) => {
 
 	// body
 	await page.getByTestId('request-tabs').getByText('Body').click();
-	await page.locator('#type-selector').selectOption('json');
+	await page.locator('#body-type').selectOption('json');
 	await expect(page.getByTestId('json-body-error')).toBeVisible();
-	await page.getByPlaceholder('write your body').fill('{"foo": "bar"}');
+	await page.getByPlaceholder('> your body here <').fill('{"foo": "bar"}');
 	await expect(page.getByTestId('json-body-error')).not.toBeVisible();
 
 	// parameter
