@@ -45,7 +45,7 @@
 		 focus-visible:outline-none peer border-background-accent text-text focus:border-text-accent
 		  focus:focus-visible:outline-none"
 	>
-		<option value="none">kein Body</option>
+		<option value="none">none</option>
 		<option value="plaintext">text/plain</option>
 		<option value="json">application/json</option>
 	</select>
@@ -78,6 +78,7 @@
 	oninput={() => {
 		update();
 	}}
+	class:hidden={request.body.type === 'none'}
 	class="w-full h-[70%]"
 	placeholder="> your body here <"
 	bind:value={request.body.payload}
