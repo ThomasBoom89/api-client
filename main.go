@@ -38,9 +38,8 @@ func main() {
 	// Create application with options
 	err := wails.Run(&options.App{
 		Title:     "Api-Client",
-		Frameless: true,
-		Width:     800,
-		Height:    1000,
+		Width:     960,
+		Height:    720,
 		MaxWidth:  7680, // 8k
 		MaxHeight: 4320,
 		AssetServer: &assetserver.Options{
