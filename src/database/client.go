@@ -23,11 +23,17 @@ func NewClient(userDir configuration.UserDir) *gorm.DB {
 		log.Fatal().Msgf("failed opening connection to sqlite: %v", err)
 	}
 
+	// this fixes database table lock error on sqlite3 during playwright tests
+	db, _ := database.DB()
+	db.SetMaxOpenConns(1)
+
 	return database
 }
 
 func AutoMigrate(databaseClient *gorm.DB) {
 	err := databaseClient.AutoMigrate(
+		&HttpRequestHeader{},
+		&HttpRequestParameter{},
 		&HttpRequestBody{},
 		&HttpRequest{},
 		&GrpcRequest{},

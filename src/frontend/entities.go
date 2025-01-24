@@ -20,14 +20,16 @@ type CollectionDto struct {
 }
 
 type HttpRequestDto struct {
-	ID           uint               `json:"id"`
-	UpdatedAt    time.Time          `json:"updatedAt"`
-	Name         string             `json:"name"`
-	Type         string             `json:"type"`
-	CollectionID uint               `json:"collectionId"`
-	Url          string             `json:"url"`
-	Method       string             `json:"method"`
-	Body         HttpRequestBodyDto `json:"body"`
+	ID           uint                      `json:"id"`
+	UpdatedAt    time.Time                 `json:"updatedAt"`
+	Name         string                    `json:"name"`
+	Type         string                    `json:"type"`
+	CollectionID uint                      `json:"collectionId"`
+	Url          string                    `json:"url"`
+	Method       string                    `json:"method"`
+	Body         HttpRequestBodyDto        `json:"body"`
+	Parameter    []HttpRequestParameterDto `json:"parameter"`
+	Header       []HttpRequestHeaderDto    `json:"header"`
 }
 
 type HttpRequestBodyDto struct {
@@ -36,6 +38,22 @@ type HttpRequestBodyDto struct {
 	HttpRequestID uint      `json:"httpRequestID"`
 	Type          string    `json:"type"`
 	Payload       string    `json:"payload"`
+}
+
+type HttpRequestParameterDto struct {
+	ID            uint      `json:"id"`
+	UpdatedAt     time.Time `json:"updatedAt"`
+	HttpRequestID uint      `json:"httpRequestID"`
+	Key           string    `json:"key"`
+	Value         string    `json:"value"`
+}
+
+type HttpRequestHeaderDto struct {
+	ID            uint      `json:"id"`
+	UpdatedAt     time.Time `json:"updatedAt"`
+	HttpRequestID uint      `json:"httpRequestID"`
+	Key           string    `json:"key"`
+	Value         string    `json:"value"`
 }
 
 type Projects struct {
@@ -210,25 +228,54 @@ func (H *HttpRequests) GetAll() ([]HttpRequestDto, error) {
 	}
 	httpRequestDtos := make([]HttpRequestDto, len(httpRequests))
 	for iter, request := range httpRequests {
-		httpRequestDtos[iter] = HttpRequestDto{
-			ID:           request.ID,
-			UpdatedAt:    request.UpdatedAt,
-			Name:         request.Name,
-			CollectionID: request.CollectionID,
-			Url:          request.Url,
-			Type:         "http",
-			Method:       request.Method,
-			Body: HttpRequestBodyDto{
-				ID:            request.HttpRequestBody.ID,
-				UpdatedAt:     request.HttpRequestBody.UpdatedAt,
-				HttpRequestID: request.HttpRequestBody.HttpRequestID,
-				Type:          request.HttpRequestBody.Type,
-				Payload:       request.HttpRequestBody.Payload,
-			},
-		}
+		httpRequestDtos[iter] = H.buildDtoFromDatabase(request)
 	}
 
 	return httpRequestDtos, nil
+}
+
+func (H *HttpRequests) buildDtoFromDatabase(httpRequest database.HttpRequest) HttpRequestDto {
+	parameterDtos := make([]HttpRequestParameterDto, len(httpRequest.HttpRequestParameter))
+	for iter, parameter := range httpRequest.HttpRequestParameter {
+		parameterDtos[iter] = HttpRequestParameterDto{
+			ID:            parameter.ID,
+			UpdatedAt:     parameter.UpdatedAt,
+			HttpRequestID: parameter.HttpRequestID,
+			Key:           parameter.Key,
+			Value:         parameter.Value,
+		}
+	}
+
+	headerDtos := make([]HttpRequestHeaderDto, len(httpRequest.HttpRequestHeader))
+	for iter, header := range httpRequest.HttpRequestHeader {
+		headerDtos[iter] = HttpRequestHeaderDto{
+			ID:            header.ID,
+			UpdatedAt:     header.UpdatedAt,
+			HttpRequestID: header.HttpRequestID,
+			Key:           header.Key,
+			Value:         header.Value,
+		}
+	}
+
+	return HttpRequestDto{
+		ID:           httpRequest.ID,
+		UpdatedAt:    httpRequest.UpdatedAt,
+		Name:         httpRequest.Name,
+		CollectionID: httpRequest.CollectionID,
+		Url:          httpRequest.Url,
+		Type:         "http",
+		Method:       httpRequest.Method,
+		Body: HttpRequestBodyDto{
+			ID:            httpRequest.HttpRequestBody.ID,
+			UpdatedAt:     httpRequest.HttpRequestBody.UpdatedAt,
+			HttpRequestID: httpRequest.HttpRequestBody.HttpRequestID,
+			Type:          httpRequest.HttpRequestBody.Type,
+			Payload:       httpRequest.HttpRequestBody.Payload,
+		},
+		Parameter: parameterDtos,
+		Header:    headerDtos,
+	}
+
 }
 
 func (H *HttpRequests) Create(httpRequestDto HttpRequestDto) (HttpRequestDto, error) {
@@ -247,7 +294,8 @@ func (H *HttpRequests) Create(httpRequestDto HttpRequestDto) (HttpRequestDto, er
 	}
 	httpRequestDto.ID = httpRequest.ID
 	httpRequestDto.UpdatedAt = httpRequest.UpdatedAt
-
+	httpRequestDto.Type = "http"
+	httpRequestDto.Method = httpRequest.Method
 	httpRequestDto.Body.HttpRequestID = httpRequest.ID
 	httpRequestDto.Body.ID = httpRequest.HttpRequestBody.ID
 	httpRequestDto.Body.Type = httpRequest.HttpRequestBody.Type
@@ -258,6 +306,19 @@ func (H *HttpRequests) Create(httpRequestDto HttpRequestDto) (HttpRequestDto, er
 }
 
 func (H *HttpRequests) Update(httpRequestDto HttpRequestDto) (HttpRequestDto, error) {
+
+	currentHttpRequest, err := H.httpRequestRepository.GetById(httpRequestDto.ID)
+	if err != nil {
+		return httpRequestDto, err
+	}
+	httpRequestParameter, err := H.prepareParameter(httpRequestDto, currentHttpRequest)
+	if err != nil {
+		return httpRequestDto, err
+	}
+	httpRequestHeader, err := H.prepareHeader(httpRequestDto, currentHttpRequest)
+	if err != nil {
+		return httpRequestDto, err
+	}
 
 	httpRequest := &database.HttpRequest{
 		Model: gorm.Model{
@@ -275,14 +336,15 @@ func (H *HttpRequests) Update(httpRequestDto HttpRequestDto) (HttpRequestDto, er
 			Type:          httpRequestDto.Body.Type,
 			Payload:       httpRequestDto.Body.Payload,
 		},
+		HttpRequestParameter: httpRequestParameter,
+		HttpRequestHeader:    httpRequestHeader,
 	}
-	httpRequest, err := H.httpRequestRepository.Update(httpRequest)
+	newHttpRequest, err := H.httpRequestRepository.Update(httpRequest)
 	if err != nil {
 		return httpRequestDto, err
 	}
-	httpRequestDto.UpdatedAt = httpRequest.UpdatedAt
 
-	return httpRequestDto, nil
+	return H.buildDtoFromDatabase(*newHttpRequest), nil
 }
 
 func (H *HttpRequests) Delete(httpRequestDto HttpRequestDto) error {
@@ -293,4 +355,116 @@ func (H *HttpRequests) Delete(httpRequestDto HttpRequestDto) error {
 	}
 
 	return H.httpRequestRepository.Delete(httpRequest)
+}
+
+func (H *HttpRequests) prepareParameter(httpRequestDto HttpRequestDto, currentHttpRequest *database.HttpRequest) ([]database.HttpRequestParameter, error) {
+	var httpRequestParameter []database.HttpRequestParameter
+	notDelete := make(map[uint]bool)
+	for _, parameter := range httpRequestDto.Parameter {
+		if parameter.ID == 0 {
+			newParameter, err := H.createParameter(parameter)
+			if err != nil {
+				return nil, err
+			}
+			httpRequestParameter = append(httpRequestParameter, newParameter)
+			parameter.ID = newParameter.ID
+			parameter.UpdatedAt = newParameter.UpdatedAt
+			parameter.HttpRequestID = newParameter.HttpRequestID
+
+			continue
+		}
+		for _, currentParameter := range currentHttpRequest.HttpRequestParameter {
+			if parameter.ID != currentParameter.ID {
+				continue
+			}
+			if parameter.Key != currentParameter.Key {
+				currentParameter.Key = parameter.Key
+			}
+			if parameter.Value != currentParameter.Value {
+				currentParameter.Value = parameter.Value
+			}
+			httpRequestParameter = append(httpRequestParameter, currentParameter)
+			notDelete[currentParameter.ID] = true
+		}
+	}
+	for _, parameter := range currentHttpRequest.HttpRequestParameter {
+		if _, ok := notDelete[parameter.ID]; !ok {
+			err := H.httpRequestRepository.DeleteParameter(&parameter)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	return httpRequestParameter, nil
+}
+
+func (H *HttpRequests) createParameter(httpRequestParameterDto HttpRequestParameterDto) (database.HttpRequestParameter, error) {
+	httpRequestParameter := &database.HttpRequestParameter{
+		HttpRequestID: httpRequestParameterDto.HttpRequestID,
+		Key:           httpRequestParameterDto.Key,
+		Value:         httpRequestParameterDto.Value,
+	}
+
+	httpRequestParameter, err := H.httpRequestRepository.CreateParameter(httpRequestParameter)
+	if err != nil {
+		return database.HttpRequestParameter{}, err
+	}
+
+	return *httpRequestParameter, nil
+}
+
+func (H *HttpRequests) prepareHeader(httpRequestDto HttpRequestDto, currentHttpRequest *database.HttpRequest) ([]database.HttpRequestHeader, error) {
+	var httpRequestHeaders []database.HttpRequestHeader
+	notDelete := make(map[uint]bool)
+	for _, header := range httpRequestDto.Header {
+		if header.ID == 0 {
+			newParameter, err := H.createHeader(header)
+			if err != nil {
+				return nil, err
+			}
+			httpRequestHeaders = append(httpRequestHeaders, newParameter)
+			header.ID = newParameter.ID
+			header.UpdatedAt = newParameter.UpdatedAt
+			header.HttpRequestID = newParameter.HttpRequestID
+
+			continue
+		}
+		for _, currentHeader := range currentHttpRequest.HttpRequestHeader {
+			if header.ID != currentHeader.ID {
+				continue
+			}
+			if header.Key != currentHeader.Key {
+				currentHeader.Key = header.Key
+			}
+			if header.Value != currentHeader.Value {
+				currentHeader.Value = header.Value
+			}
+			httpRequestHeaders = append(httpRequestHeaders, currentHeader)
+			notDelete[currentHeader.ID] = true
+		}
+	}
+	for _, header := range currentHttpRequest.HttpRequestHeader {
+		if _, ok := notDelete[header.ID]; !ok {
+			err := H.httpRequestRepository.DeleteHeader(&header)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	return httpRequestHeaders, nil
+}
+
+func (H *HttpRequests) createHeader(httpRequestHeaderDto HttpRequestHeaderDto) (database.HttpRequestHeader, error) {
+	httpRequestHeader := &database.HttpRequestHeader{
+		HttpRequestID: httpRequestHeaderDto.HttpRequestID,
+		Key:           httpRequestHeaderDto.Key,
+		Value:         httpRequestHeaderDto.Value,
+	}
+
+	httpRequestHeader, err := H.httpRequestRepository.CreateHeader(httpRequestHeader)
+	if err != nil {
+		return database.HttpRequestHeader{}, err
+	}
+
+	return *httpRequestHeader, nil
 }
