@@ -7,6 +7,7 @@ export default defineConfig({
 		port: 34115,
 		reuseExistingServer: true,
 		stderr: 'ignore',
+		gracefulShutdown: { signal: 'SIGTERM', timeout: 5000 },
 	},
 	testDir: 'tests',
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,

@@ -20,7 +20,7 @@
 		"test:unit-watch": "vitest watch"
 	},
 	"devDependencies": {
-		"@playwright/test": "^1.49.1",
+		"@playwright/test": "^1.50.1",
 		"@sveltejs/adapter-static": "^3.0.8",
 		"@sveltejs/kit": "2.17.1",
 		"@sveltejs/vite-plugin-svelte": "4.0.4",
@@ -30,7 +30,7 @@
 		"eslint": "^9.19.0",
 		"eslint-config-prettier": "^10.0.1",
 		"eslint-plugin-svelte": "^2.46.1",
-		"globals": "^15.14.0",
+		"globals": "^15.15.0",
 		"happy-dom": "^16.8.1",
 		"postcss": "^8.5.1",
 		"prettier": "^3.4.2",
