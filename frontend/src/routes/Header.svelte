@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { getThemeStore } from '../lib/themeStore.svelte.ts';
 	import { NavigationState } from '$lib/enums/NavigationState.ts';
 	import { getNavigationSystem } from '$lib/navigationSystem.svelte.ts';
@@ -10,19 +9,10 @@
 	const navigationSystem = getNavigationSystem();
 	const collectionStore = getCollectionStore();
 	const projectStore = getProjectStore();
-
-	function navigate(page: string = ''): null {
-		if (page == undefined) {
-			return null;
-		}
-		goto(page, {});
-
-		return null;
-	}
 </script>
 
 <header class="px-2 pb-2">
-	<div class="flex flex-row items-center">
+	<div class="flex flex-row justify-between items-center">
 		<nav aria-label="Breadcrumb">
 			<ol class="flex items-stretch gap-2 list-none">
 				<li class="flex items-center gap-2">

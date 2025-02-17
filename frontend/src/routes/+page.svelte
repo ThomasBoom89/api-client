@@ -13,7 +13,7 @@
 <button
 	onclick={() => navigationSystem.navigateToOverview()}
 	class="inline-flex items-center justify-center h-12 gap-2 px-6 transition
-	 duration-300 border rounded hover:text-text-accent"
+	 duration-300 border rounded-sm hover:text-text-accent"
 >
 	<span>to project overview</span>
 </button>

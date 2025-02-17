@@ -15,7 +15,7 @@
 				onclick={() => changeTab(tab)}
 				class:bg-[var(--color-background-accent)]={currentTab === tab}
 				class="inline-flex items-center justify-center w-full h-12 gap-2 px-6 -mb-px
-			 tracking-wide transition duration-300 rounded-t focus-visible:outline-none text-text border-b-[1px]
+			 tracking-wide transition duration-300 rounded-t focus-visible:outline-hidden text-text border-b-[1px]
 			    hover:bg-background-accent"
 				id="tab-label-1a"
 				role="tab"

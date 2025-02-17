@@ -30,12 +30,12 @@
 				id="new-request"
 				type="text"
 				placeholder="New Request"
-				class="relative w-full h-10 px-4 text-sm placeholder-transparent transition-all border rounded outline-none focus-visible:outline-none peer
-				 border-background-accent focus:border-text-accent focus:outline-none"
+				class="relative w-full h-10 px-4 text-sm placeholder-transparent transition-all border rounded-sm outline-hidden focus-visible:outline-hidden peer
+				 border-background-accent focus:border-text-accent focus:outline-hidden"
 			/>
 			<label
 				for="new-request"
-				class="cursor-text peer-focus:cursor-default peer-autofill:-top-2 absolute left-2 -top-2 z-[1] px-2 text-xs
+				class="cursor-text peer-focus:cursor-default peer-autofill:-top-2 absolute left-2 -top-2 z-1 px-2 text-xs
 				  transition-all before:bg-background before:absolute before:top-0 before:left-0 before:z-[-1] before:block before:h-full
 				  before:w-full before:transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm
 				  peer-focus:-top-2 peer-focus:text-xs"
@@ -67,11 +67,11 @@
 				<div class="flex flex-row w-full gap-x-2 justify-center items-center">
 					<div
 						data-testid="request"
-						class="flex flex-row justify-center w-full items-center gap-2 overflow-hidden rounded shadow-sm p-2
-						{request === selectedRequest ? 'shadow-[--color-text-accent]' : 'shadow-[--color-background-accent]'}"
+						class="flex flex-row justify-center w-full items-center gap-2 overflow-hidden rounded-sm shadow-sm p-2
+						{request === selectedRequest ? 'shadow-text-accent' : 'shadow-background-accent'}"
 					>
 						{#if request.type === 'http'}
-							<span class="h-fit rounded border-http border px-2 text-xs text-text">http </span>
+							<span class="h-fit rounded-sm border-http border px-2 text-xs text-text">http </span>
 						{/if}
 						{#if request.id !== requestInEdit}
 							<button class=" text-left w-full truncate" onclick={() => changeSelectedRequest(request)}>
