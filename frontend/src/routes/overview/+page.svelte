@@ -19,12 +19,12 @@
 			id="new-project"
 			type="text"
 			placeholder="New Project"
-			class="relative w-full h-10 px-4 text-sm placeholder-transparent transition-all border rounded outline-none focus-visible:outline-none peer
-				 border-background-accent focus:border-text-accent focus:outline-none"
+			class="relative w-full h-10 px-4 text-sm placeholder-transparent transition-all border rounded-sm outline-hidden focus-visible:outline-hidden peer
+				 border-background-accent focus:border-text-accent focus:outline-hidden"
 		/>
 		<label
 			for="new-project"
-			class="cursor-text peer-focus:cursor-default peer-autofill:-top-2 absolute left-2 -top-2 z-[1] px-2 text-xs
+			class="cursor-text peer-focus:cursor-default peer-autofill:-top-2 absolute left-2 -top-2 z-1 px-2 text-xs
 				  transition-all before:bg-background before:absolute before:top-0 before:left-0 before:z-[-1] before:block before:h-full
 				  before:w-full before:transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm
 				  peer-focus:-top-2 peer-focus:text-xs"
@@ -51,11 +51,11 @@
 			<path d="M12 9v6" />
 		</svg>
 	</div>
-	<div data-testid="projects" class="grid grid-cols-projectOverview gap-2">
+	<div data-testid="projects" class="grid grid-cols-project-overview gap-2">
 		{#each projectStore.projects as project}
 			<div
 				data-testid="project"
-				class="flex flex-row gap-2 overflow-hidden rounded shadow-sm shadow-[--color-background-accent] p-2"
+				class="flex flex-row gap-2 overflow-hidden rounded-sm shadow-background-accent shadow-xs p-2"
 			>
 				{#if project.id !== projectInEdit}
 					<button class=" text-left w-full truncate" onclick={() => navigationSystem.navigateToProject(project.id)}>

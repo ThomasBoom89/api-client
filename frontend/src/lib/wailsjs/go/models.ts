@@ -262,8 +262,8 @@ export namespace frontend {
 	    url: string;
 	    method: string;
 	    responseBody: string;
-	    sendHeader: {[key: string]: string[]};
-	    receivedHeader: {[key: string]: string[]};
+	    sendHeader: Record<string, string[]>;
+	    receivedHeader: Record<string, string[]>;
 	    elapsedTime: string;
 	    statusCode: number;
 	

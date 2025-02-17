@@ -21,10 +21,10 @@ test('create collection store', async () => {
 
 	const collectionDtos = [];
 	const collectionDtoOne = new CollectionDto(
-		'{"id":1,"updatedAt":"2024-08-28T20:49:26.366552118+02:00","name":"Collection 0","projectId":1}'
+		'{"id":1,"updatedAt":"2024-08-28T20:49:26.366552118+02:00","name":"Collection 0","projectId":1}',
 	);
 	const collectionDtoTwo = new CollectionDto(
-		'{"id":2,"updatedAt":"2024-08-28T20:49:26.366552118+02:00","name":"Collection 1","projectId":2}'
+		'{"id":2,"updatedAt":"2024-08-28T20:49:26.366552118+02:00","name":"Collection 1","projectId":2}',
 	);
 	collectionDtos.push(collectionDtoOne, collectionDtoTwo);
 	const collectionStore = new CollectionStore(collectionDtos);

@@ -41,9 +41,9 @@
 		onchange={() => {
 			update();
 		}}
-		class="relative w-full h-10 px-4 text-sm transition-all bg-background border rounded outline-none appearance-none
-		 focus-visible:outline-none peer border-background-accent text-text focus:border-text-accent
-		  focus:focus-visible:outline-none"
+		class="relative w-full h-10 px-4 text-sm transition-all bg-background border rounded-sm outline-hidden appearance-none
+		 focus-visible:outline-hidden peer border-background-accent text-text focus:border-text-accent
+		  focus:focus-visible:outline-hidden"
 	>
 		<option value="none">none</option>
 		<option value="plaintext">text/plain</option>
@@ -51,7 +51,7 @@
 	</select>
 	<label
 		for="body-type"
-		class="pointer-events-none absolute top-2.5 left-2 z-[1] px-2 text-sm text-text transition-all
+		class="pointer-events-none absolute top-2.5 left-2 z-1 px-2 text-sm text-text transition-all
 		before:absolute before:top-0 before:left-0 before:z-[-1] before:block before:h-full before:w-full
 		before:bg-background before:transition-all peer-valid:-top-2 peer-valid:text-xs peer-focus:-top-2 peer-focus:text-xs
 		 peer-focus:text-text peer-disabled:cursor-not-allowed peer-disabled:text-text peer-disabled:before:bg-transparent"
