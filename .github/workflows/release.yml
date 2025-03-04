@@ -45,6 +45,8 @@ jobs:
         with:
           build-name: ${{ matrix.name }}
           build-platform: ${{ matrix.platform }}
+          build-libwebkitversion: ${{ matrix.libwebkitversion }}
+          build-tag: ${{ matrix.tag }}
 
   windows:
     runs-on: windows-latest
