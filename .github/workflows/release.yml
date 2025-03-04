@@ -11,15 +11,27 @@ env:
 
 jobs:
   linux:
-    runs-on: ubuntu-22.04
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - name: api-client-linux-amd64
+          - name: api-client-linux-amd64-gtk4.0
             platform: linux/amd64
-          - name: api-client-linux-arm64
+            libwebkitVersion: libwebkit2gtk-4.0-dev
+            os: ubuntu-22.04
+          - name: api-client-linux-arm64-gtk4.0
             platform: linux/arm64
+            libwebkitVersion: libwebkit2gtk-4.0-dev
+            os: ubuntu-22.04-arm
+          - name: api-client-linux-amd64-gtk4.1
+            platform: linux/amd64
+            libwebkitVersion: libwebkit2gtk-4.1-dev
+            os: ubuntu-24.04
+          - name: api-client-linux-arm64-gtk4.1
+            platform: linux/arm64
+            libwebkitVersion: libwebkit2gtk-4.1-dev
+            os: ubuntu-24.04-arm
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
