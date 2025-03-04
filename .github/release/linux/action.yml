@@ -7,8 +7,11 @@ inputs:
   build-platform:
     description: Platform to build for
     type: string
-  build-libwebkitVersion:
+  build-libwebkitversion:
     description: libwebkit version
+    type: string
+  build-tag:
+    description: build tag for wails
     type: string
 
 runs:
@@ -17,10 +20,10 @@ runs:
     - name: Prepare build environment
       uses: ./.github/release/prepare
     - name: Install Linux Wails dependencies
-      run: sudo apt-get update && sudo apt-get install -y libgtk-3-0 ${{ inputs.build-libwebkitVersion }} gcc-aarch64-linux-gnu
+      run: sudo apt-get update && sudo apt-get install -y libgtk-3-0 ${{ inputs.build-libwebkitversion }} gcc-aarch64-linux-gnu
       shell: bash
     - name: Build app
-      run: wails build --platform ${{ inputs.build-platform }} -webview2 download -o ${{ inputs.build-name }}
+      run: wails build --platform ${{ inputs.build-platform }} -webview2 download -o ${{ inputs.build-name }} ${{ inputs.build-tag }}
       shell: bash
     - name: Fix permission
       run: chmod +x build/bin/*
