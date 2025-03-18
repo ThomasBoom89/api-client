@@ -57,43 +57,47 @@
 			/>
 		</svg>
 	</div>
-	<div class="relative mx-auto w-full">
-		<input
-			bind:value={request.url}
-			oninput={() => {
-				update();
-			}}
-			id="request-url"
-			type="url"
-			placeholder="Request Url"
-			class="relative w-full h-10 px-4 text-sm placeholder-transparent transition-all border rounded-sm outline-hidden focus-visible:outline-hidden peer
-				 border-background-accent focus:border-text-accent focus:outline-hidden"
-		/>
-		<label
-			for="request-url"
-			class="cursor-text peer-focus:cursor-default peer-autofill:-top-2 absolute left-2 -top-2 z-1 px-2 text-xs
-				  transition-all before:absolute before:top-0 before:left-0 before:z-[-1] before:block before:h-full
-				  before:w-full before:bg-background before:transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm
-				  peer-focus:-top-2 peer-focus:text-xs"
-			>Request URL
-		</label>
-		<svg
-			onclick={submit}
-			xmlns="http://www.w3.org/2000/svg"
-			class="absolute top-1 right-3 h-7 w-7 cursor-pointer"
-			fill="none"
-			id="run-request-icon"
-			viewBox="0 0 16 20"
-			stroke="currentColor"
-			aria-hidden="true"
-			aria-label="create icon"
-			role="graphics-symbol"
-		>
-			<path stroke="none" d="M0 0h24v24H0z" fill="none" />
-			<path d="M13 4m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-			<path d="M4 17l5 1l.75 -1.5" />
-			<path d="M15 21l0 -4l-4 -3l1 -6" />
-			<path d="M7 12l0 -3l5 -1l3 3l3 1" />
-		</svg>
+	<div class="relative flex w-full items-center rounded-sm">
+		<div class="flex-1 relative">
+			<input
+				bind:value={request.url}
+				oninput={() => {
+					update();
+				}}
+				id="request-url"
+				type="url"
+				placeholder="Request Url"
+				class="relative w-full h-10 px-4 text-sm placeholder-transparent transition-all border rounded-sm outline-hidden focus-visible:outline-hidden peer
+						border-background-accent focus:border-text-accent focus:outline-hidden"
+			/>
+			<label
+				for="request-url"
+				class="cursor-text peer-focus:cursor-default peer-autofill:-top-2 absolute left-2 -top-2 z-1 px-2 text-xs
+						transition-all before:absolute before:top-0 before:left-0 before:z-[-1] before:block before:h-full
+						before:w-full before:bg-background before:transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm
+						peer-focus:-top-2 peer-focus:text-xs overflow-wrap: break-words"
+				>Request URL
+			</label>
+		</div>
+		<div class="flex justify-end mb-1 p-1">
+			<svg
+				onclick={submit}
+				xmlns="http://www.w3.org/2000/svg"
+				class="w-7 h-7 cursor-pointer"
+				fill="none"
+				id="run-request-icon"
+				viewBox="0 0 16 20"
+				stroke="currentColor"
+				aria-hidden="true"
+				aria-label="create icon"
+				role="graphics-symbol"
+			>
+				<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+				<path d="M13 4m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+				<path d="M4 17l5 1l.75 -1.5" />
+				<path d="M15 21l0 -4l-4 -3l1 -6" />
+				<path d="M7 12l0 -3l5 -1l3 3l3 1" />
+			</svg>
+		</div>
 	</div>
 </div>
