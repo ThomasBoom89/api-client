@@ -19,7 +19,7 @@
 {:else if response.error !== ''}
 	<p data-testid="response-error" class="text-red-700">{response.error}</p>
 {:else if response.elapsedTime === undefined}{:else}
-	<div class="flex flex-col h-full overflow-y-auto overflow-x-hidden p-2 border">
+	<div class="flex flex-col h-full overflow-y-auto overflow-x-hidden p-2 border overflow">
 		<h4 class="text-text-highlight">Current Response:</h4>
 		<p class="break-words">{response.method} {response.url}</p>
 		<hr class="my-2" />
@@ -36,7 +36,7 @@
 		<hr class="my-2" />
 		<h4 class="text-text-highlight">Received Header:</h4>
 		{#each Object.entries(response.receivedHeader) as [key, value]}
-			<p>{key} {value}</p>
+			<p class="break-words mr-2"><span class="text-red-200">{key}</span> {value}</p>
 		{/each}
 		{#if response.error !== ''}
 			<hr class="my-2" />
@@ -46,9 +46,11 @@
 		<hr class="my-2" />
 		<h4 class="text-text-highlight">Payload:</h4>
 		{#if isJsonResponse}
-			<pre>{response.responseBody}</pre>
+			<div class="mr-2">
+				<pre class="whitespace-pre-wrap overflow-x-auto">{response.responseBody}</pre>
+			</div>
 		{:else}
-			<div class="break-words">{response.responseBody}</div>
+			<div class="break-words mr-2">{response.responseBody}</div>
 		{/if}
 	</div>
 {/if}
