@@ -31,12 +31,12 @@
 		<hr class="my-2" />
 		<h4 class="text-text-highlight">Send Header:</h4>
 		{#each Object.entries(response.sendHeader) as [key, value]}
-			<p>{key} {value}</p>
+			<p><span class="text-text-response-headers">{key}</span> {value}</p>
 		{/each}
 		<hr class="my-2" />
 		<h4 class="text-text-highlight">Received Header:</h4>
 		{#each Object.entries(response.receivedHeader) as [key, value]}
-			<p class="break-words mr-2"><span class="text-red-200">{key}</span> {value}</p>
+			<p class="break-words mr-2"><span class="text-text-response-headers">{key}</span> {value}</p>
 		{/each}
 		{#if response.error !== ''}
 			<hr class="my-2" />
