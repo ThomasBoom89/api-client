@@ -21,34 +21,36 @@
 {:else if response.elapsedTime === undefined}{:else}
 	<div class="flex flex-col h-full overflow-y-auto overflow-x-hidden p-2 border">
 		<h4 class="text-text-highlight">Current Response:</h4>
-		<p class="break-words">{response.method} {response.url}</p>
-		<hr class="my-2" />
+		<p class="break-words mr-2">{response.method} {response.url}</p>
+		<hr class="my-2 mr-2" />
 		<h4 class="text-text-highlight">Status-Code:</h4>
 		<p>{response.statusCode}</p>
-		<hr class="my-2" />
+		<hr class="my-2 mr-2" />
 		<h4 class="text-text-highlight">Elapsed Time:</h4>
 		<p>{response.elapsedTime}</p>
-		<hr class="my-2" />
+		<hr class="my-2 mr-2" />
 		<h4 class="text-text-highlight">Send Header:</h4>
 		{#each Object.entries(response.sendHeader) as [key, value]}
-			<p>{key} {value}</p>
+			<p><span class="text-text-response-headers">{key}</span> {value}</p>
 		{/each}
-		<hr class="my-2" />
+		<hr class="my-2 mr-2" />
 		<h4 class="text-text-highlight">Received Header:</h4>
 		{#each Object.entries(response.receivedHeader) as [key, value]}
-			<p>{key} {value}</p>
+			<p class="break-words mr-2"><span class="text-text-response-headers">{key}</span> {value}</p>
 		{/each}
 		{#if response.error !== ''}
-			<hr class="my-2" />
+			<hr class="my-2 mr-2" />
 			<h4 class="text-text-highlight">Error:</h4>
 			<p>{response.error}</p>
 		{/if}
-		<hr class="my-2" />
+		<hr class="my-2 mr-2" />
 		<h4 class="text-text-highlight">Payload:</h4>
 		{#if isJsonResponse}
-			<pre>{response.responseBody}</pre>
+			<div class="mr-2">
+				<pre class="whitespace-pre-wrap overflow-x-auto">{response.responseBody}</pre>
+			</div>
 		{:else}
-			<div class="break-words">{response.responseBody}</div>
+			<div class="break-words mr-2">{response.responseBody}</div>
 		{/if}
 	</div>
 {/if}
