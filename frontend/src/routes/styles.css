@@ -23,6 +23,7 @@
 		--color-background-accent: #666666;
 		--color-text: ghostwhite;
 		--color-text-accent: #a53dff;
+		--color-text-response-headers: #fecaca; /* tailwind red.200 */
 		--color-text-disabled: #878787;
 		--color-border: #4b4b4b;
 		--color-text-highlight: #909090;
@@ -54,7 +55,7 @@ html[data-theme='light'] {
 	--color-background: ghostwhite;
 	--color-background-accent: #dcdcdc;
 	--color-text: black;
-	--color-text-accent: #8005db; 
+	--color-text-accent: #8005db;
 	--color-text-response-headers: #ef4444; /* tailwind red.500 */
 	--color-text-disabled: #878787;
 	--color-border: #dcdcdc;

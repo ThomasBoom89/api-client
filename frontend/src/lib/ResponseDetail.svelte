@@ -19,9 +19,9 @@
 {:else if response.error !== ''}
 	<p data-testid="response-error" class="text-red-700">{response.error}</p>
 {:else if response.elapsedTime === undefined}{:else}
-	<div class="flex flex-col h-full overflow-y-auto overflow-x-hidden p-2 border overflow">
+	<div class="flex flex-col h-full overflow-y-auto overflow-x-hidden p-2 border">
 		<h4 class="text-text-highlight">Current Response:</h4>
-		<p class="break-words">{response.method} {response.url}</p>
+		<p class="break-words mr-2">{response.method} {response.url}</p>
 		<hr class="my-2 mr-2" />
 		<h4 class="text-text-highlight">Status-Code:</h4>
 		<p>{response.statusCode}</p>
