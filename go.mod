@@ -5,7 +5,7 @@ go 1.23
 require (
 	github.com/adrg/xdg v0.5.3
 	github.com/pelletier/go-toml/v2 v2.2.3
-	github.com/rs/zerolog v1.33.0
+	github.com/rs/zerolog v1.34.0
 	github.com/wailsapp/wails/v2 v2.10.1
 	gorm.io/driver/sqlite v1.5.7
 	gorm.io/gorm v1.25.12
