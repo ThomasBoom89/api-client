@@ -47,7 +47,7 @@
 		<h4 class="text-text-highlight">Payload:</h4>
 		{#if isJsonResponse}
 			<div class="mr-2">
-				<pre class="whitespace-pre-wrap overflow-x-auto">{response.responseBody}</pre>
+				<pre class="whitespace-pre-wrap break-words overflow-x-auto">{response.responseBody}</pre>
 			</div>
 		{:else}
 			<div class="break-words mr-2">{response.responseBody}</div>
