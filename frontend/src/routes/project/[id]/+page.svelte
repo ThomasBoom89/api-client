@@ -16,21 +16,21 @@
 </svelte:head>
 
 <div class="flex flex-col gap-2">
-	<div class="relative mt-2 mx-auto">
+	<div class="relative mx-auto mt-2">
 		<input
 			bind:value={newCollectionName}
 			id="new-collection"
 			type="text"
 			placeholder="New Collection"
-			class="relative w-full h-10 px-4 text-sm placeholder-transparent transition-all border rounded-sm outline-hidden focus-visible:outline-hidden peer
-				 border-background-accent focus:border-text-accent focus:outline-hidden"
+			class="peer border-background-accent focus:border-text-accent relative h-10 w-full rounded-sm border px-4 text-sm
+			placeholder-transparent outline-hidden transition-all focus:outline-hidden focus-visible:outline-hidden"
 		/>
 		<label
 			for="new-collection"
-			class="cursor-text peer-focus:cursor-default peer-autofill:-top-2 absolute left-2 -top-2 z-1 px-2 text-xs
-				  transition-all before:bg-background before:absolute before:top-0 before:left-0 before:z-[-1] before:block before:h-full
-				  before:w-full before:transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm
-				  peer-focus:-top-2 peer-focus:text-xs"
+			class="before:bg-background absolute -top-2 left-2 z-1 cursor-text px-2 text-xs transition-all
+			peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm peer-autofill:-top-2 peer-focus:-top-2
+			peer-focus:cursor-default peer-focus:text-xs before:absolute before:top-0 before:left-0 before:z-[-1]
+			before:block before:h-full before:w-full before:transition-all"
 			>New Collection
 		</label>
 		<svg
@@ -54,15 +54,15 @@
 			<path d="M12 9v6" />
 		</svg>
 	</div>
-	<div data-testid="collections" class="grid grid-cols-collection-overview gap-2">
+	<div data-testid="collections" class="grid-cols-collection-overview grid gap-2">
 		{#each collectionStore.getByProjectId(id) as collection}
 			<div
 				data-testid="collection"
-				class="flex flex-row gap-2 overflow-hidden rounded-sm shadow-background-accent shadow-xs p-2"
+				class="shadow-background-accent flex flex-row gap-2 overflow-hidden rounded-sm p-2 shadow-xs"
 			>
 				{#if collection.id !== collectionInEdit}
 					<button
-						class=" text-left w-full truncate"
+						class=" w-full truncate text-left"
 						onclick={() => navigationSystem.navigateToCollection(collection.id)}
 					>
 						{collection.name}
@@ -91,7 +91,7 @@
 						</svg>
 					</button>
 				{:else}
-					<input type="text" class="border-none w-full" bind:value={collection.name} />
+					<input type="text" class="w-full border-none" bind:value={collection.name} />
 					<button
 						aria-label="save"
 						onclick={() => {

@@ -18,9 +18,9 @@
 	document.getElementById('loader')?.remove();
 </script>
 
-<div class="w-[100vw] h-[100vh] bg-background text-text flex flex-col overflow-hidden">
+<div class="bg-background text-text flex h-[100vh] w-[100vw] flex-col overflow-hidden">
 	<Header />
-	<main class="flex flex-col w-full h-full overflow-hidden flex-1 px-2 pb-2">
+	<main class="flex h-full w-full flex-1 flex-col overflow-hidden px-2 pb-2">
 		{@render children()}
 	</main>
 </div>
