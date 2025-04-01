@@ -5,6 +5,7 @@ import (
 	"api-client/src/configuration"
 	"api-client/src/database"
 	"api-client/src/frontend"
+	"api-client/src/runtime"
 	"embed"
 	"github.com/rs/zerolog"
 	"github.com/wailsapp/wails/v2"
@@ -32,10 +33,15 @@ func main() {
 	projectRepository := database.NewRepository[database.Project](databaseClient)
 	collectionsRepository := database.NewRepository[database.Collection](databaseClient)
 	httpRequestRepository := database.NewHttpRequestRepository(databaseClient)
+	websocketRequestRepository := database.NewWebsocketRequestRepository(databaseClient)
 	request := frontend.NewRequest(httpRequestRepository)
+	wailsEvent := runtime.Wails{}
+	websocket := frontend.NewWebsocket(context, &wailsEvent)
 	projects := frontend.NewProjects(projectRepository)
 	collections := frontend.NewCollections(collectionsRepository)
 	httpRequest := frontend.NewHttpRequests(httpRequestRepository)
+	websocketRequest := frontend.NewWebsocketRequests(websocketRequestRepository)
+	requests := frontend.NewRequests(httpRequest, websocketRequest)
 	// Create application with options
 	err := wails.Run(&options.App{
 		Title:     "Api-Client",
@@ -54,7 +60,10 @@ func main() {
 			request,
 			projects,
 			collections,
+			requests,
 			httpRequest,
+			websocketRequest,
+			websocket,
 		},
 	})
 
