@@ -1,4 +1,5 @@
 import { expect, type Page } from '@playwright/test';
+import type { RequestTypes } from '$lib/enums/RequestTypes.ts';
 
 export async function navigateToProject(page: Page): Promise<void> {
 	await page.goto('/');
@@ -57,9 +58,11 @@ export async function setupRequest(
 	projectSetupUUID: string,
 	collectionSetupUUID: string,
 	requestSetupUUID: string,
+	requestType: RequestTypes,
 ) {
 	await setupCollections(page, projectSetupUUID, collectionSetupUUID);
 
+	await page.locator('#request-type').selectOption(requestType);
 	await page.locator('#new-request').fill(requestSetupUUID);
 	await page.locator('#create-new-request').click();
 
