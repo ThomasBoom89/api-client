@@ -31,23 +31,23 @@
 	};
 </script>
 
-<div class="flex flex-col h-full">
-	<div class="flex flex-row gap-1 pr-4 mt-4">
+<div class="flex h-full flex-col">
+	<div class="mt-4 flex flex-row gap-1 pr-4">
 		<div class="relative mx-auto w-full">
 			<input
 				bind:value={newHeaderKey}
 				id="new-header-key"
 				type="text"
 				placeholder="New Header Key"
-				class="relative w-full h-10 px-4 text-sm placeholder-transparent transition-all border rounded-sm outline-hidden focus-visible:outline-hidden peer
-				 border-background-accent focus:border-text-accent focus:outline-hidden"
+				class="peer border-background-accent focus:border-text-accent relative h-10 w-full rounded-sm border px-4
+				text-sm placeholder-transparent outline-hidden transition-all focus:outline-hidden focus-visible:outline-hidden"
 			/>
 			<label
 				for="new-header-key"
-				class="cursor-text peer-focus:cursor-default peer-autofill:-top-2 absolute left-2 -top-2 z-1 px-2 text-xs
-				  transition-all before:absolute before:top-0 before:left-0 before:z-[-1] before:block before:h-full
-				  before:w-full before:bg-background before:transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm
-				  peer-focus:-top-2 peer-focus:text-xs"
+				class="before:bg-background absolute -top-2 left-2 z-1 cursor-text px-2 text-xs transition-all
+				  peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm peer-autofill:-top-2 peer-focus:-top-2
+				  peer-focus:cursor-default peer-focus:text-xs before:absolute before:top-0 before:left-0 before:z-[-1]
+				  before:block before:h-full before:w-full before:transition-all"
 				>New Header Key
 			</label>
 		</div>
@@ -57,15 +57,15 @@
 				id="new-header-value"
 				type="text"
 				placeholder="New Header Value"
-				class="relative w-full h-10 px-4 text-sm placeholder-transparent transition-all border rounded-sm outline-hidden focus-visible:outline-hidden peer
-				 border-background-accent focus:border-text-accent focus:outline-hidden"
+				class="peer border-background-accent focus:border-text-accent relative h-10 w-full rounded-sm border px-4
+				text-sm placeholder-transparent outline-hidden transition-all focus:outline-hidden focus-visible:outline-hidden"
 			/>
 			<label
 				for="new-header-value"
-				class="cursor-text peer-focus:cursor-default peer-autofill:-top-2 absolute left-2 -top-2 z-1 px-2 text-xs
-				  transition-all before:absolute before:top-0 before:left-0 before:z-[-1] before:block before:h-full
-				  before:w-full before:bg-background before:transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm
-				  peer-focus:-top-2 peer-focus:text-xs"
+				class="before:bg-background absolute -top-2 left-2 z-1 cursor-text px-2 text-xs transition-all
+				  peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm peer-autofill:-top-2 peer-focus:-top-2
+				  peer-focus:cursor-default peer-focus:text-xs before:absolute before:top-0 before:left-0 before:z-[-1]
+				  before:block before:h-full before:w-full before:transition-all"
 				>New Header Value
 			</label>
 		</div>
@@ -93,7 +93,7 @@
 			</svg>
 		</button>
 	</div>
-	<div data-testid="request-headers" class="pr-4 overflow-y-auto flex flex-col max-h-full mt-4">
+	<div data-testid="request-headers" class="mt-4 flex max-h-full flex-col overflow-y-auto pr-4">
 		{#each request.header as header, iter}
 			<div class="flex flex-row gap-1">
 				<input
@@ -102,8 +102,9 @@
 						update();
 					}}
 					type="text"
-					class="relative w-full h-10 px-4 text-sm placeholder-transparent transition-all border rounded-sm outline-hidden focus-visible:outline-hidden peer
-				 border-background-accent focus:border-text-accent focus:outline-hidden"
+					class="peer border-background-accent focus:border-text-accent relative h-10 w-full rounded-sm border px-4
+					text-sm placeholder-transparent outline-hidden transition-all focus:outline-hidden
+					 focus-visible:outline-hidden"
 				/>
 				<input
 					bind:value={header.value}
@@ -111,8 +112,9 @@
 						update();
 					}}
 					type="text"
-					class="relative w-full h-10 px-4 text-sm placeholder-transparent transition-all border rounded-sm outline-hidden focus-visible:outline-hidden peer
-				 border-background-accent focus:border-text-accent focus:outline-hidden"
+					class="peer border-background-accent focus:border-text-accent relative h-10 w-full rounded-sm border px-4
+					text-sm placeholder-transparent outline-hidden transition-all focus:outline-hidden
+					focus-visible:outline-hidden"
 				/>
 				<button aria-label="delete" onclick={() => deleteHeader(iter)} class="h-10">
 					<svg
