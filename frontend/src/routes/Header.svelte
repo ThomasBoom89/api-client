@@ -12,17 +12,18 @@
 </script>
 
 <header class="px-2 pb-2">
-	<div class="flex flex-row justify-between items-center">
+	<div class="flex flex-row items-center justify-between">
 		<nav aria-label="Breadcrumb">
-			<ol class="flex items-stretch gap-2 list-none">
+			<ol class="flex list-none items-stretch gap-2">
 				<li class="flex items-center gap-2">
 					<button
 						onclick={() => navigationSystem.navigateToHome()}
-						class="flex max-w-[20ch] items-center gap-1 truncate whitespace-nowrap text-text transition-colors hover:text-text-accent"
+						class="text-text hover:text-text-accent flex max-w-[20ch] items-center gap-1 truncate whitespace-nowrap
+						transition-colors"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
-							class="w-5 h-5"
+							class="h-5 w-5"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
@@ -44,7 +45,7 @@
 					{#if navigationSystem.currentState > NavigationState.Home}
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
-							class="flex-none w-4 h-4 text-text rotate-180"
+							class="text-text h-4 w-4 flex-none rotate-180"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
@@ -63,16 +64,16 @@
 					{/if}
 				</li>
 				{#if navigationSystem.currentState > NavigationState.Home}
-					<li class="items-center flex gap-2">
+					<li class="flex items-center gap-2">
 						<button
 							onclick={() => navigationSystem.navigateToOverview()}
-							class="flex max-w-[20ch] truncate whitespace-nowrap text-text transition-colors hover:text-text-accent"
+							class="text-text hover:text-text-accent flex max-w-[20ch] truncate whitespace-nowrap transition-colors"
 							>projects
 						</button>
 						{#if navigationSystem.currentState > NavigationState.Overview}
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								class="flex-none w-4 h-4 text-text rotate-180"
+								class="text-text h-4 w-4 flex-none rotate-180"
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke="currentColor"
@@ -95,13 +96,13 @@
 					<li class="flex items-center gap-2">
 						<button
 							onclick={() => navigationSystem.navigateToProject(navigationSystem.currentProjectId)}
-							class="flex max-w-[20ch] truncate whitespace-nowrap text-text transition-colors hover:text-text-accent"
+							class="text-text hover:text-text-accent flex max-w-[20ch] truncate whitespace-nowrap transition-colors"
 							>{projectStore.getById(navigationSystem.currentProjectId).name}
 						</button>
 						{#if navigationSystem.currentState > NavigationState.Project}
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								class="flex-none w-4 h-4 text-text rotate-180"
+								class="text-text h-4 w-4 flex-none rotate-180"
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke="currentColor"
@@ -121,18 +122,18 @@
 					</li>
 				{/if}
 				{#if navigationSystem.currentState > NavigationState.Project}
-					<li class="flex items-center flex-1">
+					<li class="flex flex-1 items-center">
 						<button
 							onclick={() => navigationSystem.navigateToCollection(navigationSystem.currentCollectionId)}
 							aria-current="page"
-							class="pointer-events-none max-w-[20ch] truncate whitespace-nowrap text-text-disabled"
+							class="text-text-disabled pointer-events-none max-w-[20ch] truncate whitespace-nowrap"
 							>{collectionStore.getById(navigationSystem.currentCollectionId).name}
 						</button>
 					</li>
 				{/if}
 			</ol>
 		</nav>
-		<ul class="flex flex-row gap-2 ml-auto items-center">
+		<ul class="ml-auto flex flex-row items-center gap-2">
 			<li class="flex items-center">
 				<button
 					onclick={() => {
@@ -142,7 +143,7 @@
 				>
 					{#if themeStore.currentTheme === 'dark'}
 						<svg
-							class="w-6 h-6"
+							class="h-6 w-6"
 							aria-hidden="true"
 							xmlns="http://www.w3.org/2000/svg"
 							width="24"
@@ -158,7 +159,7 @@
 						</svg>
 					{:else}
 						<svg
-							class="w-6 h-6"
+							class="h-6 w-6"
 							aria-hidden="true"
 							xmlns="http://www.w3.org/2000/svg"
 							width="24"

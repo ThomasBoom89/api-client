@@ -63,3 +63,7 @@ frontend-format:
 
 frontend-check:
 	cd frontend && npm run check
+
+start-test-environment:
+	go run ./src/cmd/websocket-server.go &
+	wails dev -loglevel "Error"

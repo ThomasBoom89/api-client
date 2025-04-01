@@ -1,6 +1,9 @@
 package test
 
-import "os"
+import (
+	"context"
+	"os"
+)
 
 type UserDir struct {
 	Dir string
@@ -18,4 +21,16 @@ func (U *UserDir) Cleanup() {
 	if err != nil {
 		panic(err)
 	}
+}
+
+type Event struct {
+	receive chan []interface{}
+}
+
+func NewEvent(receive chan []interface{}) *Event {
+	return &Event{receive: receive}
+}
+
+func (E *Event) EventsEmit(ctx context.Context, eventName string, optionalData ...interface{}) {
+	E.receive <- optionalData
 }

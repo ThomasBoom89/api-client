@@ -5,7 +5,11 @@
 		tabs,
 		changeTab,
 		currentTab,
-	}: { tabs: PageTabIndex[]; changeTab: (tabId: PageTabIndex) => void; currentTab: PageTabIndex } = $props();
+	}: {
+		tabs: PageTabIndex[];
+		changeTab: (tabId: PageTabIndex) => void;
+		currentTab: PageTabIndex;
+	} = $props();
 </script>
 
 <ul data-testid="request-tabs" class="flex items-center" role="tablist">
@@ -14,9 +18,8 @@
 			<button
 				onclick={() => changeTab(tab)}
 				class:bg-[var(--color-background-accent)]={currentTab === tab}
-				class="inline-flex items-center justify-center w-full h-12 gap-2 px-6 -mb-px
-			 tracking-wide transition duration-300 rounded-t focus-visible:outline-hidden text-text border-b-[1px]
-			    hover:bg-background-accent"
+				class="text-text hover:bg-background-accent -mb-px inline-flex h-12 w-full items-center justify-center
+			 		gap-2 rounded-t border-b-[1px] px-6 tracking-wide transition duration-300 focus-visible:outline-hidden"
 				id="tab-label-1a"
 				role="tab"
 				aria-setsize="3"

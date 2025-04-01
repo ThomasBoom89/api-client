@@ -5,7 +5,7 @@ import { NavigationState } from '$lib/enums/NavigationState.ts';
 
 test('navigate with the navigation system', async () => {
 	// Set needs to be mocked
-	const godo = vi.spyOn(models, 'goto').mockImplementation((): Promise<void> => {
+	vi.spyOn(models, 'goto').mockImplementation((): Promise<void> => {
 		return new Promise<void>((resolve) => {
 			resolve();
 		});

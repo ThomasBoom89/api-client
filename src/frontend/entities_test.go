@@ -14,9 +14,12 @@ func TestEntities(t *testing.T) {
 	projectRepository := database.NewRepository[database.Project](databaseClient)
 	collectionsRepository := database.NewRepository[database.Collection](databaseClient)
 	httpRequestRepository := database.NewHttpRequestRepository(databaseClient)
+	websocketRequestRepository := database.NewWebsocketRequestRepository(databaseClient)
 	projects := NewProjects(projectRepository)
 	collections := NewCollections(collectionsRepository)
 	httpRequests := NewHttpRequests(httpRequestRepository)
+	websocketRequests := NewWebsocketRequests(websocketRequestRepository)
+	requests := NewRequests(httpRequests, websocketRequests)
 
 	projectDtos, err := projects.GetAll()
 	if err != nil {
@@ -99,7 +102,7 @@ func TestEntities(t *testing.T) {
 	}
 	httpRequestDto := HttpRequestDto{
 		Name:         "httpRequest1",
-		Type:         "http",
+		Type:         "",
 		CollectionID: collectionDto.ID,
 		Url:          "superurl",
 		Method:       "POST",
@@ -114,6 +117,9 @@ func TestEntities(t *testing.T) {
 	}
 	if httpRequestDto.Name != "httpRequest1" {
 		t.Fatal("http request name should be httpRequest1")
+	}
+	if httpRequestDto.Type != "http" {
+		t.Fatal("request type not set properly")
 	}
 	httpRequestDto.Url = "superurl2"
 	httpRequestDto.Body.Payload = `{"key2": "value2"}`
@@ -175,6 +181,46 @@ func TestEntities(t *testing.T) {
 	}
 	if len(httpRequestDtos) != 1 {
 		t.Fatal("http requests should have one request")
+	}
+
+	websocketRequestDto := WebsocketRequestDto{
+		Name:         "websocket request 1",
+		Type:         "",
+		CollectionID: collectionDto.ID,
+		Url:          "ws://localhost:12345",
+	}
+	websocketRequestDto, err = websocketRequests.Create(websocketRequestDto)
+	if err != nil {
+		t.Fatal("could not create websocket request from dto")
+	}
+	if websocketRequestDto.Type != "websocket" {
+		t.Fatal("websocket request type not set")
+	}
+
+	websocketRequestDto.Name = "websocket request 2"
+	websocketRequestDto, err = websocketRequests.Update(websocketRequestDto)
+	if err != nil || websocketRequestDto.Name != "websocket request 2" {
+		t.Fatal("could not update websocket request by dto")
+	}
+	websocketRequestDtos, err := websocketRequests.GetAll()
+	if err != nil {
+		t.Fatal("could not get all websocket requests")
+	}
+	if websocketRequestDtos[0].Name != "websocket request 2" {
+		t.Fatal("could not get websocket request 2")
+	}
+
+	requestDtos, err := requests.GetAll()
+	if err != nil {
+		t.Fatal("could not get requests")
+	}
+	if len(requestDtos) != 2 {
+		t.Fatal("should have 2 dtos")
+	}
+
+	err = websocketRequests.Delete(websocketRequestDto)
+	if err != nil {
+		t.Fatal("error deleting websocket request", err)
 	}
 
 	err = httpRequests.Delete(httpRequestDto)
