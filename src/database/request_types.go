@@ -2,13 +2,10 @@ package database
 
 import "gorm.io/gorm"
 
-type GrpcRequest struct {
-	gorm.Model
-	Name         string
-	CollectionID uint
+type RequestType interface {
 }
 
-type WebsocketRequest struct {
+type GrpcRequest struct {
 	gorm.Model
 	Name         string
 	CollectionID uint
