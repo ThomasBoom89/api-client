@@ -1,16 +1,21 @@
 <script lang="ts">
 	import { PageTabIndex } from './enums/PageTabIndex';
 	import Tabs from './Tabs.svelte';
-	import RequestDetail from './RequestDetail.svelte';
-	import ResponseDetail from './ResponseDetail.svelte';
+	import HttpRequestDetail from './HttpRequestDetail.svelte';
+	import HttpResponseDetail from './HttpResponseDetail.svelte';
 	import Body from './Body.svelte';
 	import { Submit } from './wailsjs/go/frontend/Request';
 	import { frontend } from './wailsjs/go/models';
 	import Params from './Params.svelte';
 	import Header from './Header.svelte';
 
-	let { request, currentResponse }: { request: frontend.HttpRequestDto; currentResponse: frontend.RequestResponseDTO } =
-		$props();
+	let {
+		request,
+		currentResponse,
+	}: {
+		request: frontend.HttpRequestDto;
+		currentResponse: frontend.RequestResponseDTO;
+	} = $props();
 
 	let loading = $state(false);
 	let currentTab = $state(PageTabIndex.Body);
@@ -33,10 +38,10 @@
 	}
 </script>
 
-<div class="flex flex-col overflow-hidden h-full w-full">
-	<RequestDetail {request} {submit} />
+<div class="flex h-full w-full flex-col overflow-hidden">
+	<HttpRequestDetail {request} {submit} />
 	<Tabs {tabs} {changeTab} {currentTab} />
-	<div class="mt-2 w-full h-full overflow-hidden">
+	<div class="mt-2 h-full w-full overflow-hidden">
 		{#if currentTab === PageTabIndex.Body}
 			<Body {request} />
 		{:else if currentTab === PageTabIndex.Parameter}
@@ -44,7 +49,7 @@
 		{:else if currentTab === PageTabIndex.Header}
 			<Header {request} />
 		{:else if currentTab === PageTabIndex.Response}
-			<ResponseDetail response={currentResponse} {loading}></ResponseDetail>
+			<HttpResponseDetail response={currentResponse} {loading}></HttpResponseDetail>
 		{/if}
 	</div>
 </div>
