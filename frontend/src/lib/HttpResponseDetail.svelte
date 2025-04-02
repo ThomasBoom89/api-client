@@ -20,20 +20,20 @@
 {:else if response.error !== ''}
 	<p data-testid="response-error" class="text-red-700">{response.error}</p>
 {:else if response.elapsedTime === undefined}{:else}
-	<div class="flex flex-col h-full overflow-y-auto overflow-x-hidden p-2 border">
-		<div class="flex justify-between mr-2">
+	<div class="flex h-full flex-col overflow-x-hidden overflow-y-auto border p-2">
+		<div class="mr-2 flex justify-between">
 			<h4 class="text-text-highlight">Status-Code:</h4>
 			<ClipboardButton data={response.statusCode.toFixed(0)} />
 		</div>
 		<p>{response.statusCode}</p>
 		<hr class="my-2 mr-2" />
-		<div class="flex justify-between mr-2">
+		<div class="mr-2 flex justify-between">
 			<h4 class="text-text-highlight">Elapsed Time:</h4>
 			<ClipboardButton data={response.elapsedTime} />
 		</div>
 		<p>{response.elapsedTime}</p>
 		<hr class="my-2 mr-2" />
-		<div class="flex justify-between mr-2">
+		<div class="mr-2 flex justify-between">
 			<h4 class="text-text-highlight">Send Header:</h4>
 			<ClipboardButton data={JSON.stringify(response.sendHeader)} />
 		</div>
@@ -41,7 +41,7 @@
 			<p><span class="text-text-response-headers">{key}</span> {value}</p>
 		{/each}
 		<hr class="my-2 mr-2" />
-		<div class="flex justify-between mr-2">
+		<div class="mr-2 flex justify-between">
 			<h4 class="text-text-highlight">Received Header:</h4>
 			<ClipboardButton data={JSON.stringify(response.receivedHeader)} />
 		</div>
@@ -57,7 +57,7 @@
 			<p>{response.error}</p>
 		{/if}
 		<hr class="my-2 mr-2" />
-		<div class="flex justify-between mr-2">
+		<div class="mr-2 flex justify-between">
 			<h4 class="text-text-highlight">Payload:</h4>
 			<ClipboardButton data={response.responseBody} />
 		</div>
