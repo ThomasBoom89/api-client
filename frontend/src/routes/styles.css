@@ -8,6 +8,8 @@
 	--color-background: var(--color-background);
 	--color-text: var(--color-text);
 	--color-http: var(--color-http);
+	--color-ok: var(--color-ok);
+	--color-error: var(--color-error);
 	--color-background-accent: var(--color-background-accent);
 	--color-text-accent: var(--color-text-accent);
 	--color-text-response-headers: var(--color-text-response-headers);
@@ -19,6 +21,8 @@
 @layer base {
 	html {
 		--color-http: #00d12d;
+		--color-ok: #7ccf00;
+		--color-error: #ff6467;
 		--color-background: #2f2f2f;
 		--color-background-accent: #666666;
 		--color-text: ghostwhite;
@@ -40,6 +44,8 @@
 
 html[data-theme='dark'] {
 	--color-http: #00d12d;
+	--color-ok: #8be801;
+	--color-error: #ff6467;
 	--color-background: #2f2f2f;
 	--color-background-accent: #666666;
 	--color-text: ghostwhite;
@@ -52,6 +58,8 @@ html[data-theme='dark'] {
 
 html[data-theme='light'] {
 	--color-http: #00d12d;
+	--color-ok: #7ccf00;
+	--color-error: #ff6467;
 	--color-background: ghostwhite;
 	--color-background-accent: #dcdcdc;
 	--color-text: black;
