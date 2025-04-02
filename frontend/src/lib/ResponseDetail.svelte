@@ -22,12 +22,6 @@
 {:else if response.elapsedTime === undefined}{:else}
 	<div class="flex flex-col h-full overflow-y-auto overflow-x-hidden p-2 border">
 		<div class="flex justify-between mr-2">
-			<h4 class="text-text-highlight">Current Response:</h4>
-			<ClipboardButton data={`${response.method} ${response.url}`} />
-		</div>
-		<p class="break-words mr-2">{response.method} {response.url}</p>
-		<hr class="my-2 mr-2" />
-		<div class="flex justify-between mr-2">
 			<h4 class="text-text-highlight">Status-Code:</h4>
 			<ClipboardButton data={response.statusCode.toFixed(0)} />
 		</div>
