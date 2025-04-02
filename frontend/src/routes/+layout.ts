@@ -1,7 +1,7 @@
 import { Get } from '$lib/wailsjs/go/frontend/Configuration';
-import { GetAll } from '../lib/wailsjs/go/frontend/Projects';
+import { GetAll } from '$lib/wailsjs/go/frontend/Projects';
 import { GetAll as GetAllCollections } from '../lib/wailsjs/go/frontend/Collections';
-import { GetAll as GetAllRequests } from '../lib/wailsjs/go/frontend/HttpRequests';
+import { GetAll as GetAllRequests } from '../lib/wailsjs/go/frontend/Requests';
 
 export const prerender = false;
 export const ssr = false;

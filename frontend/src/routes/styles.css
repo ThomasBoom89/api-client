@@ -8,6 +8,7 @@
 	--color-background: var(--color-background);
 	--color-text: var(--color-text);
 	--color-http: var(--color-http);
+	--color-websocket: var(--color-websocket);
 	--color-ok: var(--color-ok);
 	--color-error: var(--color-error);
 	--color-background-accent: var(--color-background-accent);
@@ -21,6 +22,7 @@
 @layer base {
 	html {
 		--color-http: #00d12d;
+		--color-websocket: #ff00fa;
 		--color-ok: #7ccf00;
 		--color-error: #ff6467;
 		--color-background: #2f2f2f;
@@ -44,6 +46,7 @@
 
 html[data-theme='dark'] {
 	--color-http: #00d12d;
+	--color-websocket: #ff00fa;
 	--color-ok: #8be801;
 	--color-error: #ff6467;
 	--color-background: #2f2f2f;
@@ -58,6 +61,7 @@ html[data-theme='dark'] {
 
 html[data-theme='light'] {
 	--color-http: #00d12d;
+	--color-websocket: #ff00fa;
 	--color-ok: #7ccf00;
 	--color-error: #ff6467;
 	--color-background: ghostwhite;

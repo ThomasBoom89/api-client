@@ -10,7 +10,7 @@
 	};
 </script>
 
-<div class="flex flex-row gap-2 my-2">
+<div class="my-2 flex flex-row gap-2">
 	<div class="relative min-w-28">
 		<select
 			name="request-method"
@@ -19,8 +19,8 @@
 			onchange={() => {
 				update();
 			}}
-			class="relative w-full h-10 px-4 text-sm transition-all bg-background border rounded-sm outline-hidden appearance-none
-		 focus-visible:outline-hidden peer border-background-accent text-text focus:border-text-accent
+			class="bg-background peer border-background-accent text-text focus:border-text-accent relative h-10 w-full appearance-none rounded-sm border
+		 px-4 text-sm outline-hidden transition-all focus-visible:outline-hidden
 		  focus:focus-visible:outline-hidden"
 		>
 			<option value="GET">GET</option>
@@ -33,16 +33,16 @@
 		</select>
 		<label
 			for="request-method"
-			class="pointer-events-none absolute top-2.5 left-2 z-1 px-2 text-sm text-text transition-all
-		before:absolute before:top-0 before:left-0 before:z-[-1] before:block before:h-full before:w-full
-		before:bg-background before:transition-all peer-valid:-top-2 peer-valid:text-xs peer-focus:-top-2 peer-focus:text-xs
-		 peer-focus:text-text peer-disabled:cursor-not-allowed peer-disabled:text-text peer-disabled:before:bg-transparent"
+			class="text-text before:bg-background peer-focus:text-text peer-disabled:text-text pointer-events-none absolute top-2.5 left-2 z-1
+		px-2 text-sm transition-all peer-valid:-top-2 peer-valid:text-xs peer-focus:-top-2 peer-focus:text-xs
+		peer-disabled:cursor-not-allowed before:absolute before:top-0 before:left-0 before:z-[-1] before:block
+		 before:h-full before:w-full before:transition-all peer-disabled:before:bg-transparent"
 		>
 			Method type
 		</label>
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
-			class="pointer-events-none absolute top-2.5 right-2 h-5 w-5 fill-text transition-all"
+			class="fill-text pointer-events-none absolute top-2.5 right-2 h-5 w-5 transition-all"
 			viewBox="0 0 20 20"
 			fill="currentColor"
 			aria-labelledby="title-04 description-04"
@@ -58,7 +58,7 @@
 		</svg>
 	</div>
 	<div class="relative flex w-full items-center rounded-sm">
-		<div class="flex-1 relative">
+		<div class="relative flex-1">
 			<input
 				bind:value={request.url}
 				oninput={() => {
@@ -67,23 +67,23 @@
 				id="request-url"
 				type="url"
 				placeholder="Request Url"
-				class="relative w-full h-10 px-4 text-sm placeholder-transparent transition-all border rounded-sm outline-hidden focus-visible:outline-hidden peer
-						border-background-accent focus:border-text-accent focus:outline-hidden"
+				class="peer border-background-accent focus:border-text-accent relative h-10 w-full rounded-sm border px-4
+				text-sm placeholder-transparent outline-hidden transition-all focus:outline-hidden focus-visible:outline-hidden"
 			/>
 			<label
 				for="request-url"
-				class="cursor-text peer-focus:cursor-default peer-autofill:-top-2 absolute left-2 -top-2 z-1 px-2 text-xs
-						transition-all before:absolute before:top-0 before:left-0 before:z-[-1] before:block before:h-full
-						before:w-full before:bg-background before:transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm
-						peer-focus:-top-2 peer-focus:text-xs overflow-wrap: break-words"
+				class="before:bg-background overflow-wrap: absolute -top-2 left-2 z-1 cursor-text px-2 text-xs
+						break-words transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm peer-autofill:-top-2
+						peer-focus:-top-2 peer-focus:cursor-default peer-focus:text-xs before:absolute before:top-0 before:left-0
+						before:z-[-1] before:block before:h-full before:w-full before:transition-all"
 				>Request URL
 			</label>
 		</div>
-		<div class="flex justify-end mb-1 p-1">
+		<div class="mb-1 flex justify-end p-1">
 			<svg
 				onclick={submit}
 				xmlns="http://www.w3.org/2000/svg"
-				class="w-7 h-7 cursor-pointer"
+				class="h-7 w-7 cursor-pointer"
 				fill="none"
 				id="run-request-icon"
 				viewBox="0 0 16 20"

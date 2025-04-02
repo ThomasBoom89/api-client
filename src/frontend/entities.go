@@ -19,6 +19,15 @@ type CollectionDto struct {
 	ProjectID uint      `json:"projectId"`
 }
 
+type WebsocketRequestDto struct {
+	ID           uint      `json:"id"`
+	UpdatedAt    time.Time `json:"updatedAt"`
+	Name         string    `json:"name"`
+	Type         string    `json:"type"`
+	CollectionID uint      `json:"collectionId"`
+	Url          string    `json:"url"`
+}
+
 type HttpRequestDto struct {
 	ID           uint                      `json:"id"`
 	UpdatedAt    time.Time                 `json:"updatedAt"`
@@ -68,6 +77,15 @@ type HttpRequests struct {
 	httpRequestRepository *database.HttpRequestRepository
 }
 
+type WebsocketRequests struct {
+	websocketRequestRepository *database.WebsocketRequestRepository
+}
+
+type Requests struct {
+	httpRequests      *HttpRequests
+	websocketRequests *WebsocketRequests
+}
+
 func NewProjects(projectRepository *database.Repository[database.Project]) *Projects {
 	return &Projects{projectRepository}
 }
@@ -78,6 +96,14 @@ func NewCollections(collectionRepository *database.Repository[database.Collectio
 
 func NewHttpRequests(httpRequestRepository *database.HttpRequestRepository) *HttpRequests {
 	return &HttpRequests{httpRequestRepository}
+}
+
+func NewWebsocketRequests(websocketRequestRepository *database.WebsocketRequestRepository) *WebsocketRequests {
+	return &WebsocketRequests{websocketRequestRepository}
+}
+
+func NewRequests(httpRequests *HttpRequests, websocketRequests *WebsocketRequests) *Requests {
+	return &Requests{httpRequests, websocketRequests}
 }
 
 func (P *Projects) Create(projectDto ProjectDto) (ProjectDto, error) {
@@ -221,6 +247,26 @@ func (C *Collections) GetAll() ([]CollectionDto, error) {
 	return collectionDtos, nil
 }
 
+func (R *Requests) GetAll() ([]interface{}, error) {
+	httpRequestDtos, err := R.httpRequests.GetAll()
+	if err != nil {
+		return nil, err
+	}
+	websocketRequestDtos, err := R.websocketRequests.GetAll()
+	if err != nil {
+		return nil, err
+	}
+	requestDtos := make([]interface{}, 0)
+	for _, httpRequestDto := range httpRequestDtos {
+		requestDtos = append(requestDtos, httpRequestDto)
+	}
+	for _, websocketRequestDto := range websocketRequestDtos {
+		requestDtos = append(requestDtos, websocketRequestDto)
+	}
+
+	return requestDtos, err
+}
+
 func (H *HttpRequests) GetAll() ([]HttpRequestDto, error) {
 	httpRequests, err := H.httpRequestRepository.GetAll()
 	if err != nil {
@@ -232,6 +278,67 @@ func (H *HttpRequests) GetAll() ([]HttpRequestDto, error) {
 	}
 
 	return httpRequestDtos, nil
+}
+
+func (W *WebsocketRequests) GetAll() ([]WebsocketRequestDto, error) {
+	websocketRequests, err := W.websocketRequestRepository.GetAll()
+	if err != nil {
+		return nil, err
+	}
+	websocketRequestDtos := make([]WebsocketRequestDto, len(websocketRequests))
+	for iter, websocketRequest := range websocketRequests {
+		websocketRequestDtos[iter] = WebsocketRequestDto{
+			ID:           websocketRequest.ID,
+			UpdatedAt:    websocketRequest.UpdatedAt,
+			Name:         websocketRequest.Name,
+			Type:         "websocket",
+			CollectionID: websocketRequest.CollectionID,
+			Url:          websocketRequest.Url,
+		}
+	}
+
+	return websocketRequestDtos, nil
+}
+
+func (W *WebsocketRequests) Create(websocketRequestDto WebsocketRequestDto) (WebsocketRequestDto, error) {
+	websocketRequest := &database.WebsocketRequest{
+		Name:         websocketRequestDto.Name,
+		CollectionID: websocketRequestDto.CollectionID,
+		Url:          websocketRequestDto.Url,
+	}
+	websocketRequest, err := W.websocketRequestRepository.Create(websocketRequest)
+	if err != nil {
+		return websocketRequestDto, err
+	}
+	websocketRequestDto.ID = websocketRequest.ID
+	websocketRequestDto.UpdatedAt = websocketRequest.UpdatedAt
+	websocketRequestDto.Type = "websocket"
+
+	return websocketRequestDto, nil
+}
+
+func (W *WebsocketRequests) Update(websocketRequestDto WebsocketRequestDto) (WebsocketRequestDto, error) {
+	websocketRequest, err := W.websocketRequestRepository.GetById(websocketRequestDto.ID)
+	if err != nil {
+		return websocketRequestDto, err
+	}
+	websocketRequest.Name = websocketRequestDto.Name
+	websocketRequest.Url = websocketRequestDto.Url
+	websocketRequest, err = W.websocketRequestRepository.Update(websocketRequest)
+	if err != nil {
+		return websocketRequestDto, err
+	}
+
+	return websocketRequestDto, nil
+}
+
+func (W *WebsocketRequests) Delete(websocketRequestDto WebsocketRequestDto) error {
+	websocketRequest, err := W.websocketRequestRepository.GetById(websocketRequestDto.ID)
+	if err != nil {
+		return err
+	}
+
+	return W.websocketRequestRepository.Delete(websocketRequest)
 }
 
 func (H *HttpRequests) buildDtoFromDatabase(httpRequest database.HttpRequest) HttpRequestDto {

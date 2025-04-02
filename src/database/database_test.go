@@ -14,6 +14,7 @@ func TestDatabase(t *testing.T) {
 	projectRepository := NewRepository[Project](databaseClient)
 	collectionRepository := NewRepository[Collection](databaseClient)
 	httpRequestRepository := NewHttpRequestRepository(databaseClient)
+	websocketRequestRepository := NewWebsocketRequestRepository(databaseClient)
 
 	project := &Project{
 		Name:        "NewProject1",
@@ -134,6 +135,34 @@ func TestDatabase(t *testing.T) {
 		t.Fatal("http request parameter was not deleted")
 	}
 
+	// websocket
+	websocketRequest := &WebsocketRequest{
+		Name:         "superwebsocketrequest1",
+		CollectionID: collection.ID,
+		Url:          "ws://localhost:12345",
+	}
+
+	websocketRequest, err = websocketRequestRepository.Create(websocketRequest)
+	if err != nil {
+		t.Fatal("websocket request could not be created")
+	}
+
+	websocketRequest.Name = "superwebsocketrequest2"
+	websocketRequest, err = websocketRequestRepository.Update(websocketRequest)
+	if err != nil {
+		t.Fatal("websocket request could not be updated")
+	}
+
+	websocketRequests, err := websocketRequestRepository.GetAll()
+	if err != nil || len(websocketRequests) != 1 {
+		t.Fatal("could not get websocket requests")
+	}
+
+	websocketRequest, err = websocketRequestRepository.GetById(websocketRequest.ID)
+	if err != nil {
+		t.Fatal("could not get websocket request by id")
+	}
+
 	err = projectRepository.Delete(project)
 	if err != nil {
 		t.Fatal("project was not deleted")
@@ -145,5 +174,9 @@ func TestDatabase(t *testing.T) {
 	err = httpRequestRepository.Delete(httpRequest)
 	if err != nil {
 		t.Fatal("http request was not deleted")
+	}
+	err = websocketRequestRepository.Delete(websocketRequest)
+	if err != nil {
+		t.Fatal("websocket request was not deleted")
 	}
 }

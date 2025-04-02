@@ -11,7 +11,8 @@ func TestRequest(t *testing.T) {
 	userDir := test.UserDir{Dir: "./tmp-request_test/"}
 	defer userDir.Cleanup()
 
-	http.HandleFunc("GET /", func(writer http.ResponseWriter, request *http.Request) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("GET /", func(writer http.ResponseWriter, request *http.Request) {
 		header := request.Header.Get("tom")
 		if header != "riddle" {
 			t.Errorf("expecting riddle got %s", header)
@@ -22,12 +23,12 @@ func TestRequest(t *testing.T) {
 		}
 		writer.Write([]byte("Yolo"))
 	})
-	http.HandleFunc("GET /nobody", func(writer http.ResponseWriter, request *http.Request) {
+	mux.HandleFunc("GET /nobody", func(writer http.ResponseWriter, request *http.Request) {
 		writer.Write([]byte("Yolo"))
 	})
 	server := &http.Server{
 		Addr:                         ":8898",
-		Handler:                      nil,
+		Handler:                      mux,
 		DisableGeneralOptionsHandler: false,
 		TLSConfig:                    nil,
 		ReadTimeout:                  0,

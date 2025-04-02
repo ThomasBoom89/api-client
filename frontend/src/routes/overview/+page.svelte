@@ -13,21 +13,21 @@
 	<meta name="description" content="project overview" />
 </svelte:head>
 <div class="flex flex-col gap-2">
-	<div class="relative mt-2 mx-auto">
+	<div class="relative mx-auto mt-2">
 		<input
 			bind:value={newProjectName}
 			id="new-project"
 			type="text"
 			placeholder="New Project"
-			class="relative w-full h-10 px-4 text-sm placeholder-transparent transition-all border rounded-sm outline-hidden focus-visible:outline-hidden peer
-				 border-background-accent focus:border-text-accent focus:outline-hidden"
+			class="peer border-background-accent focus:border-text-accent relative h-10 w-full rounded-sm border px-4 text-sm
+			placeholder-transparent outline-hidden transition-all focus:outline-hidden focus-visible:outline-hidden"
 		/>
 		<label
 			for="new-project"
-			class="cursor-text peer-focus:cursor-default peer-autofill:-top-2 absolute left-2 -top-2 z-1 px-2 text-xs
-				  transition-all before:bg-background before:absolute before:top-0 before:left-0 before:z-[-1] before:block before:h-full
-				  before:w-full before:transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm
-				  peer-focus:-top-2 peer-focus:text-xs"
+			class="before:bg-background absolute -top-2 left-2 z-1 cursor-text px-2 text-xs transition-all
+				  peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm peer-autofill:-top-2 peer-focus:-top-2
+				  peer-focus:cursor-default peer-focus:text-xs before:absolute before:top-0 before:left-0 before:z-[-1]
+				  before:block before:h-full before:w-full before:transition-all"
 			>New Project
 		</label>
 		<svg
@@ -51,14 +51,14 @@
 			<path d="M12 9v6" />
 		</svg>
 	</div>
-	<div data-testid="projects" class="grid grid-cols-project-overview gap-2">
+	<div data-testid="projects" class="grid-cols-project-overview grid gap-2">
 		{#each projectStore.projects as project}
 			<div
 				data-testid="project"
-				class="flex flex-row gap-2 overflow-hidden rounded-sm shadow-background-accent shadow-xs p-2"
+				class="shadow-background-accent flex flex-row gap-2 overflow-hidden rounded-sm p-2 shadow-xs"
 			>
 				{#if project.id !== projectInEdit}
-					<button class=" text-left w-full truncate" onclick={() => navigationSystem.navigateToProject(project.id)}>
+					<button class=" w-full truncate text-left" onclick={() => navigationSystem.navigateToProject(project.id)}>
 						{project.name}
 					</button>
 					<button
@@ -85,7 +85,7 @@
 						</svg>
 					</button>
 				{:else}
-					<input type="text" class="border-none w-full" bind:value={project.name} />
+					<input type="text" class="w-full border-none" bind:value={project.name} />
 					<button
 						aria-label="save"
 						onclick={() => {

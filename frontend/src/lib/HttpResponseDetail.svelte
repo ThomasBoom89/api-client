@@ -46,7 +46,10 @@
 			<ClipboardButton data={JSON.stringify(response.receivedHeader)} />
 		</div>
 		{#each Object.entries(response.receivedHeader) as [key, value]}
-			<p class="break-words mr-2"><span class="text-text-response-headers">{key}</span> {value}</p>
+			<p class="mr-2 break-words">
+				<span class="text-text-response-headers">{key}</span>
+				{value}
+			</p>
 		{/each}
 		{#if response.error !== ''}
 			<hr class="my-2 mr-2" />
@@ -60,10 +63,10 @@
 		</div>
 		{#if isJsonResponse}
 			<div class="mr-2">
-				<pre class="whitespace-pre-wrap overflow-x-auto">{response.responseBody}</pre>
+				<pre class="overflow-x-auto whitespace-pre-wrap">{response.responseBody}</pre>
 			</div>
 		{:else}
-			<div class="break-words mr-2">{response.responseBody}</div>
+			<div class="mr-2 break-words">{response.responseBody}</div>
 		{/if}
 	</div>
 {/if}

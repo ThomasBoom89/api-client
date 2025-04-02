@@ -7,6 +7,7 @@
 	import { initializeCollectionStore } from '../lib/collectionStore.svelte.ts';
 	import { initializeRequestStore } from '../lib/requestStore.svelte.ts';
 	import { initializeNavigationSystem } from '$lib/navigationSystem.svelte.ts';
+	import { initializeWebsocketStore } from '$lib/websocketStore.svelte.js';
 
 	let { children, data } = $props();
 	initializeConfigurationStore(data.configuration);
@@ -15,12 +16,14 @@
 	initializeRequestStore(data.requests);
 	initializeThemeStore(getConfigurationStore());
 	initializeNavigationSystem();
+	initializeWebsocketStore();
+
 	document.getElementById('loader')?.remove();
 </script>
 
-<div class="w-[100vw] h-[100vh] bg-background text-text flex flex-col overflow-hidden">
+<div class="bg-background text-text flex h-[100vh] w-[100vw] flex-col overflow-hidden">
 	<Header />
-	<main class="flex flex-col w-full h-full overflow-hidden flex-1 px-2 pb-2">
+	<main class="flex h-full w-full flex-1 flex-col overflow-hidden px-2 pb-2">
 		{@render children()}
 	</main>
 </div>

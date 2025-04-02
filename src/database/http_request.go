@@ -83,12 +83,7 @@ func (H *HttpRequestRepository) Update(request *HttpRequest) (*HttpRequest, erro
 	return request, nil
 }
 func (H *HttpRequestRepository) Delete(request *HttpRequest) error {
-	err := H.database.Delete(request).Error
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return H.database.Delete(request).Error
 }
 
 func (H *HttpRequestRepository) CreateParameter(httpRequestParameter *HttpRequestParameter) (*HttpRequestParameter, error) {

@@ -1,4 +1,4 @@
-<section id="loader" class="w-full h-full flex items-center justify-center bg-background overflow-hidden">
-	<span class="animate-ping w-full h-full rounded-full opacity-50 bg-blue-200"></span>
-	<p class="absolute top-[50%] text-text">loading...</p>
+<section id="loader" class="bg-background flex h-full w-full items-center justify-center overflow-hidden">
+	<span class="h-full w-full animate-ping rounded-full bg-blue-200 opacity-50"></span>
+	<p class="text-text absolute top-[50%]">loading...</p>
 </section>

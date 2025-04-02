@@ -12,21 +12,23 @@
 
 <button
 	onclick={() => navigationSystem.navigateToOverview()}
-	class="inline-flex items-center justify-center h-12 gap-2 px-6 transition
-	 duration-300 border rounded-sm hover:text-text-accent"
+	class="hover:text-text-accent inline-flex h-12 items-center justify-center gap-2 rounded-sm
+	 border px-6 transition duration-300"
 >
 	<span>to project overview</span>
 </button>
 <br />
-<p class="text-3xl text-center">Welcome to the api-client <strong class="text-3xl">pre-release</strong>!</p>
+<p class="text-center text-3xl">
+	Welcome to the api-client <strong class="text-3xl">pre-release</strong>!
+</p>
 <br />
-<p class="text-2xl text-center">Thank you for downloading this amazing piece of software!</p>
+<p class="text-center text-2xl">Thank you for downloading this amazing piece of software!</p>
 <br />
-<div class="flex flex-row gap-2 justify-center items-center text-2xl text-center">
+<div class="flex flex-row items-center justify-center gap-2 text-center text-2xl">
 	<p class="text-2xl">If you have further questions go here:</p>
 
 	<button
-		class="inline-flex items-center justify-center hover:text-text-accent"
+		class="hover:text-text-accent inline-flex items-center justify-center"
 		onclick={() => {
 			BrowserOpenURL('https://github.com/ThomasBoom89/api-client/issues');
 		}}
@@ -50,11 +52,11 @@
 		Github Issues
 	</button>
 </div>
-<div class="flex flex-row gap-2 justify-center items-center text-2xl text-center">
+<div class="flex flex-row items-center justify-center gap-2 text-center text-2xl">
 	<p class="text-2xl">If you have further questions go here:</p>
 
 	<button
-		class="inline-flex items-center justify-center hover:text-text-accent"
+		class="hover:text-text-accent inline-flex items-center justify-center"
 		onclick={() => {
 			BrowserOpenURL('https://github.com/ThomasBoom89/api-client/discussions');
 		}}

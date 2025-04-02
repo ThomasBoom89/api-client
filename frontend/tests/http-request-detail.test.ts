@@ -1,12 +1,13 @@
 import { expect, test } from '@playwright/test';
-import { setupRequest, cleanupRequest } from './setup';
+import { cleanupRequest, setupRequest } from './setup';
+import { RequestTypes } from '$lib/enums/RequestTypes.ts';
 
 const projectSetupUUID = crypto.randomUUID();
 const collectionsSetupUUID = crypto.randomUUID();
 const requestSetupUUID = crypto.randomUUID();
 
 test.beforeEach('project setup', async ({ page }) => {
-	await setupRequest(page, projectSetupUUID, collectionsSetupUUID, requestSetupUUID);
+	await setupRequest(page, projectSetupUUID, collectionsSetupUUID, requestSetupUUID, RequestTypes.HTTP);
 });
 
 test.afterEach('project cleanup', async ({ page }) => {
