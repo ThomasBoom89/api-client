@@ -6,22 +6,18 @@
 	let error = $state(false);
 
 	let handleCopy = async (): Promise<void> => {
-		try {
-			if (copied) {
-				return;
-			}
-			let res = await ClipboardSetText(data);
-			copied = !!res;
-			error = !res;
-		} catch (err) {
-			error = true;
-			console.error('Error copying to clipboard: ', err);
-		} finally {
-			setTimeout(() => {
-				error = false;
-				copied = false;
-			}, 2000);
+		if (copied) {
+			return;
 		}
+
+		let res = await ClipboardSetText(data);
+		copied = !!res;
+		error = !res;
+
+		setTimeout(() => {
+			error = false;
+			copied = false;
+		}, 2000);
 	};
 
 	let cssClass = (): string => {
