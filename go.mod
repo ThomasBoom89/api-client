@@ -10,7 +10,7 @@ require (
 	github.com/rs/zerolog v1.34.0
 	github.com/wailsapp/wails/v2 v2.10.1
 	golang.org/x/net v0.41.0
-	gorm.io/driver/sqlite v1.5.7
+	gorm.io/driver/sqlite v1.6.0
 	gorm.io/gorm v1.30.0
 )
 
