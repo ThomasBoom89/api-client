@@ -66,7 +66,7 @@ func TestRequest(t *testing.T) {
 		t.Fatal("should not fail to create collection")
 	}
 	httpRequestRepository := database.NewHttpRequestRepository(databaseClient)
-	request := NewRequest(httpRequestRepository)
+	request := NewRequest(httpRequestRepository, nil)
 	httpRequest, err := httpRequestRepository.Create(&database.HttpRequest{
 		Name:         "test request",
 		CollectionID: collection.ID,

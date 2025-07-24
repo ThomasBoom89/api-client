@@ -34,7 +34,7 @@ func main() {
 	collectionsRepository := database.NewRepository[database.Collection](databaseClient)
 	httpRequestRepository := database.NewHttpRequestRepository(databaseClient)
 	websocketRequestRepository := database.NewWebsocketRequestRepository(databaseClient)
-	request := frontend.NewRequest(httpRequestRepository)
+	request := frontend.NewRequest(httpRequestRepository, configurationReadWriter)
 	wailsEvent := runtime.Wails{}
 	websocket := frontend.NewWebsocket(context, &wailsEvent)
 	projects := frontend.NewProjects(projectRepository)
