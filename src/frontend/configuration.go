@@ -1,6 +1,8 @@
 package frontend
 
-import "api-client/src/configuration"
+import (
+	"api-client/src/configuration"
+)
 
 type Configuration struct {
 	readwriter *configuration.ReadWriter

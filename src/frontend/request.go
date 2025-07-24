@@ -1,7 +1,9 @@
 package frontend
 
 import (
+	"api-client/src/configuration"
 	"api-client/src/database"
+	"crypto/tls"
 	"io"
 	"net/http"
 	"net/url"
@@ -12,6 +14,7 @@ import (
 
 type Request struct {
 	httpRequestRepository *database.HttpRequestRepository
+	configuration         *configuration.ReadWriter
 }
 
 type RequestResponseDTO struct {
@@ -25,8 +28,11 @@ type RequestResponseDTO struct {
 	StatusCode     int                 `json:"statusCode"`
 }
 
-func NewRequest(httpRequestRepository *database.HttpRequestRepository) *Request {
-	return &Request{httpRequestRepository: httpRequestRepository}
+func NewRequest(httpRequestRepository *database.HttpRequestRepository, configuration *configuration.ReadWriter) *Request {
+	return &Request{
+		httpRequestRepository: httpRequestRepository,
+		configuration:         configuration,
+	}
 }
 
 func (R *Request) Submit(requestId uint) (requestResponseDto RequestResponseDTO) {
@@ -64,9 +70,17 @@ func (R *Request) Submit(requestId uint) (requestResponseDto RequestResponseDTO)
 	requestResponseDto.Method = request.Method
 	R.handleHeader(request, &requestResponseDto)
 
+	config, err := R.configuration.Read()
+	if err != nil {
+		return
+	}
+
 	client := http.Client{
 		Transport: &http.Transport{
 			DisableCompression: true,
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: config.SkipTLSVerify,
+			},
 		},
 	}
 
