@@ -27,7 +27,7 @@
 		"@tailwindcss/postcss": "^4.1.11",
 		"@types/eslint": "^9.6.1",
 		"@vitest/coverage-v8": "^3.2.4",
-		"eslint": "^9.31.0",
+		"eslint": "^9.32.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.11.0",
 		"globals": "^16.3.0",
