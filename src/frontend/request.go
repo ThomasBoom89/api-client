@@ -26,6 +26,7 @@ type RequestResponseDTO struct {
 	ReceivedHeader map[string][]string `json:"receivedHeader"`
 	ElapsedTime    string              `json:"elapsedTime"`
 	StatusCode     int                 `json:"statusCode"`
+	TlsSkipped     bool                `json:"tlsSkipped"`
 }
 
 func NewRequest(httpRequestRepository *database.HttpRequestRepository, configuration *configuration.ReadWriter) *Request {
@@ -42,13 +43,13 @@ func (R *Request) Submit(requestId uint) (requestResponseDto RequestResponseDTO)
 		return
 	}
 
-	url := R.prepareUrl(httpRequest)
+	prepareUrl := R.prepareUrl(httpRequest)
 
 	var request *http.Request
 	if httpRequest.HttpRequestBody.Type == "" || httpRequest.HttpRequestBody.Type == "none" {
-		request, err = http.NewRequest(httpRequest.Method, url, nil)
+		request, err = http.NewRequest(httpRequest.Method, prepareUrl, nil)
 	} else {
-		request, err = http.NewRequest(httpRequest.Method, url, strings.NewReader(httpRequest.HttpRequestBody.Payload))
+		request, err = http.NewRequest(httpRequest.Method, prepareUrl, strings.NewReader(httpRequest.HttpRequestBody.Payload))
 	}
 	if err != nil {
 		requestResponseDto.Error = err.Error()
@@ -75,11 +76,25 @@ func (R *Request) Submit(requestId uint) (requestResponseDto RequestResponseDTO)
 		return
 	}
 
+	skipTLSVerify := config.SkipTLSVerify
+	if skipTLSVerify == true {
+		addr := request.URL.Host + ":" + request.URL.Port()
+		if request.URL.Port() == "" {
+			addr += "443"
+		}
+		tlsDial, err := tls.Dial("tcp", addr, &tls.Config{})
+		if err == nil {
+			skipTLSVerify = false
+			tlsDial.Close()
+		}
+	}
+	requestResponseDto.TlsSkipped = skipTLSVerify
+
 	client := http.Client{
 		Transport: &http.Transport{
 			DisableCompression: true,
 			TLSClientConfig: &tls.Config{
-				InsecureSkipVerify: config.SkipTLSVerify,
+				InsecureSkipVerify: skipTLSVerify,
 			},
 		},
 	}

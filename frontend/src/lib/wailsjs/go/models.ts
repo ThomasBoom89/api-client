@@ -268,6 +268,7 @@ export namespace frontend {
 	    receivedHeader: Record<string, Array<string>>;
 	    elapsedTime: string;
 	    statusCode: number;
+	    tlsSkipped: boolean;
 	
 	    static createFrom(source: any = {}) {
 	        return new RequestResponseDTO(source);
@@ -283,6 +284,7 @@ export namespace frontend {
 	        this.receivedHeader = source["receivedHeader"];
 	        this.elapsedTime = source["elapsedTime"];
 	        this.statusCode = source["statusCode"];
+	        this.tlsSkipped = source["tlsSkipped"];
 	    }
 	}
 	export class WebsocketRequestDto {
