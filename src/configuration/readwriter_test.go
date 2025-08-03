@@ -10,7 +10,7 @@ func TestWriteRead(t *testing.T) {
 	userDir := test.UserDir{Dir: "./tmp-readwriter_test/"}
 	defer userDir.Cleanup()
 	readWriter := NewReadWriter(&userDir)
-	expectedConfiguration := Configuration{Theme: "dark"}
+	expectedConfiguration := Configuration{Theme: "dark", SkipTLSVerify: false}
 	err := readWriter.Write(expectedConfiguration)
 	if err != nil {
 		t.Fatal("no error should be returned:", err)

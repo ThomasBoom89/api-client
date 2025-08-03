@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { frontend } from './wailsjs/go/models';
-	import Loader from './Loader.svelte';
+	import { frontend }    from './wailsjs/go/models';
+	import Loader          from './Loader.svelte';
 	import ClipboardButton from './ClipboardButton.svelte';
 
 	let { response, loading }: { response: frontend.RequestResponseDTO; loading: boolean } = $props();
-	let isJsonResponse: boolean = $derived.by(() => {
+	let isJsonResponse: boolean                                                            = $derived.by(() => {
 		try {
 			JSON.parse(response.responseBody);
 		} catch (e) {
@@ -21,6 +21,10 @@
 	<p data-testid="response-error" class="text-red-700">{response.error}</p>
 {:else if response.elapsedTime === undefined}{:else}
 	<div class="flex h-full flex-col overflow-x-hidden overflow-y-auto border p-2">
+		{#if response.tlsSkipped === true}
+			<p class="text-red-600">TLS could not be verified, skipped!</p>
+			<hr class="my-2 mr-2">
+		{/if}
 		<div class="mr-2 flex justify-between">
 			<h4 class="text-text-highlight">Status-Code:</h4>
 			<ClipboardButton data={response.statusCode.toFixed(0)} />

@@ -12,7 +12,8 @@ const (
 
 // Configuration json annotation is mandatory to export fields in javascript
 type Configuration struct {
-	Theme string `json:"theme"`
+	Theme         string `json:"theme"`
+	SkipTLSVerify bool   `json:"skip_tls_verify"`
 }
 
 type ReadWriter struct {

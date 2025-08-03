@@ -2,6 +2,7 @@ export namespace configuration {
 	
 	export class Configuration {
 	    theme: string;
+	    skip_tls_verify: boolean;
 	
 	    static createFrom(source: any = {}) {
 	        return new Configuration(source);
@@ -10,6 +11,7 @@ export namespace configuration {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.theme = source["theme"];
+	        this.skip_tls_verify = source["skip_tls_verify"];
 	    }
 	}
 
@@ -262,10 +264,11 @@ export namespace frontend {
 	    url: string;
 	    method: string;
 	    responseBody: string;
-	    sendHeader: Record<string, string[]>;
-	    receivedHeader: Record<string, string[]>;
+	    sendHeader: Record<string, Array<string>>;
+	    receivedHeader: Record<string, Array<string>>;
 	    elapsedTime: string;
 	    statusCode: number;
+	    tlsSkipped: boolean;
 	
 	    static createFrom(source: any = {}) {
 	        return new RequestResponseDTO(source);
@@ -281,6 +284,7 @@ export namespace frontend {
 	        this.receivedHeader = source["receivedHeader"];
 	        this.elapsedTime = source["elapsedTime"];
 	        this.statusCode = source["statusCode"];
+	        this.tlsSkipped = source["tlsSkipped"];
 	    }
 	}
 	export class WebsocketRequestDto {

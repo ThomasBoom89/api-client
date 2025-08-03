@@ -1,8 +1,10 @@
 package frontend
 
 import (
+	"api-client/src/configuration"
 	"api-client/src/database"
 	"api-client/src/test"
+	"crypto/tls"
 	"net/http"
 	"testing"
 )
@@ -10,6 +12,7 @@ import (
 func TestRequest(t *testing.T) {
 	userDir := test.UserDir{Dir: "./tmp-request_test/"}
 	defer userDir.Cleanup()
+	readWriter := configuration.NewReadWriter(&userDir)
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /", func(writer http.ResponseWriter, request *http.Request) {
@@ -30,7 +33,7 @@ func TestRequest(t *testing.T) {
 		Addr:                         ":8898",
 		Handler:                      mux,
 		DisableGeneralOptionsHandler: false,
-		TLSConfig:                    nil,
+		TLSConfig:                    &tls.Config{Certificates: test.CreateTLSCertificate()},
 		ReadTimeout:                  0,
 		ReadHeaderTimeout:            0,
 		WriteTimeout:                 0,
@@ -42,7 +45,7 @@ func TestRequest(t *testing.T) {
 		BaseContext:                  nil,
 		ConnContext:                  nil,
 	}
-	go server.ListenAndServe()
+	go server.ListenAndServeTLS("", "")
 
 	databaseClient := database.NewClient(&userDir)
 	database.AutoMigrate(databaseClient)
@@ -66,7 +69,9 @@ func TestRequest(t *testing.T) {
 		t.Fatal("should not fail to create collection")
 	}
 	httpRequestRepository := database.NewHttpRequestRepository(databaseClient)
-	request := NewRequest(httpRequestRepository)
+	defaultConfiguration := configuration.Configuration{}
+	readWriter.Write(defaultConfiguration)
+	request := NewRequest(httpRequestRepository, readWriter)
 	httpRequest, err := httpRequestRepository.Create(&database.HttpRequest{
 		Name:         "test request",
 		CollectionID: collection.ID,
@@ -113,5 +118,40 @@ func TestRequest(t *testing.T) {
 	requestResponseDTO = request.Submit(httpRequest.ID)
 	if requestResponseDTO.Error != "" {
 		t.Fatal("should not fail to receive response of http post request")
+	}
+
+	skipTlsConfiguration := configuration.Configuration{
+		Theme:         "dark",
+		SkipTLSVerify: true,
+	}
+	readWriter.Write(skipTlsConfiguration)
+	httpRequest, err = httpRequestRepository.Create(&database.HttpRequest{
+		Name:         "test request",
+		CollectionID: collection.ID,
+		Url:          "https://localhost:8898/nobody",
+		Method:       "GET",
+	})
+	if err != nil {
+		t.Fatal("should not fail to create http request")
+	}
+	requestResponseDTO = request.Submit(httpRequest.ID)
+	if requestResponseDTO.Error != "" {
+		t.Fatal("should not happen: ", requestResponseDTO.Error)
+	}
+	if requestResponseDTO.TlsSkipped == false {
+		t.Fatal("nö")
+	}
+
+	noSkipTlsConfiguration := configuration.Configuration{
+		Theme:         "dark",
+		SkipTLSVerify: false,
+	}
+	readWriter.Write(noSkipTlsConfiguration)
+	requestResponseDTO = request.Submit(httpRequest.ID)
+	if requestResponseDTO.Error == "" {
+		t.Fatal("should not happen2")
+	}
+	if requestResponseDTO.TlsSkipped == true {
+		t.Fatal("nö2")
 	}
 }
