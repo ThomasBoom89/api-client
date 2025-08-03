@@ -7,6 +7,8 @@ import (
 	"golang.org/x/net/websocket"
 	"io"
 	"net/http"
+	"net/http/httptest"
+	"regexp"
 	"testing"
 )
 
@@ -18,7 +20,11 @@ func TestWebsocket(t *testing.T) {
 	mux.Handle("/echo", websocket.Handler(func(conn *websocket.Conn) {
 		io.Copy(conn, conn)
 	}))
-	go http.ListenAndServe(":12346", mux)
+
+	server := httptest.NewServer(mux)
+	defer server.Close()
+	re := regexp.MustCompile("^http://(.*)$")
+	serverUrl := re.FindStringSubmatch(server.URL)[1]
 
 	databaseClient := database.NewClient(&userDir)
 	database.AutoMigrate(databaseClient)
@@ -46,7 +52,7 @@ func TestWebsocket(t *testing.T) {
 	websocketRequestDto, err := websocketRequest.Create(WebsocketRequestDto{
 		Name:         "websocket request 1",
 		CollectionID: collection.ID,
-		Url:          "ws://localhost:12346/echo",
+		Url:          "ws://" + serverUrl + "/echo",
 	})
 	appContext := app.NewContext()
 	receiver := make(chan []interface{})
