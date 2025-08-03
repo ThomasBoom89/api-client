@@ -4,8 +4,8 @@ import (
 	"api-client/src/configuration"
 	"api-client/src/database"
 	"api-client/src/test"
-	"crypto/tls"
 	"net/http"
+	"net/http/httptest"
 	"testing"
 )
 
@@ -29,23 +29,13 @@ func TestRequest(t *testing.T) {
 	mux.HandleFunc("GET /nobody", func(writer http.ResponseWriter, request *http.Request) {
 		writer.Write([]byte("Yolo"))
 	})
-	server := &http.Server{
-		Addr:                         ":8898",
-		Handler:                      mux,
-		DisableGeneralOptionsHandler: false,
-		TLSConfig:                    &tls.Config{Certificates: test.CreateTLSCertificate()},
-		ReadTimeout:                  0,
-		ReadHeaderTimeout:            0,
-		WriteTimeout:                 0,
-		IdleTimeout:                  0,
-		MaxHeaderBytes:               0,
-		TLSNextProto:                 nil,
-		ConnState:                    nil,
-		ErrorLog:                     nil,
-		BaseContext:                  nil,
-		ConnContext:                  nil,
-	}
-	go server.ListenAndServeTLS("", "")
+
+	server := httptest.NewServer(mux)
+	tlsServer := httptest.NewTLSServer(mux)
+	defer server.Close()
+	defer tlsServer.Close()
+	t.Log(server.URL)
+	t.Log(tlsServer.URL)
 
 	databaseClient := database.NewClient(&userDir)
 	database.AutoMigrate(databaseClient)
@@ -75,7 +65,7 @@ func TestRequest(t *testing.T) {
 	httpRequest, err := httpRequestRepository.Create(&database.HttpRequest{
 		Name:         "test request",
 		CollectionID: collection.ID,
-		Url:          "http://localhost:8898/nobody",
+		Url:          server.URL + "/nobody",
 		Method:       "GET",
 	})
 	if err != nil {
@@ -89,7 +79,7 @@ func TestRequest(t *testing.T) {
 	httpRequest, err = httpRequestRepository.Create(&database.HttpRequest{
 		Name:         "test request",
 		CollectionID: collection.ID,
-		Url:          "http://localhost:8898",
+		Url:          server.URL,
 		Method:       "POST",
 		HttpRequestBody: database.HttpRequestBody{
 			Type:    "json",
@@ -128,7 +118,7 @@ func TestRequest(t *testing.T) {
 	httpRequest, err = httpRequestRepository.Create(&database.HttpRequest{
 		Name:         "test request",
 		CollectionID: collection.ID,
-		Url:          "https://localhost:8898/nobody",
+		Url:          tlsServer.URL + "/nobody",
 		Method:       "GET",
 	})
 	if err != nil {
@@ -136,10 +126,10 @@ func TestRequest(t *testing.T) {
 	}
 	requestResponseDTO = request.Submit(httpRequest.ID)
 	if requestResponseDTO.Error != "" {
-		t.Fatal("should not happen: ", requestResponseDTO.Error)
+		t.Fatal("should not create error: ", requestResponseDTO.Error)
 	}
 	if requestResponseDTO.TlsSkipped == false {
-		t.Fatal("nö")
+		t.Fatal("tls verify should be skipped")
 	}
 
 	noSkipTlsConfiguration := configuration.Configuration{
@@ -149,9 +139,9 @@ func TestRequest(t *testing.T) {
 	readWriter.Write(noSkipTlsConfiguration)
 	requestResponseDTO = request.Submit(httpRequest.ID)
 	if requestResponseDTO.Error == "" {
-		t.Fatal("should not happen2")
+		t.Fatal("should create error")
 	}
 	if requestResponseDTO.TlsSkipped == true {
-		t.Fatal("nö2")
+		t.Fatal("tls verify should not be skipped")
 	}
 }
