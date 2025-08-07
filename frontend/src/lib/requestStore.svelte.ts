@@ -23,21 +23,25 @@ export class RequestStore {
 		);
 	}
 
-	public update(request: HttpRequestDto | WebsocketRequestDto): void {
-		switch (request.type) {
-			case RequestTypes.HTTP:
-				Update(request as HttpRequestDto).then((newRequest: HttpRequestDto) => {
-					const index = this._requests.findIndex((request) => request.id === newRequest.id);
-					this._requests[index] = newRequest;
-				});
-				break;
-			case RequestTypes.WEBSOCKET:
-				UpdateWebsocket(request as WebsocketRequestDto).then((newRequest: WebsocketRequestDto) => {
-					const index = this._requests.findIndex((request) => request.id === newRequest.id);
-					this._requests[index] = newRequest;
-				});
-				break;
-		}
+	public update(request: HttpRequestDto | WebsocketRequestDto): Promise<void> {
+		return new Promise<void>( (resolve, reject) => {
+			switch (request.type) {
+				case RequestTypes.HTTP:
+					Update(request as HttpRequestDto).then((newRequest: HttpRequestDto) => {
+						const index = this._requests.findIndex((request) => request.id === newRequest.id);
+						this._requests[index] = newRequest;
+						resolve();
+					});
+					break;
+				case RequestTypes.WEBSOCKET:
+					UpdateWebsocket(request as WebsocketRequestDto).then((newRequest: WebsocketRequestDto) => {
+						const index = this._requests.findIndex((request) => request.id === newRequest.id);
+						this._requests[index] = newRequest;
+						resolve();
+					});
+					break;
+			}
+		});
 	}
 
 	public create(collectionId: number, newRequestName: string, requestType: RequestTypes): void {
